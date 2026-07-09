@@ -1,0 +1,314 @@
+/* =========================
+   PÁGINA PRINCIPAL
+========================= */
+.product-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* =========================
+   BREADCRUMB
+========================= */
+.breadcrumb {
+  font-size: 13px;
+  opacity: 0.55;
+  margin-bottom: 35px;
+}
+
+.breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
+.product-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+/* =========================
+   IMAGEN PRODUCTO - CON ZOOM MEJORADO
+========================= */
+.product-image-box {
+  width: 100%;
+  height: 480px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  cursor: zoom-in;
+}
+
+.product-image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-image-box img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+}
+
+/* ZOOM AL HACER HOVER */
+.product-image-box:hover img {
+  transform: scale(1.8);
+}
+
+/* =========================
+   INFORMACIÓN PRODUCTO
+========================= */
+.product-info h1 {
+  font-size: 32px;
+  font-weight: 400;
+  margin: 0 0 15px;
+  color: #111;
+}
+
+.price {
+  font-size: 20px;
+  margin-bottom: 25px;
+  color: #222;
+  font-weight: 500;
+}
+
+/* =========================
+   DESCRIPCIÓN
+========================= */
+.description-section {
+  margin-bottom: 40px;
+}
+
+.description {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #333;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* =========================
+   ESPECIFICACIONES
+========================= */
+.specs-section {
+  border-top: 1px solid #eaeaea;
+  padding-top: 25px;
+}
+
+.specs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.specs-header h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #111;
+  margin: 0;
+}
+
+/* BOTÓN EN BLANCO */
+.download-btn {
+  background: white;
+  color: #111;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.download-btn:hover {
+  border-color: #0d1f5c;;
+  transform: translateY(-2px);
+
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.specs-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.specs-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  gap: 20px;
+}
+
+.specs-key {
+  font-weight: 500;
+  color: #555;
+}
+
+.specs-value {
+  color: #222;
+}
+
+/* =========================
+   DOCUMENTOS
+========================= */
+.documents {
+  margin-top: 30px;
+  padding-top: 20px;
+}
+
+.documents button {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.25s ease;
+  border-radius: 4px;
+  color: #222;
+}
+
+.documents button:hover {
+  border-color: #111;
+  background: #f5f5f5;
+}
+
+/* =========================
+   RESPONSIVE TABLET
+========================= */
+@media (max-width: 1000px) {
+  .product-layout {
+    grid-template-columns: 350px 1fr;
+    gap: 40px;
+  }
+
+  .product-image-box {
+    height: 400px;
+  }
+
+  .specs-row {
+    grid-template-columns: 180px 1fr;
+  }
+}
+
+/* =========================
+   RESPONSIVE MOBILE
+========================= */
+@media (max-width: 768px) {
+  .product-page {
+    padding: 25px 18px;
+  }
+
+  .product-layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .product-image-box {
+    height: 350px;
+  }
+
+  .product-image-box:hover img {
+    transform: scale(1.5);
+  }
+
+  .product-info h1 {
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .specs-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .download-btn {
+    justify-content: center;
+  }
+
+  .specs-row {
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding: 14px 0;
+  }
+
+  .specs-key {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .documents button {
+    width: 100%;
+  }
+}
+
+/* =========================
+   MOBILE PEQUEÑO
+========================= */
+@media (max-width: 480px) {
+  .product-image-box {
+    height: 280px;
+  }
+
+  .product-image-box img {
+    width: 85%;
+    height: 85%;
+  }
+
+  .product-info h1 {
+    font-size: 22px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .breadcrumb {
+    font-size: 12px;
+  }
+
+  .specs-row {
+    font-size: 13px;
+  }
+
+  .download-btn {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  .description {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}

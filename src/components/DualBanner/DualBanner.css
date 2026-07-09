@@ -1,0 +1,190 @@
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+.dual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 600px;
+  gap: 4px;
+  background: #f0f0f0;
+}
+
+/* COLUMNA DERECHA: apilada */
+.dual__right {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+}
+
+/* =========================
+   BLOQUE BASE
+========================= */
+.dual__block {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* IMAGEN */
+.dual__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.dual__block:hover .dual__img {
+  transform: scale(1.05);
+}
+
+/* OVERLAY OSCURO */
+.dual__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.70) 0%,
+    rgba(0, 0, 0, 0.15) 60%,
+    transparent 100%
+  );
+  transition: background 0.4s ease;
+}
+
+.dual__block:hover .dual__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.80) 0%,
+    rgba(0, 0, 0, 0.25) 60%,
+    transparent 100%
+  );
+}
+
+/* =========================
+   CONTENIDO
+========================= */
+.dual__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 36px;
+  z-index: 2;
+}
+
+.dual__eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.dual__title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+}
+
+.dual__desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 320px;
+}
+
+/* =========================
+   BOTÓN
+========================= */
+.dual__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  padding: 12px 24px;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.dual__btn--light {
+  color: #fff;
+  background: transparent;
+}
+
+.dual__btn--light:hover {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+/* Bloque pequeño: título más chico */
+.dual__block--top .dual__title,
+.dual__block--bottom .dual__title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.dual__block--top .dual__content,
+.dual__block--bottom .dual__content {
+  padding: 24px 28px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 900px) {
+  .dual {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+  }
+
+  .dual__block--left {
+    height: 380px;
+  }
+
+  .dual__right {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: 260px;
+  }
+}
+
+@media (max-width: 560px) {
+  .dual {
+    gap: 3px;
+  }
+
+  .dual__right {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 400px;
+  }
+
+  .dual__block--left {
+    height: 300px;
+  }
+
+  .dual__title {
+    font-size: 26px;
+  }
+
+  .dual__block--top .dual__title,
+  .dual__block--bottom .dual__title {
+    font-size: 20px;
+  }
+
+  .dual__content {
+    padding: 20px 20px;
+  }
+}

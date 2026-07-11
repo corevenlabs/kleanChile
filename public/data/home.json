@@ -1,0 +1,46 @@
+{
+  "bestSellers": {
+    "title": "Productos más vendidos", "linkLabel": "Ver más productos", "linkPath": "/cleaning",
+    "products": [
+      { "id": 1, "name": "Fabuloso Lavanda", "type": "Limpiador Multiusos · 900ml", "price": "$2.990", "badge": "Más vendido", "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/fabuloso/fresca-lavanda/product-shot-fresca-lavanda-900ml.jpg" },
+      { "id": 2, "name": "Fabuloso Alternativa Cloro", "type": "Desinfectante · 900ml", "price": "$3.290", "badge": "Oferta", "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/fabuloso/alternativa-al-cloro/product-shot-alternativa-al-cloro-900ml.jpg" },
+      { "id": 3, "name": "Fabuloso Pino", "type": "Limpiador Multiusos · 900ml", "price": "$2.990", "badge": null, "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/fabuloso/pino/alternativa-al-cloro-pino-900ml.jpg" },
+      { "id": 4, "name": "Fabuloso Manzana", "type": "Limpiador Multiusos · 900ml", "price": "$2.990", "badge": "Nuevo", "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/fabuloso/frescura-activa-manzana/product-shot-fabuloso-manzana-900ml.jpg" },
+      { "id": 5, "name": "Fabuloso Bicarbonato", "type": "Frescura Activa · 900ml", "price": "$3.490", "badge": null, "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/fabuloso/frescura-activa-con-bicarbonato/thumb-fabuloso-frescura-activa-con-bicarbonato-900ml.jpg" },
+      { "id": 6, "name": "Ajax Bicloro", "type": "Limpiador en Polvo · 582g", "price": "$4.190", "badge": "Oferta", "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/ajax/bicloro/thumbnail/ajax-bicloro-582gr-miniatura-desktop-mx.jpg" },
+      { "id": 7, "name": "Axion X-Treme", "type": "Lavavajillas · 250ml", "price": "$1.990", "badge": null, "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/axion/x-treme/thumbnail/axion-x-treme-250-ml-product-mx.png" },
+      { "id": 8, "name": "Suavitel Fresca Primavera", "type": "Suavizante de Ropa · 700ml", "price": "$3.990", "badge": "Más vendido", "image": "https://www.tuhogar.com/content/dam/cp-sites/home-care/tu-hogar/latam/productos/suavitel/complete-fresca-primavera1/thumbnail/2024/suavitel-complete-fresca-primavera-700ml.jpg" }
+    ]
+  },
+  "brands": { "label": "Marcas que trabajamos", "items": [
+    { "name": "Clorox", "logo": "https://logo.clearbit.com/clorox.com" }, { "name": "Ariel", "logo": "https://logo.clearbit.com/ariel.com" },
+    { "name": "3M", "logo": "https://logo.clearbit.com/3m.com" }, { "name": "Vileda", "logo": "https://logo.clearbit.com/vileda.com" },
+    { "name": "Scotch-Brite", "logo": "https://logo.clearbit.com/scotch-brite.com" }, { "name": "Faber-Castell", "logo": "https://logo.clearbit.com/faber-castell.com" },
+    { "name": "Staedtler", "logo": "https://logo.clearbit.com/staedtler.com" }, { "name": "BIC", "logo": "https://logo.clearbit.com/bicworld.com" },
+    { "name": "Pelikan", "logo": "https://logo.clearbit.com/pelikan.com" }, { "name": "Omo", "logo": "https://logo.clearbit.com/omo.com" },
+    { "name": "Unilever", "logo": "https://logo.clearbit.com/unilever.com" }, { "name": "Ajax", "logo": "https://logo.clearbit.com/ajax.com" }
+  ] },
+  "dualBanner": {
+    "blocks": [
+      {"id":"cleaning","position":"left","image":"https://images.unsplash.com/photo-1563453392212-326f5e854473?w=900&auto=format&fit=crop&q=80","alt":"Productos de limpieza","eyebrow":"Nueva colección","title":"Productos de Limpieza","description":"Detergentes, desinfectantes y equipos profesionales para hogar e industria.","path":"/cleaning","cta":"Ver productos"},
+      {"id":"bookshop","position":"top","image":"https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=900&auto=format&fit=crop&q=80","alt":"Material escolar","eyebrow":"Temporada escolar","title":"Librería & Útiles","path":"/bookshop","cta":"Ver productos"},
+      {"id":"machinery","position":"bottom","image":"https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&auto=format&fit=crop&q=80","alt":"Maquinaria industrial","eyebrow":"Equipamiento","title":"Maquinaria Industrial","path":"/machinery","cta":"Ver productos"}
+    ]
+  },
+  "whyUs": { "eyebrow": "Por qué elegirnos", "title": "Soluciones confiables para tu negocio", "subtitle": "Una experiencia completa en productos de limpieza, librería y maquinaria industrial.", "reasons": [
+    { "id": 1, "icon": "star", "title": "Calidad garantizada", "desc": "Productos certificados y seleccionados para uso profesional y doméstico." },
+    { "id": 2, "icon": "arrow", "title": "Despacho nacional", "desc": "Envíos rápidos y seguros a todo Chile con seguimiento." },
+    { "id": 3, "icon": "shield", "title": "Confianza y respaldo", "desc": "Más de 10 años apoyando empresas, colegios y hogares." },
+    { "id": 4, "icon": "clock", "title": "Atención personalizada", "desc": "Asesoría directa para encontrar la mejor solución." },
+    { "id": 5, "icon": "price", "title": "Precios mayoristas", "desc": "Descuentos especiales para empresas e instituciones." },
+    { "id": 6, "icon": "catalog", "title": "Amplio catálogo", "desc": "Todo lo que necesitas en un solo lugar." }
+  ] },
+  "testimonials": { "label": "testimonios", "title": "Lo que dicen nuestros clientes", "subtitle": "Más de 500 clientes confían en KleanChile para sus soluciones de limpieza", "items": [
+    { "id": 1, "nombre": "María González", "cargo": "Gerente de Operaciones", "empresa": "Limpiezas Industriales MG", "comentario": "Los productos de KleanChile han transformado nuestra limpieza. El desengrasante es el mejor que hemos probado, rendimiento excepcional.", "fecha": "15 Jun 2026" },
+    { "id": 2, "nombre": "Carlos Rodríguez", "cargo": "Encargado de Mantención", "empresa": "Hotel Central", "comentario": "Excelente servicio y productos de primera calidad. Nuestros pisos nunca habían estado tan limpios. 100% recomendados.", "fecha": "12 Jun 2026" },
+    { "id": 3, "nombre": "Ana María Pérez", "cargo": "Dueña", "empresa": "Cafetería El Buen Sabor", "comentario": "El lavalozas Excell es maravilloso. Deja los platos impecables y con un aroma fresco. Además, es biodegradable.", "fecha": "08 Jun 2026" },
+    { "id": 4, "nombre": "Roberto Méndez", "cargo": "Jefe de Bodega", "empresa": "Distribuidora Andes", "comentario": "Llevamos 2 años comprando a KleanChile. Productos consistentes, entregas puntuales y excelente atención al cliente.", "fecha": "05 Jun 2026" },
+    { "id": 5, "nombre": "Laura Fernández", "cargo": "Administradora", "empresa": "Colegio San José", "comentario": "La limpieza de nuestro colegio mejoró notablemente. Los desinfectantes son seguros para los niños y muy efectivos.", "fecha": "01 Jun 2026" },
+    { "id": 6, "nombre": "Patricio Silva", "cargo": "Jefe de Cocina", "empresa": "Restaurante La Casona", "comentario": "El desengrasante industrial es increíble. Nuestras cocinas quedan impecables y el aroma a limón es muy agradable.", "fecha": "28 May 2026" }
+  ] }
+}

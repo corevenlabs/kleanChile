@@ -18,19 +18,24 @@ import Configuraciones from "./admin/pages/Configuraciones";
 import Banners from "./admin/pages/Banners";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
 import ProductDetail from "./View/ProductDetail/ProductDetail"
+import { KleanProvider, useKlean } from "./context/KleanContext";
 
-function App() {
+function AppRoutes() {
+  const { navigation, banner, home, catalogs, site, productDetails, loading, error } = useKlean();
+
+  if (loading) return <main className="app-status">Cargando contenido…</main>;
+  if (error) return <main className="app-status">No fue posible cargar el contenido: {error}</main>;
+
   return (
     <BrowserRouter>
       <Routes>
-
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/cleaning" element={<Cleaning />} />
-          <Route path="/bookshop" element={<Bookshop />} />
-          <Route path="/desktop" element={<Desktop />} />
+        <Route element={<PublicLayout navigation={navigation} site={site} />}>
+          <Route path="/" element={<Home banner={banner} content={home} />} />
+          <Route path="/cleaning" element={<Cleaning products={catalogs.cleaning} />} />
+          <Route path="/bookshop" element={<Bookshop products={catalogs.bookshop} />} />
+          <Route path="/desktop" element={<Desktop products={catalogs.desktop} />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/product/:id" element={<ProductDetail products={productDetails} />} />
         </Route>
 
         <Route path="/login" element={<Login />} />
@@ -53,6 +58,10 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
+}
+
+function App() {
+  return <KleanProvider><AppRoutes /></KleanProvider>;
 }
 
 export default App;

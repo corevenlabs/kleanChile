@@ -1,0 +1,44 @@
+{
+  "cleaning": [
+    {"id":1,"name":"Detergente Industrial","type":"químico","price":12000,"image":"https://images.unsplash.com/photo-1585421514738-01798e348b17?w=600","description":"Detergente concentrado de alto rendimiento para limpieza profunda en superficies industriales."},
+    {"id":2,"name":"Desinfectante Multiuso","type":"químico","price":8500,"image":"https://images.unsplash.com/photo-1607082349566-187342175e2f?w=600","description":"Elimina bacterias, virus y hongos en todo tipo de superficies. Ideal para uso doméstico e industrial."},
+    {"id":3,"name":"Escoba Profesional","type":"herramienta","price":15000,"image":"https://images.unsplash.com/photo-1584824486539-53bb4646bdbc?w=600","description":"Escoba resistente para uso intensivo en limpieza profesional y grandes superficies."},
+    {"id":4,"name":"Mopa Microfibra","type":"herramienta","price":18000,"image":"https://images.unsplash.com/photo-1581579185169-0c9b0c0f2b0b?w=600","description":"Mopa de microfibra de alta absorción que permite limpieza profunda sin químicos."},
+    {"id":5,"name":"Aromatizante Industrial","type":"químico","price":9900,"image":"https://images.unsplash.com/photo-1610705267928-1b9f5f3f7d6a?w=600","description":"Aromatizante de larga duración que neutraliza malos olores en espacios grandes."},
+    {"id":6,"name":"Guantes de Limpieza","type":"protección","price":5000,"image":"https://images.unsplash.com/photo-1583947581924-860bda6a26df?w=600","description":"Guantes resistentes para protección en tareas de limpieza con químicos o agua."},
+    {"id":7,"name":"Paños Microfibra","type":"herramienta","price":7000,"image":"https://images.unsplash.com/photo-1585421514284-efb74c2b6b9a?w=600","description":"Paños ultra absorbentes ideales para limpieza de superficies delicadas sin rayar."},
+    {"id":8,"name":"Limpiador Vidrios","type":"químico","price":11000,"image":"https://images.unsplash.com/photo-1585421514738-01798e348b17?w=600","description":"Fórmula especial para dejar vidrios sin manchas ni residuos."},
+    {"id":9,"name":"Carro de Limpieza","type":"industrial","price":45000,"image":"https://images.unsplash.com/photo-1581579185169-0c9b0c0f2b0b?w=600","description":"Carro profesional para transporte de implementos de limpieza en grandes instalaciones."},
+    {"id":10,"name":"Aspiradora Industrial","type":"industrial","price":120000,"image":"https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600","description":"Aspiradora de alta potencia para limpieza industrial pesada y continua."},
+    {"id":11,"name":"Cepillo Industrial","type":"herramienta","price":9000,"image":"https://images.unsplash.com/photo-1584824486539-53bb4646bdbc?w=600","description":"Cepillo robusto diseñado para suciedad difícil en superficies duras."},
+    {"id":12,"name":"Desengrasante Fuerte","type":"químico","price":13000,"image":"https://images.unsplash.com/photo-1607082349566-187342175e2f?w=600","description":"Desengrasante de alto poder para eliminar grasa pesada en maquinaria y cocinas."}
+  ],
+  "bookshop": [
+    {"id":1,"name":"Cuaderno universitario cuadriculado","type":"cuaderno","price":2500,"image":"https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=600","description":"Cuaderno de 100 hojas cuadriculadas ideal para estudio y trabajo."},
+    {"id":2,"name":"Set de lápices grafito HB","type":"escritura","price":1800,"image":"https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=600","description":"Set de lápices HB para escritura y dibujo técnico."},
+    {"id":3,"name":"Set de marcadores de colores","type":"arte","price":4200,"image":"https://images.unsplash.com/photo-1588072432836-e10032774350?w=600","description":"Marcadores de colores intensos para resaltado y arte."},
+    {"id":4,"name":"Carpeta archivadora oficio","type":"oficina","price":3500,"image":"https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600","description":"Carpeta resistente para organización de documentos."},
+    {"id":5,"name":"Notas adhesivas","type":"oficina","price":1200,"image":"https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600","description":"Notas adhesivas para recordatorios diarios."},
+    {"id":6,"name":"Pluma estilográfica negra","type":"escritura","price":8900,"image":"https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=600","description":"Pluma elegante para escritura fina."},
+    {"id":7,"name":"Regla metálica 30cm","type":"herramienta","price":1500,"image":"https://images.unsplash.com/photo-1606326608690-5b0f2c0f9c7e?w=600","description":"Regla de metal resistente para uso técnico."},
+    {"id":8,"name":"Calculadora escolar básica","type":"tecnología","price":5200,"image":"https://images.unsplash.com/photo-1587145820266-a5951ee6f620?w=600","description":"Calculadora para operaciones básicas."},
+    {"id":9,"name":"Estuche minimalista","type":"accesorios","price":3000,"image":"https://images.unsplash.com/photo-1587614382346-4ec70e388b1d?w=600","description":"Estuche compacto para útiles escolares."},
+    {"id":10,"name":"Resaltadores neón x4","type":"escritura","price":2800,"image":"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600","description":"Set de resaltadores de colores brillantes."},
+    {"id":11,"name":"Tijeras escolares seguras","type":"herramienta","price":1700,"image":"https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600","description":"Tijeras diseñadas para uso escolar."},
+    {"id":12,"name":"Cuaderno premium tapa dura","type":"cuaderno","price":4500,"image":"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600","description":"Cuaderno elegante con tapa dura."}
+  ],
+  "desktop": [
+    {"id":1,"name":"Monitor 27'' Full HD","type":"pantallas","price":189990,"image":"https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?w=600","description":"Monitor de alta resolución ideal para trabajo y diseño."},
+    {"id":2,"name":"Teclado mecánico RGB","type":"periféricos","price":45990,"image":"https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=600","description":"Teclado mecánico para escritura rápida y gaming."},
+    {"id":3,"name":"Mouse inalámbrico ergonómico","type":"periféricos","price":19990,"image":"https://images.unsplash.com/photo-1527814050087-3793815479db?w=600","description":"Mouse cómodo para largas jornadas de trabajo."},
+    {"id":4,"name":"Soporte ajustable para laptop","type":"accesorios","price":15990,"image":"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600","description":"Mejora postura y ventilación del portátil."},
+    {"id":5,"name":"Silla ergonómica oficina","type":"mobiliario","price":129990,"image":"https://images.unsplash.com/photo-1582582494700-08c0a5c0a0b7?w=600","description":"Silla cómoda para largas horas de trabajo."},
+    {"id":6,"name":"Escritorio minimalista madera","type":"mobiliario","price":89990,"image":"https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600","description":"Escritorio moderno estilo limpio y minimalista."},
+    {"id":7,"name":"Lámpara LED escritorio","type":"iluminación","price":12990,"image":"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600","description":"Luz ajustable para trabajo nocturno."},
+    {"id":8,"name":"Hub USB-C múltiple","type":"conectividad","price":24990,"image":"https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600","description":"Expande puertos de tu laptop fácilmente."},
+    {"id":9,"name":"Webcam Full HD","type":"video","price":34990,"image":"https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=600","description":"Cámara ideal para videollamadas profesionales."},
+    {"id":10,"name":"Micrófono USB profesional","type":"audio","price":59990,"image":"https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600","description":"Audio claro para streaming y reuniones."},
+    {"id":11,"name":"Organizador de cables","type":"accesorios","price":7990,"image":"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600","description":"Mantén tu escritorio limpio y ordenado."},
+    {"id":12,"name":"Pad mouse XXL","type":"accesorios","price":9990,"image":"https://images.unsplash.com/photo-1612810806695-30f7f8f9d5c7?w=600","description":"Superficie amplia para mayor comodidad."}
+  ]
+}

@@ -3,13 +3,13 @@ import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import WhatsAppButton from "../components/WhatsAppButton/WhatsAppButton";
 
-function PublicLayout() {
+function PublicLayout({ navigation, site }) {
   return (
     <>
-      <Navbar />
+      <Navbar data={navigation} />
       <Outlet />
-      <WhatsAppButton />
-      <Footer />
+      <WhatsAppButton data={site.whatsapp} />
+      <Footer data={site.footer} />
     </>
   );
 }

@@ -1,0 +1,24 @@
+{
+  "brand": "CleanPro",
+  "searchPlaceholder": "Buscar productos...",
+  "links": [
+    { "name": "Inicio", "path": "/", "dropdown": null },
+    { "name": "Limpieza", "path": "/cleaning", "dropdown": { "title": "Productos de Limpieza", "sections": [
+      { "title": "Químicos", "items": ["Detergentes", "Desinfectantes", "Cloro"] },
+      { "title": "Equipos", "items": ["Aspiradoras", "Mopas", "Fregonas"] },
+      { "title": "Accesorios", "items": ["Guantes", "Paños", "Escobas"] }
+    ] } },
+    { "name": "Librería", "path": "/bookshop", "dropdown": { "title": "Librería", "sections": [
+      { "title": "Lectura", "items": ["Novelas", "Ficción", "Ensayos"] },
+      { "title": "Educación", "items": ["Escolar", "Universitario", "Técnico"] },
+      { "title": "Ofertas", "items": ["Descuentos", "Outlet", "Promos"] }
+    ] } },
+    { "name": "Artículos de escritorio", "path": "/desktop", "dropdown": { "title": "Artículos de escritorio", "sections": [
+      { "title": "Periféricos", "items": ["Teclados", "Mouse", "Webcams"] },
+      { "title": "Mobiliario", "items": ["Escritorios", "Sillas", "Soportes"] },
+      { "title": "Accesorios", "items": ["Lámparas", "Organizadores", "Cables"] }
+    ] } },
+    { "name": "Nosotros", "path": "/about", "dropdown": null },
+    { "name": "Contacto", "path": "/contact", "dropdown": null }
+  ]
+}

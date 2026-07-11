@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Lavalozas Excell Desengrasante Biodegradable Limón 750 cc",
+    "price": 12000,
+    "image": "https://images.unsplash.com/photo-1585421514738-01798e348b17?w=600",
+    "description": "El Lavalozas Excell Desengrasante Biodegradable Limón 750 cc es una solución eficaz para la limpieza diaria de vajilla, utensilios de cocina, cristalería y superficies lavables que requieren una acción desengrasante potente. Su fórmula remueve residuos de grasa y suciedad adherida. Su fragancia a limón aporta frescura y su formulación biodegradable ofrece una alternativa práctica para hogares, oficinas, cafeterías y restaurantes. La presentación de 750 cc proporciona un rendimiento adecuado para el uso cotidiano.",
+    "especificaciones": {"marca":"EXCELL","advertencias_almacenamiento":"Almacenar en lugar seco y fresco","advertencias_uso":"Evite el contacto con los ojos. En caso de contacto, enjuague con abundante agua y consulte su médico.","beneficios_uso":"Más rendimiento por cada gota, haciendo que la limpieza sea eficiente y económica.","contenido_neto":"750 cc","denominacion_variedad":"Desengrasante Biodegradable","modo_uso":"Aplique una pequeña dosis en una esponja, lave y enjuague. Mantenga el envase cerrado en un ambiente fresco, seco y en posición vertical.","tipo_producto":"Lavalozas","concentrado":"Sí","unidades_por_paquete":"1.00","estado_producto":"DISPONIBLE","formato":"Líquido","presentacion_empaque":"Botella"}
+  },
+  {
+    "id": 2,
+    "name": "Desinfectante Multiuso Excell",
+    "price": 8500,
+    "image": "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=600",
+    "description": "Desinfectante multiuso de alta eficacia para diferentes superficies. Su fórmula proporciona limpieza profunda en hogares, oficinas y espacios comerciales. Ideal para pisos, mesas, baños, cocinas y áreas de alto contacto.",
+    "especificaciones": {"marca":"EXCELL","advertencias_almacenamiento":"Almacenar en lugar seco y fresco","advertencias_uso":"No ingerir. Evitar contacto directo con ojos.","beneficios_uso":"Elimina el 99.9% de bacterias y virus","contenido_neto":"1 L","denominacion_variedad":"Desinfectante Multiuso","modo_uso":"Aplicar sobre superficie limpia y dejar actuar 5 minutos","tipo_producto":"Desinfectante","concentrado":"No","unidades_por_paquete":"1.00","estado_producto":"DISPONIBLE","formato":"Líquido","presentacion_empaque":"Botella"}
+  }
+]

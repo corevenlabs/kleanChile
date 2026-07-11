@@ -22,30 +22,30 @@ function RevealSection({ children, className = '', effect = 'fade-up', delay = 0
   )
 }
 
-export default function Home() {
+export default function Home({ banner, content }) {
   return (
     <>
-      <Banner />
+      <Banner data={banner} />
 
       <RevealSection effect="fade-up">
-        <BestSellers />
+        <BestSellers data={content.bestSellers} />
       </RevealSection>
 
       <RevealSection effect="zoom-in" delay={80}>
-        <DualBanner />
+        <DualBanner data={content.dualBanner} />
       </RevealSection>
 
       {/* 👇 TESTIMONIOS - con efecto fade-up como el resto */}
       <RevealSection effect="fade-up" delay={60}>
-        <Testimonials />
+        <Testimonials data={content.testimonials} />
       </RevealSection>
 
       <RevealSection effect="slide-right">
-        <WhyUs />
+        <WhyUs data={content.whyUs} />
       </RevealSection>
 
       <RevealSection effect="fade-up" delay={60}>
-        <BrandSlider />
+        <BrandSlider data={content.brands} />
       </RevealSection>
     </>
   )

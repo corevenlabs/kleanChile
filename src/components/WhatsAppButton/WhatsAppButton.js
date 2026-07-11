@@ -1,11 +1,8 @@
 import React from "react";
 import './WhatsAppButton.css'
 
-const WhatsAppButton = () => {
-  const phoneNumber = "569XXXXXXXX"; // tu número en formato internacional Chile
-
-  const message = encodeURIComponent("Hola! Quisiera más información.");
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+const WhatsAppButton = ({ data }) => {
+  const whatsappUrl = `https://wa.me/${data.phoneNumber}?text=${encodeURIComponent(data.message)}`;
 
   return (
     <a
@@ -13,9 +10,9 @@ const WhatsAppButton = () => {
       className="whatsapp-button"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat en WhatsApp"
+      aria-label={data.ariaLabel}
     >
-      <img src="/whatsapp-fill.svg" alt="WhatsApp" />
+      <img src={data.icon} alt={data.alt} />
     </a>
   );
 };

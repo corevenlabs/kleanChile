@@ -3,14 +3,6 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Banner.css";
 
-const SLIDES = [
-  { id: 1, eyebrow: "SERVICIOS PROFESIONALES", title: "Limpieza que transforma espacios", description: "Soluciones de limpieza profesional para hogares, empresas e industrias.", cta: "Ver servicios", image: "/image/BannerLimpieza.png", alt: "Limpieza profesional", path: "/cleaning" },
-  { id: 2, eyebrow: "ARTÍCULOS ESCOLARES", title: "Todo para el aula y oficina", description: "Papelería, útiles escolares y suministros de oficina de calidad.", cta: "Ver catálogo", image: "/image/BannerEscolar.png", alt: "Material escolar", path: "/bookshop" },
-  { id: 3, eyebrow: "EQUIPOS INDUSTRIALES", title: "Maquinaria confiable para industria", description: "Equipos duraderos para producción, mantenimiento y operación industrial.", cta: "Ver equipos", image: "/image/BannerMaquinaria.png", alt: "Maquinaria industrial", path: "/machinery" },
-];
-
-const INTERVAL = 3500;
-
 function TextEffect({ children, className, per = "word", delay = 0 }) {
   const parts = per === "char" ? children.split("") : children.split(" ");
   return (
@@ -24,7 +16,8 @@ function TextEffect({ children, className, per = "word", delay = 0 }) {
   );
 }
 
-export default function Banner() {
+export default function Banner({ data }) {
+  const { slides, interval } = data;
   const [current, setCurrent] = useState(0);
 
   const goTo = useCallback((idx) => {
@@ -33,17 +26,17 @@ export default function Banner() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % SLIDES.length);
-    }, INTERVAL);
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, interval);
     return () => clearInterval(timer);
-  }, []);
+  }, [interval, slides.length]);
 
-  const slide = SLIDES[current];
+  const slide = slides[current];
 
   return (
     <section className="hero">
       <div className="hero__bg">
-        {SLIDES.map((s, i) => (
+        {slides.map((s, i) => (
           <img
             key={s.id}
             src={s.image}
@@ -62,7 +55,7 @@ export default function Banner() {
       </div>
 
       <div className="hero__progress">
-        {SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <button key={i} onClick={() => goTo(i)} className={`progress-bar ${i === current ? "active" : i < current ? "done" : ""}`} />
         ))}
       </div>

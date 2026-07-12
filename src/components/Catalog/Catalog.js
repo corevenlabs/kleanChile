@@ -1,5 +1,7 @@
+"use client";
+
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function Catalog({ products = [], linkProducts = false }) {
   const [selectedType, setSelectedType] = useState("todos");
@@ -28,7 +30,7 @@ export default function Catalog({ products = [], linkProducts = false }) {
       <div className="catalog__grid">
         {filtered.map((product) => {
           const card = <div className="product-card"><div className="product-card__inner"><div className="product-card__img"><img src={product.image} alt={product.name} /></div><div className="product-card__info"><h3>{product.name}</h3><p>${product.price.toLocaleString("es-CL")}</p></div></div></div>;
-          return linkProducts ? <Link key={product.id} to={`/product/${product.id}`} className="product-link">{card}</Link> : <div key={product.id}>{card}</div>;
+          return linkProducts ? <Link key={product.id} href={`/product/${product.id}`} className="product-link">{card}</Link> : <div key={product.id}>{card}</div>;
         })}
       </div>
     </div>

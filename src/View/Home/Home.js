@@ -1,5 +1,6 @@
+"use client";
+
 import React from 'react'
-import './Home.css'
 import Banner from '../Banner/Banner'
 import BestSellers from '../../components/BestSellers/BestSellers'
 import BrandSlider from '../../components/BrandSlider/BrandSlider'

@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { ADMIN_STORAGE_KEY, adminStorage } from "../services/adminStorage";
 

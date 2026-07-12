@@ -1,5 +1,6 @@
-import "./DualBanner.css";
-import { NavLink } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { motion } from "framer-motion";
 import TextEffect from "../core/TextEffect";
 
@@ -10,7 +11,7 @@ function BannerBlock({ block }) {
     <img src={block.image} alt={block.alt} className="dual__img" loading="lazy" /><div className="dual__overlay" />
     <div className="dual__content"><TextEffect className="dual__eyebrow" per="char" delay={0.15}>{block.eyebrow}</TextEffect><TextEffect className="dual__title" per="word" delay={0.35}>{block.title}</TextEffect>
       {block.description && <TextEffect className="dual__desc" per="word" delay={0.65}>{block.description}</TextEffect>}
-      <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: block.description ? 0.9 : 0.65 }} viewport={{ once: true }}><NavLink to={block.path} className="dual__btn dual__btn--light">{block.cta}<Arrow /></NavLink></motion.div>
+      <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: block.description ? 0.9 : 0.65 }} viewport={{ once: true }}><Link href={block.path} className="dual__btn dual__btn--light">{block.cta}<Arrow /></Link></motion.div>
     </div>
   </div>;
 }

@@ -1,4 +1,3 @@
-import "./WhyUs.css";
 
 const icons = {
   star: <path d="M12 2l2.5 6.5L21 9.5l-5 4.5 1.5 7L12 18l-5.5 3 1.5-7L3 9.5l6.5-1z" />,

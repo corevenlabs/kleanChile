@@ -1,5 +1,9 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import NextLink from "next/link";
 import { useAdmin } from "../context/AdminContext";
+
+const Link = ({ to, ...props }) => <NextLink href={to} {...props} />;
 
 export default function Dashboard() {
   const { products, banners } = useAdmin();

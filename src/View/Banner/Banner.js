@@ -1,7 +1,8 @@
+"use client";
+
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import "./Banner.css";
 
 function TextEffect({ children, className, per = "word", delay = 0 }) {
   const parts = per === "char" ? children.split("") : children.split(" ");
@@ -51,7 +52,7 @@ export default function Banner({ data }) {
         <TextEffect key={`eyebrow-${slide.id}`} className="hero__eyebrow" per="char" delay={0.15}>{slide.eyebrow}</TextEffect>
         <TextEffect key={`title-${slide.id}`} className="hero__title" per="word" delay={0.45}>{slide.title}</TextEffect>
         <TextEffect key={`desc-${slide.id}`} className="hero__desc" per="word" delay={0.85}>{slide.description}</TextEffect>
-        <Link to={slide.path} className="hero__cta"> {slide.cta} </Link>
+        <Link href={slide.path} className="hero__cta"> {slide.cta} </Link>
       </div>
 
       <div className="hero__progress">

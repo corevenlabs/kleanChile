@@ -1,4 +1,4 @@
-import "./BrandSlider.css";
+"use client";
 
 export default function BrandSlider({ data }) {
   const brands = [...data.items, ...data.items];

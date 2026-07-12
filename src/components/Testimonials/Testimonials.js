@@ -1,5 +1,6 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import "./Testimonials.css";
 
 export default function Testimonials({ data }) {
   const testimonials = data.items;

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useAdmin } from "../context/AdminContext";
 

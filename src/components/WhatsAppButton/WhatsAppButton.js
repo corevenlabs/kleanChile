@@ -1,5 +1,4 @@
 import React from "react";
-import './WhatsAppButton.css'
 
 const WhatsAppButton = ({ data }) => {
   const whatsappUrl = `https://wa.me/${data.phoneNumber}?text=${encodeURIComponent(data.message)}`;

@@ -18,10 +18,16 @@ original directo al bucket con una URL firmada, y el servidor lo convierte en un
 escalón AVIF/WebP de hasta cinco anchos. El archivo nunca pasa por una función
 serverless.
 
-**Sin ellas** los archivos se escriben en `public/uploads/`. Eso sirve en
-desarrollo y en un VPS o contenedor con volumen, **pero no en Vercel**: cada
-instancia tiene disco efímero, así que una foto subida desde el panel desaparece
-en el siguiente despliegue y queda un producto apuntando a un 404.
+**Sin ellas** los archivos se escriben en `public/uploads/` y los sirve
+`app/uploads/[...path]/route.js`. Sirve en desarrollo y en un VPS o contenedor
+con volumen, **pero no en Vercel**: cada instancia tiene disco efímero, así que
+una foto subida desde el panel desaparece en el siguiente despliegue y queda un
+producto apuntando a un 404.
+
+> La ruta existe porque Next fija el contenido de `public/` al momento del
+> build: un archivo escrito ahí después **no lo sirve `next start`**, aunque sí
+> `next dev`. Sin ella, subir una imagen funcionaba en desarrollo y daba 404 en
+> cualquier build de producción.
 
 En los dos casos el campo guarda **una URL**, así que un producto con foto
 subida y uno con enlace de proveedor son la misma clase de cosa. Eso es lo que

@@ -118,6 +118,34 @@
 .admin-panel .admin-panel .admin-form-grid { padding:14px 0 0; }
 .admin-panel .admin-panel .admin-panel { background:#fff; }
 
+/* ── Campo de imagen ─────────────────────────────────────────────────────────
+
+   Miniatura y controles en una fila, en vez de la vista previa de 130px debajo
+   del input nativo. Alto fijo y chico a propósito: dentro del modal de
+   productos este campo compite por el poco espacio vertical que hay, y una
+   vista previa grande empujaba el resultado fuera del área visible — que era
+   justamente lo que hacía parecer que subir una foto no hacía nada.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.admin-image-field {
+  display:flex; align-items:center; gap:12px;
+  padding:10px; border:1px solid #dfe4ec; border-radius:10px; background:#fbfcfe;
+}
+
+.admin-image-field__thumb {
+  flex-shrink:0; width:64px; height:64px; display:grid; place-items:center;
+  border:1px solid #e9eef6; border-radius:8px; background:#fff; overflow:hidden;
+  color:#c3ccda;
+}
+.admin-image-field__thumb img { width:100%; height:100%; object-fit:contain; }
+
+.admin-image-field__body { display:grid; gap:8px; flex:1; min-width:0; }
+.admin-image-field__actions { display:flex; gap:7px; }
+.admin-image-field__actions .admin-button { padding:7px 12px; font-size:12px; }
+
+/* Verde: es la única confirmación de que el archivo llegó y se procesó. */
+.admin-image-field__done { color:#27875a !important; font-weight:600 !important; }
+
 .admin-row-actions button svg { display:block; }
 
 /*

@@ -350,6 +350,18 @@ export default function ProductsManager({ products }) {
                   }
                 />
               </label>
+              {/*
+                La imagen va arriba, no al final.
+
+                Estaba después de las especificaciones, o sea fuera del área
+                visible de un modal que scrollea: había que bajar para
+                encontrarla y el resultado de subir aparecía más abajo todavía.
+              */}
+              <ImageField
+                label="Imagen"
+                value={editing.image}
+                onChange={(value) => setEditing({ ...editing, image: value })}
+              />
               <label>
                 Precio (pesos)
                 <input
@@ -443,11 +455,6 @@ export default function ProductsManager({ products }) {
                 />
                 <small>Una por línea, con el formato «clave: valor».</small>
               </label>
-              <ImageField
-                label="Imagen"
-                value={editing.image}
-                onChange={(value) => setEditing({ ...editing, image: value })}
-              />
             </div>
 
             {error && (

@@ -97,6 +97,10 @@ base, no JWT firmados. Tampoco Resend ni cron.
       preflight de CORS contra ese origen y lo borra. Es seguro contra el bucket
       de producción.
 
+> **Antes de tener el bucket real** puedes correr todo esto contra el MinIO que
+> levanta `docker compose up -d`: mismo protocolo S3, mismas URLs firmadas,
+> mismo preflight. Las variables están en `docker-compose.yml`.
+
 ## 4. Dominio y DNS
 
 - [ ] Apex y `www` apuntando al host (los registros que indique Vercel al añadir

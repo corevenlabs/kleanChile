@@ -62,9 +62,16 @@ export async function requestImageUploadAction({ contentType }) {
     return { status: "error", message: "El almacenamiento de objetos no está configurado." };
   }
 
-  // Una sesión válida pero descontrolada no debería poder emitir URLs firmadas
-  // sin límite: una carga real de galería son unas pocas por minuto.
-  if (!checkRateLimit(`upload:${user.id}`, 60, 60_000).ok) {
+  /*
+   * Una sesión válida pero descontrolada no debería poder emitir URLs firmadas
+   * sin límite: una carga real de galería son unas pocas por minuto.
+   *
+   * El limitador de acá toma un objeto de opciones y devuelve `allowed` — no la
+   * firma posicional con `.ok` de azarwear. Pasarle `(key, 60, 60_000)` no falla
+   * en el build ni en los tipos: `limit` cae a su valor por defecto y `.ok` es
+   * `undefined`, así que **toda** subida quedaba rechazada.
+   */
+  if (!checkRateLimit(`upload:${user.id}`, { limit: 60, windowMs: 60_000 }).allowed) {
     return { status: "error", message: "Demasiadas subidas seguidas. Espera un momento." };
   }
 

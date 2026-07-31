@@ -39,8 +39,16 @@ function client() {
   cached = new S3Client({
     // R2 no está particionado por región como S3; "auto" es lo que espera.
     region: "auto",
-    endpoint: `https://${cfg.accountId}.r2.cloudflarestorage.com`,
+    endpoint: cfg.endpoint ?? `https://${cfg.accountId}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId: cfg.accessKeyId, secretAccessKey: cfg.secretAccessKey },
+    /*
+     * Direccionamiento por ruta cuando el endpoint viene puesto a mano.
+     *
+     * MinIO en `localhost:9000` no puede resolver `bucket.localhost`, que es lo
+     * que el SDK intentaría por defecto. R2 acepta las dos formas, así que esto
+     * solo aplica al sustituto local.
+     */
+    ...(cfg.endpoint ? { forcePathStyle: true } : {}),
   });
 
   return cached;

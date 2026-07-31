@@ -32,6 +32,16 @@ const serverSchema = z.object({
   R2_SECRET_ACCESS_KEY: z.string().min(1).optional(),
   R2_BUCKET: z.string().min(1).optional(),
   NEXT_PUBLIC_CDN_URL: z.url().optional(),
+
+  /**
+   * Overrides the derived R2 endpoint.
+   *
+   * Not part of the all-or-nothing group: R2 itself never needs it. It exists
+   * so a local MinIO can stand in for the bucket, which is the only way to
+   * exercise the presigned upload and the CORS preflight without real
+   * credentials — see `docker-compose.yml`.
+   */
+  R2_ENDPOINT: z.url().optional(),
 });
 
 let cache = null;
@@ -85,6 +95,7 @@ export function storageConfig() {
     secretAccessKey: cfg.R2_SECRET_ACCESS_KEY,
     bucket: cfg.R2_BUCKET,
     cdnUrl: cfg.NEXT_PUBLIC_CDN_URL,
+    endpoint: cfg.R2_ENDPOINT ?? null,
   };
 }
 

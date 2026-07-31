@@ -217,6 +217,8 @@ Three properties follow, and they are worth more than the table would be:
 
 **R2 is optional, as a group.** All five `R2_*` variables or none: `storageConfig()` rejects the half-configured state by name, because that is the one that fails late — uploads appear to work, then fail at presign, or succeed into a bucket whose public URL nobody set. With none of them, uploads write to `public/uploads/` as before, which keeps `npm run dev` working on a bare checkout.
 
+**There is a local bucket.** `docker compose up -d` also starts MinIO on `:9000` with the bucket created and public-read. Point `R2_ENDPOINT` at it (see `docker-compose.yml`) and the whole path runs locally — presigned PUT, CORS preflight, sharp, the database write. That substitution is only possible because `r2.js` speaks plain S3 with no Cloudflare-specific calls, and it is the only way to exercise this without real credentials. `R2_ENDPOINT` also switches the client to path-style addressing, which MinIO needs and R2 accepts.
+
 **`sharp` is reachable from exactly one module** (`app/api/admin/media/route.js`) and is in `serverExternalPackages`. `imageKeys.js` holds every naming rule with no dependencies at all, precisely so a page can name a rendition without pulling a native binary into its graph. Keep that split.
 
 `PIPELINE_REVISION` is folded into every key. Bump it when widths, formats or quality change — otherwise new settings collide with objects encoded under the old ones and nothing regenerates.

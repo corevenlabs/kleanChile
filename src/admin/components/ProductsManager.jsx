@@ -205,6 +205,16 @@ export default function ProductsManager({ products }) {
           ))}
         </select>
         <span className="admin-count">{filtered.length} productos</span>
+        {/*
+          Arriba, no debajo de la tabla.
+
+          Estaba al final de la página, y con cuarenta y seis productos eso
+          queda tan por debajo del pliegue que la conclusión razonable es que
+          crear un producto suelto no se puede y hay que importar.
+        */}
+        <button type="button" className="admin-button" onClick={() => open({ ...emptyProduct })}>
+          <Icon name="mas" size={15} /> Nuevo producto
+        </button>
       </div>
 
       {error && !editing && (
@@ -308,15 +318,6 @@ export default function ProductsManager({ products }) {
         )}
       </div>
 
-      <div className="admin-settings__actions">
-        <button
-          type="button"
-          className="admin-button"
-          onClick={() => open({ ...emptyProduct })}
-        >
-          <Icon name="mas" size={15} /> Nuevo producto
-        </button>
-      </div>
 
       {editing && (
         <div

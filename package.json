@@ -34,6 +34,6 @@
     "db:studio": "drizzle-kit studio",
     "db:seed": "node --conditions=react-server scripts/seed.js",
     "admin:create": "node --conditions=react-server scripts/create-admin.js",
-    "media:verify": "node scripts/verify-media.js"
+    "media:verify": "node --conditions=react-server scripts/verify-media.js"
   }
 }

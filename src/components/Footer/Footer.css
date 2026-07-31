@@ -201,12 +201,49 @@
    BOTTOM
 ========================= */
 .footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   border-top: 1px solid var(--k-line);
   margin-top: 40px;
   padding-top: 16px;
-  text-align: center;
   font-size: 12px;
   color: var(--k-muted);
+}
+
+.footer__bottom p {
+  margin: 0;
+}
+
+/*
+ * La firma del estudio.
+ *
+ * Deliberadamente más apagada que el copyright de al lado: es una firma, no un
+ * aviso. El nombre va en la tipografía de display, en versalitas espaciadas,
+ * para que se lea como una marca y no como otro enlace del pie.
+ */
+.footer__studio {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: inherit;
+  opacity: 0.62;
+  text-decoration: none;
+  transition: opacity 0.18s;
+}
+
+a.footer__studio:hover {
+  opacity: 1;
+}
+
+.footer__studio strong {
+  font-family: var(--k-display);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 /* =========================

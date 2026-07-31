@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Este proyecto no tiene linter ni tests configurados — `next build` es la
+      # única comprobación automática que hay. Se deja el paso solo, y con eso
+      # ya atrapa lo que más se rompe acá: un import mal escrito, un Client
+      # Component recibiendo una función como prop, o una ruta que no compila.
+      - name: Build
+        run: npm run build
+        env:
+          # Valores de relleno: el build no se conecta a la base, pero `src/env.js`
+          # valida que DATABASE_URL sea una URL bien formada.
+          DATABASE_URL: postgresql://user:pass@localhost:5432/kleanchile
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000

@@ -11,4 +11,5 @@ export * from "./content.js";
 export * from "./enums.js";
 export * from "./imports.js";
 export * from "./inventory.js";
+export * from "./media.js";
 export * from "./orders.js";

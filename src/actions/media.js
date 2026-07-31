@@ -1,45 +1,93 @@
 "use server";
 
-import { randomBytes } from "node:crypto";
+import { randomBytes, randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { storageConfigured } from "../env.js";
+import { createUploadUrl } from "../infra/storage/r2.js";
 import { requireUser } from "../lib/adminSession.js";
+import { checkRateLimit } from "../lib/rateLimit.js";
 
 /**
- * Image upload.
+ * Subida de imágenes, por dos caminos.
  *
- * Files land in `public/uploads/` and the database stores the path. The old
- * admin encoded images as base64 data URLs and kept them in `localStorage`,
- * which meant every product image was inlined into the page that listed it and
- * the whole catalog shared a five-megabyte quota.
+ * **Con R2 configurado** el navegador pide acá una URL firmada y hace PUT del
+ * original directo al bucket; después `/api/admin/media` lo procesa. El archivo
+ * nunca pasa por el servidor: una foto de cámara es más grande de lo que una
+ * función serverless puede recibir, y enrutarla por una función sería lento
+ * además.
  *
- * **This writes to the local filesystem**, so it works in development and on a
- * VPS or container with a persistent volume, but not on a serverless host where
- * the disk is ephemeral and per-instance. Object storage is the seam to add
- * when that matters: only this file and the returned URL would change, because
- * nothing downstream knows where the bytes went. Products can also just be
- * given an external image URL, which is what the seeded catalog uses.
+ * **Sin R2** el archivo se escribe en `public/uploads/` como antes. Ese camino
+ * sigue existiendo porque `npm run dev` tiene que funcionar con solo una base
+ * de datos, y porque un VPS con volumen es una forma legítima de correr esto.
+ * En un host serverless el disco es efímero y la foto desaparece — por eso
+ * `docs/DEPLOY.md` abre con esa decisión.
+ *
+ * Los dos caminos terminan igual: el campo guarda una URL.
  */
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const MAX_BYTES = 4 * 1024 * 1024;
+const MAX_LOCAL_BYTES = 4 * 1024 * 1024;
 
 /**
- * The extension comes from the content type, never from the uploaded filename.
+ * La extensión sale del content type, nunca del nombre que mandó el navegador.
  *
- * A browser will happily send `name: "../../../app/page.js"`, and joining that
- * onto a directory is how an upload form becomes a write primitive. The name is
- * discarded entirely — the stored file is named from random bytes.
+ * Un navegador manda feliz `name: "../../../app/page.js"`, y pegar eso a un
+ * directorio es cómo un formulario de subida se convierte en escritura
+ * arbitraria. El nombre se descarta entero.
  */
 const EXTENSIONS = {
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/webp": "webp",
   "image/avif": "avif",
-  "image/gif": "gif",
-  "image/svg+xml": "svg",
 };
 
+/** Solo el camino local; R2 procesa con sharp y no le sirven ni GIF ni SVG. */
+const LOCAL_ONLY_EXTENSIONS = { ...EXTENSIONS, "image/gif": "gif", "image/svg+xml": "svg" };
+
+/** Le dice al navegador qué camino usar, sin que tenga que adivinar. */
+export async function storageModeAction() {
+  await requireUser();
+  return { mode: storageConfigured() ? "r2" : "local" };
+}
+
+/**
+ * Un permiso de subida directa al bucket.
+ */
+export async function requestImageUploadAction({ contentType }) {
+  const user = await requireUser();
+
+  if (!storageConfigured()) {
+    return { status: "error", message: "El almacenamiento de objetos no está configurado." };
+  }
+
+  // Una sesión válida pero descontrolada no debería poder emitir URLs firmadas
+  // sin límite: una carga real de galería son unas pocas por minuto.
+  if (!checkRateLimit(`upload:${user.id}`, 60, 60_000).ok) {
+    return { status: "error", message: "Demasiadas subidas seguidas. Espera un momento." };
+  }
+
+  const extension = EXTENSIONS[contentType];
+  if (!extension) {
+    return { status: "error", message: "Formato no admitido. Usa JPG, PNG, WebP o AVIF." };
+  }
+
+  // Clave temporal al azar bajo un prefijo propio. La clave definitiva se
+  // calcula desde el contenido y solo después de procesar, así que este nombre
+  // es descartable.
+  const tempKey = `uploads/tmp/${randomUUID()}.${extension}`;
+
+  return {
+    status: "ok",
+    uploadUrl: await createUploadUrl(tempKey, contentType),
+    tempKey,
+  };
+}
+
+/**
+ * El camino local: el archivo sí pasa por el servidor y se escribe en disco.
+ */
 export async function uploadImageAction(formData) {
   await requireUser();
 
@@ -48,11 +96,11 @@ export async function uploadImageAction(formData) {
     return { status: "error", message: "No se recibió ninguna imagen." };
   }
 
-  if (file.size > MAX_BYTES) {
+  if (file.size > MAX_LOCAL_BYTES) {
     return { status: "error", message: "La imagen supera los 4 MB." };
   }
 
-  const extension = EXTENSIONS[file.type];
+  const extension = LOCAL_ONLY_EXTENSIONS[file.type];
   if (!extension) {
     return { status: "error", message: "Formato no admitido. Usa JPG, PNG, WebP o AVIF." };
   }

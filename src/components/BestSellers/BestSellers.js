@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
+import Picture from "../media/Picture";
 import { formatClp } from "../../domain/shared/money";
 import ProductQuickView from "../cart/ProductQuickView";
 
@@ -46,7 +47,7 @@ export default function BestSellers({ data, products = [] }) {
           onClick={() => setPreview(product)}
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setPreview(product); } }}
         >
-          <div className="bs__card-img"><img src={product.image} alt={product.name} loading="lazy" />{badge && <span className={`bs__badge ${badgeColors[badge]}`}>{badge}</span>}</div>
+          <div className="bs__card-img"><Picture src={product.image} alt={product.name} sizes="(max-width: 720px) 60vw, 260px" />{badge && <span className={`bs__badge ${badgeColors[badge]}`}>{badge}</span>}</div>
           <div className="bs__card-info"><p className="bs__card-name">{product.name}</p><p className="bs__card-type">{product.type}</p><p className="bs__card-price">{formatClp(product.price)}</p></div>
         </div>;
       })}</div>

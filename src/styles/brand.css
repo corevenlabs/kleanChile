@@ -78,6 +78,20 @@ body {
   color: var(--k-muted);
 }
 
+/*
+ * `<picture>` no genera caja.
+ *
+ * Envolver un `<img>` en `<picture>` mete un elemento inline entre el
+ * contenedor y la imagen, y eso rompe cualquier cadena de `height: 100%` o
+ * cualquier hijo directo de un flex — que es exactamente cómo están hechas las
+ * tarjetas del catálogo y el banner dual. `display: contents` hace que el
+ * envoltorio desaparezca de la maqueta y la imagen se comporte igual que antes,
+ * así que `Picture` se puede usar donde había un `<img>` sin tocar el CSS.
+ */
+picture {
+  display: contents;
+}
+
 /* Keyboard focus, once, everywhere. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--k-cyan);

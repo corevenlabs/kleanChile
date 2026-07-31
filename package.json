@@ -7,6 +7,8 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1101.0",
+    "@aws-sdk/s3-request-presigner": "^3.1101.0",
     "drizzle-orm": "^0.45.2",
     "exceljs": "^4.4.0",
     "framer-motion": "^12.42.0",
@@ -16,6 +18,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "server-only": "^0.0.1",
+    "sharp": "^0.35.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -30,6 +33,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:seed": "node --conditions=react-server scripts/seed.js",
-    "admin:create": "node --conditions=react-server scripts/create-admin.js"
+    "admin:create": "node --conditions=react-server scripts/create-admin.js",
+    "media:verify": "node scripts/verify-media.js"
   }
 }

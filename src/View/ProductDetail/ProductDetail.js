@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AddToCartForm from "../../components/cart/AddToCartForm";
 import JsonLd from "../../components/seo/JsonLd";
+import Picture from "../../components/media/Picture";
 import { CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { breadcrumbLd, productLd } from "../../domain/seo/structuredData";
 import { formatClp } from "../../domain/shared/money";
@@ -40,7 +41,9 @@ export default function ProductDetail({ product }) {
     <JsonLd data={productLd({ product, url, image: absoluteImage(product.image), brand: product.specs?.marca })} />
     <JsonLd data={breadcrumbLd(trail)} />
     <nav className="breadcrumb" aria-label="Ruta"><Link href="/">Inicio</Link> / <Link href={`/${product.category}`}>{categoryLabel}</Link> / <span>{product.name}</span></nav><div className="product-layout">
-    <div className="product-image-box"><div className="product-image-wrapper"><img src={product.image} alt={product.name} /></div></div>
+    {/* La imagen principal de la página: `priority` para que no espere detrás de
+        la heurística de carga diferida. */}
+    <div className="product-image-box"><div className="product-image-wrapper"><Picture src={product.image} alt={product.name} sizes="(max-width: 900px) 100vw, 520px" priority /></div></div>
     <div className="product-info">{product.skuCode && <p className="quickview__sku">SKU {product.skuCode}</p>}<h1>{product.name}</h1><div className="price">{formatClp(product.price)}</div><div className="description-section"><p className="description">{product.description}</p></div>
       <AddToCartForm productId={product.id} inStock={product.inStock} stockOnHand={product.stockOnHand} />
       {specs.length > 0 &&<div className="specs-section"><div className="specs-header"><h3>Especificaciones</h3><button className="download-btn">📄 Descargar ficha técnica</button></div><div className="specs-grid">{specs.map(([key, value]) => <div className="specs-row" key={key}><span className="specs-key">{formatKey(key)}</span><span className="specs-value">{value}</span></div>)}</div></div>}

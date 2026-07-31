@@ -9,28 +9,27 @@ host** y que conviene leer antes de empezar.
 
 ---
 
-## 0. La decisión que hay que tomar primero: dónde viven las imágenes
+## 0. Imágenes: R2, o disco local
 
-`src/actions/media.js` guarda los archivos subidos en `public/uploads/` y
-almacena la ruta en la base. Eso funciona en desarrollo y en un VPS o contenedor
-con volumen, **pero no en Vercel**: cada instancia serverless tiene su propio
-disco efímero, así que una foto subida desde el panel desaparece en el siguiente
-despliegue —o antes— y queda un producto apuntando a un 404.
+Hay dos caminos y el código elige solo, según estén o no las variables `R2_*`.
 
-Tres salidas, en orden de esfuerzo:
+**Con R2** (lo recomendado, y lo que hace azarwear) el navegador sube el
+original directo al bucket con una URL firmada, y el servidor lo convierte en un
+escalón AVIF/WebP de hasta cinco anchos. El archivo nunca pasa por una función
+serverless.
 
-1. **Solo URLs externas.** El catálogo sembrado ya funciona así, y el importador
-   toma una columna de URL. Si el cliente aloja sus fotos en otro lado, Vercel
-   sirve tal cual y no hay nada que hacer. El botón de subir archivo del panel
-   **hay que quitarlo o desactivarlo**, o alguien lo va a usar.
-2. **Object storage** (Cloudflare R2, S3). Es la costura prevista: cambia
-   únicamente `src/actions/media.js` y todo lo demás sigue igual, porque el
-   resto del sistema solo conoce «la imagen es una URL». Es lo que hace azarwear.
-3. **Un VPS o contenedor con volumen** (Railway, Fly, Hetzner + Docker). El
-   código no cambia: `docker-compose.yml` ya levanta el Postgres y `public/uploads`
-   se monta como volumen.
+**Sin ellas** los archivos se escriben en `public/uploads/`. Eso sirve en
+desarrollo y en un VPS o contenedor con volumen, **pero no en Vercel**: cada
+instancia tiene disco efímero, así que una foto subida desde el panel desaparece
+en el siguiente despliegue y queda un producto apuntando a un 404.
 
-> Elige antes del paso 4. Cambiar de host después es rehacer DNS y variables.
+En los dos casos el campo guarda **una URL**, así que un producto con foto
+subida y uno con enlace de proveedor son la misma clase de cosa. Eso es lo que
+permite que el importador siga tomando una columna de URL sin saber nada de
+esto.
+
+> Si despliegas en Vercel: configura R2 (paso 3) o acepta que el botón de subir
+> archivo no sirve y todas las imágenes entran como URL externa.
 
 ---
 
@@ -55,9 +54,19 @@ mensaje claro, no con un `undefined` tres capas más abajo.
 |---|---|
 | `DATABASE_URL` | El string pooled de Postgres. |
 | `NEXT_PUBLIC_SITE_URL` | **El dominio real**, p. ej. `https://kleanchile.cl`. Sin barra final. |
+| `R2_ACCOUNT_ID` | Account ID de Cloudflare. |
+| `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` | El par de llaves S3 del bucket. |
+| `R2_BUCKET` | `kleanchile` |
+| `NEXT_PUBLIC_CDN_URL` | `https://cdn.kleanchile.cl` |
 
-Son solo dos. Este proyecto no usa R2, ni Resend, ni cron, ni `AUTH_SECRET`
-—las sesiones son tokens opacos guardados con hash en la base, no JWT firmados.
+Las cinco de R2 son **todas o ninguna**: `storageConfig()` en `src/env.js`
+rechaza el estado intermedio nombrando las que faltan. Medio configurado es el
+estado peligroso — las subidas parecerían funcionar y después fallarían al
+firmar, o peor, escribirían en un bucket cuya URL pública nadie definió, y las
+fotos quedarían guardadas e inalcanzables.
+
+No hay `AUTH_SECRET`: las sesiones son tokens opacos guardados con hash en la
+base, no JWT firmados. Tampoco Resend ni cron.
 
 > **`NEXT_PUBLIC_SITE_URL` es la que más se olvida.** Alimenta `sitemap.xml`,
 > `robots.txt`, las URLs canónicas y las imágenes de Open Graph. Si queda en
@@ -65,22 +74,46 @@ Son solo dos. Este proyecto no usa R2, ni Resend, ni cron, ni `AUTH_SECRET`
 > previsualizar un enlace. El fallback es `http://localhost:3000` a propósito:
 > se detecta de un vistazo, un dominio mal escrito no.
 
-## 3. Dominio y DNS
+## 3. R2 (imágenes y CORS)
+
+- [ ] Bucket creado, con dominio público `cdn.kleanchile.cl`
+      (Cloudflare → R2 → bucket → Settings → Custom Domains).
+- [ ] **CORS.** La subida del panel hace un PUT firmado desde el navegador
+      directo al bucket, así que R2 tiene que permitir el dominio de producción.
+      Es el paso que más se olvida, y falla **solo en producción y solo desde el
+      navegador** — nunca al probar desde la consola. En Cloudflare → R2 →
+      bucket → Settings → CORS Policy:
+      ```json
+      [{
+        "AllowedOrigins": ["https://kleanchile.cl", "https://www.kleanchile.cl"],
+        "AllowedMethods": ["PUT", "GET"],
+        "AllowedHeaders": ["content-type"],
+        "MaxAgeSeconds": 3600
+      }]
+      ```
+- [ ] Compruébalo:
+      `npm run media:verify -- --r2 --cors https://kleanchile.cl`
+      Sube un objeto de prueba bajo `uploads/tmp/verify-`, lo lee, hace el
+      preflight de CORS contra ese origen y lo borra. Es seguro contra el bucket
+      de producción.
+
+## 4. Dominio y DNS
 
 - [ ] Apex y `www` apuntando al host (los registros que indique Vercel al añadir
       el dominio, o la IP del VPS).
 - [ ] HTTPS activo antes de abrir el sitio: la cookie de sesión del admin es
       `sameSite=strict` + `httpOnly`, y sobre HTTP la contraseña viaja en claro.
 
-## 4. Despliegue
+## 5. Despliegue
 
 - [ ] Conecta el repo. Framework: Next.js (autodetectado).
-- [ ] `sharp` solo se usa en `scripts/build-logo-assets.js`, que se corre a mano
-      —no en el build— así que no hace falta configurarlo en el host.
+- [ ] `sharp` está en `serverExternalPackages` (`next.config.js`): es un binario
+      nativo y el bundler no puede empaquetarlo. Vercel lo soporta sin más
+      configuración.
 - [ ] Revisa el log del primer build: debe compilar limpio. El CI
       (`.github/workflows/ci.yml`) corre el mismo build en cada push a `main`.
 
-## 5. Datos iniciales
+## 6. Datos iniciales
 
 - [ ] Crea la cuenta dueña:
       `DATABASE_URL="<prod>" npm run admin:create -- --email tu@kleanchile.cl --name "Tu Nombre" --owner`
@@ -98,7 +131,7 @@ Son solo dos. Este proyecto no usa R2, ni Resend, ni cron, ni `AUTH_SECRET`
 - [ ] Carga el catálogo real. El importador acepta CSV y XLSX; la vista previa no
       escribe nada, así que puedes revisarla sin miedo.
 
-## 6. Verificación post-deploy
+## 7. Verificación post-deploy
 
 - [ ] `https://<dominio>/sitemap.xml` lista el dominio real, no localhost.
 - [ ] `https://<dominio>/robots.txt` apunta al sitemap y bloquea `/admin`,
@@ -112,8 +145,9 @@ Son solo dos. Este proyecto no usa R2, ni Resend, ni cron, ni `AUTH_SECRET`
       —anular devuelve el stock— o déjalo marcado.
 - [ ] Ajusta el stock de un producto desde el editor y confirma que la columna de
       la lista cambió.
-- [ ] Si elegiste la opción 2 o 3 del paso 0: sube una foto desde el panel y
-      recarga a los cinco minutos para confirmar que sigue ahí.
+- [ ] **Sube una foto desde el panel.** Es la prueba real del CORS de R2, y el
+      campo debe quedar con una URL de `cdn.` — no con una ruta `/uploads/`. Si
+      quedó `/uploads/`, R2 no está configurado y esa foto se va a perder.
 
 ---
 
@@ -144,6 +178,13 @@ de aplicar una importación.
   (`tsvector` + GIN). La costura es `getSearchableProducts`.
 - **No hay carga masiva de imágenes por ZIP**: el importador toma una columna de
   URL, y las fotos se suben de a una en el editor.
+- **Las imágenes externas no pasan por el pipeline.** Una URL de proveedor se
+  sirve tal cual, sin renditions y sin `srcset`: el escalón solo aplica a lo que
+  se sube por el panel. Ingerir URLs externas al subirlas sería el siguiente
+  paso, y `ingestUploadedImage` ya hace casi todo lo necesario.
+- **No hay limpieza de huérfanos.** La tabla `media` registra qué se subió, así
+  que se puede escribir un `media:purge`, pero no existe: una foto reemplazada
+  por otra sigue ocupando espacio en el bucket.
 - **No hay forma de deshacer una importación** desde el panel. El lote y los
   valores anteriores de cada fila quedan guardados, así que la información para
   revertir existe; el botón no.

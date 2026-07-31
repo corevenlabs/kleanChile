@@ -43,6 +43,13 @@
       "when": 1785536672272,
       "tag": "0005_footer_copyright_is_the_shop",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1785537701683,
+      "tag": "0006_media_table",
+      "breakpoints": true
     }
   ]
 }

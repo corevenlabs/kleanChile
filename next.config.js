@@ -13,6 +13,18 @@ const nextConfig = {
    */
   distDir: process.env.NEXT_DIST_DIR || ".next",
 
+  /*
+   * `sharp` es un binario nativo: el bundler no puede empaquetarlo, y si lo
+   * intenta el resultado falla en tiempo de ejecución en el host. Externalizarlo
+   * hace que se cargue con `require` desde node_modules, que es lo que Vercel y
+   * cualquier runtime Node esperan.
+   *
+   * Solo lo alcanza `app/api/admin/media/route.js` — a propósito. Ver la nota en
+   * `infra/storage/imageKeys.js` sobre por qué los nombres de rendition viven
+   * aparte del pipeline.
+   */
+  serverExternalPackages: ["sharp"],
+
   experimental: {
     serverActions: {
       // Server Actions cap request bodies at 1 MB by default, which a photo

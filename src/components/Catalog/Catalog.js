@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Picture from "../media/Picture";
 import { formatClp } from "../../domain/shared/money";
 
 /**
@@ -93,7 +94,14 @@ export default function Catalog({ products = [], linkProducts = false }) {
           const card = (
             <article className={`product-card ${product.inStock ? "" : "product-card--out"}`}>
               <div className="product-card__img">
-                <img src={product.image} alt={product.name} loading="lazy" />
+                {/* 4 columnas a 1280px, 3 a 1000px, 2 en teléfono — así el
+                    navegador baja la rendition del tamaño que va a mostrar y no
+                    la más grande que exista. */}
+                <Picture
+                  src={product.image}
+                  alt={product.name}
+                  sizes="(max-width: 720px) 50vw, (max-width: 1000px) 33vw, 300px"
+                />
                 {!product.inStock && <span className="product-card__flag">Sin stock</span>}
               </div>
               <div className="product-card__info">

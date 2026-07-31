@@ -191,6 +191,36 @@ Anything that mutates content **must** invalidate the matching tag, or the store
 
 **The public routes are dynamic, not prerendered.** The cart count in the navbar reads an `httpOnly` cookie in `app/(public)/layout.js`, and in Next 15 without PPR that makes the whole route render on demand. The alternative — fetching the count from the browser after hydration — keeps the pages static but shows an empty badge on first paint and needs its own refresh path after every add. Page *data* is still cached by tag, so a dynamic render is a render, not a round trip to Postgres.
 
+### Images
+
+```
+browser  →  requestImageUploadAction  →  presigned PUT  →  R2 (uploads/tmp/…)
+         →  POST /api/admin/media     →  sharp ladder   →  R2 (img/v1/…)
+         →  the field holds a URL
+```
+
+**An image is a URL, and that does not change.** azarwear makes an image a row in `media` that products reference; here the seeded catalog points at supplier URLs, the importer takes a URL column, and the editor lets you paste any link. Changing that would mean migrating the schema, the importer, the seed and every component.
+
+So the URL is made self-describing instead — the original's dimensions live in the path:
+
+```
+img/v1/<hash>/<originalW>x<originalH>/<width>.<format>
+```
+
+Three properties follow, and they are worth more than the table would be:
+
+- An untouched `<img src={product.image}>` **still works** — what is stored is a real image, not an identifier.
+- The full `srcset` is derived **with no database read**, because the original width is the only thing needed to know which renditions exist, and it travels in the URL.
+- A supplier URL does not match the pattern, `parseRenditionUrl` returns null, and `Picture` falls back to a plain `<img>`. The two kinds coexist, which is what let this be adopted one component at a time.
+
+**`media` records what is in the bucket; nothing rendered depends on it.** Drop the table and the storefront renders identically. It exists to answer "what did we upload, who uploaded it, why is the bucket 4 GB" — questions the URL cannot.
+
+**R2 is optional, as a group.** All five `R2_*` variables or none: `storageConfig()` rejects the half-configured state by name, because that is the one that fails late — uploads appear to work, then fail at presign, or succeed into a bucket whose public URL nobody set. With none of them, uploads write to `public/uploads/` as before, which keeps `npm run dev` working on a bare checkout.
+
+**`sharp` is reachable from exactly one module** (`app/api/admin/media/route.js`) and is in `serverExternalPackages`. `imageKeys.js` holds every naming rule with no dependencies at all, precisely so a page can name a rendition without pulling a native binary into its graph. Keep that split.
+
+`PIPELINE_REVISION` is folded into every key. Bump it when widths, formats or quality change — otherwise new settings collide with objects encoded under the old ones and nothing regenerates.
+
 ### Metadata, sharing and accessibility
 
 **`NEXT_PUBLIC_SITE_URL` is load-bearing in production.** `src/lib/site.js` holds it, and `metadataBase` in the root layout is built from it. Canonical tags, `og:image`, `og:url` and every URL in the sitemap are absolute; without the variable they all resolve against `http://localhost:3000`, and Next drops `og:image` entirely rather than emitting a relative one. The fallback is deliberately the obvious wrong answer — a production page advertising `localhost` is diagnosable at a glance, a subtly wrong domain is not.
@@ -221,8 +251,7 @@ There is no sign-up route by design. Accounts come from `npm run admin:create`.
 ## Deliberate decisions
 
 - **Prices are integer Chilean pesos, not cents.** This departs from azarwear's "money is always integer cents" rule because CLP is zero-decimal — there is no centavo to represent. `src/domain/shared/money.js` formats and parses; `parseClp` exists because `Number("2.990")` returns 2.99, which would price a three-thousand-peso product at three pesos.
-- **Images are URLs.** `src/actions/media.js` writes uploads to `public/uploads/` and stores the path. That works in dev and on a VPS or container with a volume, **not on a serverless host** with an ephemeral per-instance disk. Object storage is the seam to add there; only that file changes. Products can also just take an external image URL, which is what the seeded catalog uses.
-- **No sharp/R2 pipeline.** azarwear generates an AVIF/WebP ladder; this site does not have the traffic to justify the dependency.
+- **An image is a URL.** Not a media id, not a `MediaRef` — see "Images" below. This is the invariant the importer, the seed and every component depend on.
 - **The rate limiter is in-memory** (`src/lib/rateLimit.js`), so its limit multiplies across instances. It exists to stop unauthenticated requests from burning 32 MB of scrypt each, not to stop guessing — the per-account lockout does that.
 - **`admin.css` is untouched.** All admin UI composes from the classes already in it.
 

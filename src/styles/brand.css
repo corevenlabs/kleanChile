@@ -1,0 +1,143 @@
+/*
+ * KleanChile — brand tokens.
+ *
+ * Every value here is read off the logo rather than invented. The mark is a
+ * glossy bubble holding a fluid "K": its artwork runs from a bright cyan
+ * highlight through a mid blue into a deep navy, and the wordmark sets a heavy
+ * rounded "Klean" against a light "Chile".
+ *
+ * Two rules follow from that, and the rest of the stylesheets obey them:
+ *
+ * 1. There are no neutral greys. Secondary text is `--k-muted`, a blue-grey, so
+ *    even the quietest type belongs to the palette. Plain #888 was what made
+ *    the old catalogue read as a wireframe.
+ *
+ * 2. The gradient is spent in one place per view. It is the brand's most
+ *    recognisable asset and it stops meaning anything if every surface wears
+ *    it — see the category filter, which is where it earns its keep.
+ */
+
+:root {
+  /* Core ramp, dark to light, taken from the mark's own gradient. */
+  --k-navy: #0e2a6b;
+  --k-blue: #1668b8;
+  --k-cyan: #22c2e8;
+  --k-aqua: #a9e8f7;
+
+  /* Surfaces. `foam` is the bubble's white — a blue-tinted white, not #fff. */
+  --k-foam: #f2f9fd;
+  --k-white: #ffffff;
+
+  /* Type. Blue-black rather than black, for the same reason as `--k-muted`. */
+  --k-ink: #10233f;
+  --k-muted: #5b7189;
+  --k-line: #dce9f2;
+
+  /* Status, tuned to sit beside the blues rather than fight them. */
+  --k-ok: #0f9d6b;
+  --k-warn: #b45309;
+  --k-alert: #d63b3b;
+
+  /*
+   * The signature. 135° so the highlight lands top-left, where the bubble's
+   * own gloss sits.
+   */
+  --k-gradient: linear-gradient(135deg, var(--k-cyan) 0%, var(--k-blue) 52%, var(--k-navy) 100%);
+  /* The glow under an active pill: the bubble's halo, not a generic shadow. */
+  --k-glow: 0 6px 18px -6px rgba(34, 194, 232, 0.55), 0 2px 6px -2px rgba(14, 42, 107, 0.25);
+
+  --k-radius: 14px;
+  --k-radius-pill: 999px;
+
+  /*
+   * Type roles.
+   *
+   * Poppins reproduces the wordmark's geometric-rounded letterforms and gives
+   * back its heavy/light contrast, which is the brand's one typographic idea.
+   * Plex Sans carries body copy — a touch institutional, which suits "para
+   * instituciones" — and Plex Mono is reserved for SKU codes, because those are
+   * codes a customer retypes into WhatsApp and monospace makes them scannable.
+   */
+  --k-display: var(--font-poppins), "Segoe UI", system-ui, sans-serif;
+  --k-body: var(--font-plex), "Segoe UI", system-ui, sans-serif;
+  --k-mono: var(--font-plex-mono), ui-monospace, "Cascadia Mono", monospace;
+}
+
+body {
+  font-family: var(--k-body);
+  color: var(--k-ink);
+  background: var(--k-white);
+}
+
+/* A code the customer will read out or retype. */
+.k-sku {
+  font-family: var(--k-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--k-muted);
+}
+
+/* Keyboard focus, once, everywhere. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--k-cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/*
+ * Available to assistive technology, absent from the layout.
+ *
+ * Not `display: none` and not `visibility: hidden` — both remove the element
+ * from the accessibility tree, which is the opposite of the point.
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * Skip link.
+ *
+ * Moved off-screen rather than hidden with `display: none`, which would take it
+ * out of the tab order and defeat the point. It appears on focus — for a mouse
+ * user it never exists, for a keyboard user it is the first stop on the page.
+ */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 200;
+  padding: 11px 18px;
+  border-radius: var(--k-radius-pill);
+  background: var(--k-navy);
+  color: var(--k-white);
+  font-family: var(--k-display);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 0.18s;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

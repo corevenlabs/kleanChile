@@ -1,5 +1,4 @@
 .why {
-
   padding: 80px 64px;
 }
 
@@ -11,25 +10,28 @@
 }
 
 .why__eyebrow {
+  font-family: var(--k-display);
+  font-weight: 600;
+  color: var(--k-blue);
   font-size: 11px;
-  letter-spacing: 2px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #666;
   margin-bottom: 10px;
-
 }
 
 .why__title {
+  font-family: var(--k-display);
+  letter-spacing: -0.025em;
+  color: var(--k-navy);
   font-size: 34px;
-  font-weight: 600;
-  color: #111;
+  font-weight: 700;
   margin-bottom: 12px;
 }
 
 .why__subtitle {
   font-size: 14px;
   line-height: 1.6;
-  color: #666;
+  color: var(--k-muted);
 }
 
 /* GRID */
@@ -44,17 +46,19 @@
 /* CARD */
 .why__card {
   background: #fff;
-  padding: 28px;
+  padding: 26px;
   display: flex;
   gap: 16px;
   align-items: flex-start;
-  transition: all 0.25s ease;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
 }
 
 .why__card:hover {
   transform: translateY(-2px);
-  border-color: #ddd;
+  border-color: var(--k-aqua);
+  box-shadow: 0 10px 26px -14px rgba(14, 42, 107, 0.32);
 }
 
 /* ICON */
@@ -65,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111;
+  color: var(--k-ink);
 }
 
 .why__icon svg {
@@ -78,36 +82,36 @@
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
-  color: #111;
+  color: var(--k-ink);
 }
 
 .why__content p {
   font-size: 13px;
   line-height: 1.5;
-  color: #666;
+  color: var(--k-muted);
 }
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .why {
-    padding: 60px 40px;
-  }
+  padding: 60px 40px;
+}
 
-  .why__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.why__grid {
+  grid-template-columns: repeat(2, 1fr);
+}
 }
 
 @media (max-width: 640px) {
   .why {
-    padding: 50px 20px;
-  }
+  padding: 50px 20px;
+}
 
-  .why__grid {
-    grid-template-columns: 1fr;
-  }
+.why__grid {
+  grid-template-columns: 1fr;
+}
 
-  .why__title {
-    font-size: 26px;
-  }
+.why__title {
+  font-size: 26px;
+}
 }

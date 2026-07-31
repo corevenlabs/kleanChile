@@ -1,7 +1,9 @@
 .navbar {
   position: relative;
-  background: #ffffff;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  background: var(--k-white);
+  /* A cyan hairline instead of a grey shadow: the brand's edge, not a generic one. */
+  border-bottom: 1px solid var(--k-line);
+  box-shadow: 0 1px 10px rgba(14, 42, 107, 0.05);
   z-index: 100;
 }
 
@@ -19,8 +21,16 @@
   text-decoration: none;
   display: flex;
   align-items: center; /* el brand sí se puede centrar, no forma parte del hover */
+  gap: 10px;
 }
-.navbar__brand-text { font-weight: 700; font-size: 1.3rem; color: #0d1f5c; }
+.navbar__mark { width: 38px; height: 38px; display: block; }
+.navbar__brand-text {
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+  color: var(--k-navy);
+}
 
 .navbar__links {
   flex: 2;
@@ -35,22 +45,39 @@
 .navbar__links--hidden { display: none; }
 
 .navbar__link {
+  position: relative;
   display: flex;
   align-items: center;
   height: 100%;
   box-sizing: border-box;
   text-decoration: none;
-  color: #4b5563;
+  color: var(--k-muted);
+  font-family: var(--k-display);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   padding: 0 12px;
-  border-radius: 8px;
 }
-.navbar__link:hover { color: #1a3faa; }
+.navbar__link:hover { color: var(--k-navy); }
 
 .navbar__link--active {
-  color: #1a3faa;
-  font-weight: 700;
+  color: var(--k-navy);
+  font-weight: 600;
+}
+
+/*
+ * The active tab is marked with a gradient underline rather than only a colour
+ * change — at 0.92rem a weight shift alone is easy to miss, and this ties the
+ * navigation to the same gradient the filters use.
+ */
+.navbar__link--active::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--k-gradient);
 }
 
 /* MEGA MENU CORREGIDO */
@@ -78,42 +105,225 @@
   padding: 0 20px;
 }
 
-.megaMenu__title { font-size: 1.1rem; font-weight: 600; color: #0d1f5c; margin-bottom: 20px; }
+.megaMenu__title { font-size: 1.1rem; font-weight: 600; color: var(--k-navy); margin-bottom: 20px; }
 
 .megaMenu__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
 
 .megaMenu__section h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; }
 
-.megaMenu__item { display: block; text-decoration: none; color: #4b5563; font-size: 0.9rem; padding: 6px 0; }
-.megaMenu__item:hover { color: #1a3faa; transform: translateX(4px); transition: 0.2s; }
+.megaMenu__item { display: block; text-decoration: none; color: var(--k-muted); font-size: 0.9rem; padding: 6px 0; }
+.megaMenu__item:hover { color: var(--k-blue); transform: translateX(4px); transition: 0.2s; }
 
 .megaMenu__item--active {
-  color: #1a3faa;
+  color: var(--k-blue);
   font-weight: 700;
 }
 
 /* SEARCH, ACTIONS, MOBILE */
-.navbar__search { flex: 2; display: flex; justify-content: center; }
-.navbar__search input { width: 100%; max-width: 650px; padding: 12px 0; border: none; border-bottom: 2px solid #cbd5e1; outline: none; font-size: 1.1rem; }
-.navbar__search input:focus { border-bottom: 2px solid #1a3faa; }
+
+/*
+ * The search box.
+ *
+ * A bordered field rather than the old bare underline: this now opens a menu
+ * beneath it, and a control with a dropdown needs an edge for the dropdown to
+ * hang off, or the suggestions read as floating over the page.
+ */
+.navbar__search { flex: 2; display: flex; justify-content: center; min-width: 0; }
+.navbar__search form { position: relative; width: 100%; max-width: 560px; }
+
+.navbar__search-field {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 14px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius-pill);
+  background: var(--k-foam);
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.navbar__search-field:focus-within {
+  border-color: var(--k-aqua);
+  background: var(--k-white);
+}
+
+.navbar__search-icon { flex-shrink: 0; color: var(--k-muted); }
+
+.navbar__search input {
+  width: 100%;
+  padding: 11px 0;
+  border: none;
+  background: none;
+  outline: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--k-ink);
+}
+
+/* Safari draws its own clear button on `type=search`; it lands on top of the
+   pill's right edge and cannot be styled into agreement with it. */
+.navbar__search input::-webkit-search-decoration,
+.navbar__search input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+/* ── Suggestions ─────────────────────────────────────────────────────────── */
+
+.search-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  padding: 6px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  background: var(--k-white);
+  box-shadow: 0 18px 42px -20px rgba(14, 42, 107, 0.45);
+}
+
+.search-menu[hidden] { display: none; }
+.search-menu ul { margin: 0; padding: 0; list-style: none; }
+
+.search-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/*
+ * One highlight for both the pointer and the keyboard.
+ *
+ * `aria-activedescendant` means the input keeps real focus, so `:focus` never
+ * lands here — the active row has to be styled from state or a keyboard user
+ * sees nothing move as they arrow down.
+ */
+.search-menu__item--active { background: var(--k-foam); }
+
+.search-menu__item img {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--k-foam);
+}
+
+.search-menu__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+
+.search-menu__text strong {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--k-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-menu__text small { display: flex; align-items: center; gap: 8px; font-size: 10px; }
+
+.search-menu__out {
+  padding: 1px 6px;
+  border-radius: var(--k-radius-pill);
+  background: var(--k-foam);
+  color: var(--k-muted);
+  font-weight: 600;
+}
+
+.search-menu__price {
+  flex-shrink: 0;
+  font-family: var(--k-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--k-navy);
+}
+
+.search-menu__all { margin-top: 4px; border-top: 1px solid var(--k-line); padding-top: 4px; }
+
+.search-menu__all button {
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--k-blue);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-menu__all button:hover { background: var(--k-foam); }
 
 .navbar__actions { display: flex; align-items: center; gap: 12px; }
-.navbar__icon-btn { background: none; border: none; cursor: pointer; color: #0d1f5c; }
+.navbar__icon-btn { background: none; border: none; cursor: pointer; color: var(--k-navy); }
 
 .navbar__hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
-.navbar__hamburger span { width: 22px; height: 2px; background: #0d1f5c; border-radius: 2px; }
+.navbar__hamburger span { width: 22px; height: 2px; background: var(--k-navy); border-radius: 2px; }
 
 .navbar__mobile { display: none; flex-direction: column; padding: 10px 20px 20px; max-height: 0; overflow: hidden; transition: 0.3s ease; }
-.navbar__mobile--open { display: flex; max-height: 400px; }
-.navbar__mobile-link { padding: 14px 10px; text-decoration: none; color: #374151; }
+/* Scrolls rather than clips: the menu now carries every classification, and a
+   fixed height would have silently cut the last category off the bottom. */
+.navbar__mobile--open { display: flex; max-height: calc(100vh - 72px); overflow-y: auto; }
+.navbar__mobile-link { padding: 14px 10px 8px; text-decoration: none; color: var(--k-muted); font-family: var(--k-display); font-weight: 600; }
 
 .navbar__mobile-link--active {
-  color: #1a3faa;
+  color: var(--k-blue);
   font-weight: 700;
+}
+
+.navbar__mobile-group + .navbar__mobile-group {
+  border-top: 1px solid var(--k-line);
+}
+
+.navbar__mobile-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * The mega menu is hover-driven, so on a phone its classifications were
+ * unreachable — the whole point of the menu missing on the devices most likely
+ * to use it. Repeated here as pills, which fits nine of them in three rows.
+ */
+.navbar__mobile-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 10px 14px;
+}
+
+.navbar__mobile-chip {
+  padding: 6px 11px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius-pill);
+  background: var(--k-white);
+  color: var(--k-muted);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.navbar__mobile-chip--active {
+  border-color: transparent;
+  background: var(--k-gradient);
+  color: var(--k-white);
 }
 
 @media (max-width: 768px) {
   .navbar__links { display: none; }
   .navbar__hamburger { display: flex; }
   .megaMenu { display: none; }
+
+  /*
+   * The search drops to its own row instead of squeezing between the logo and
+   * the cart. At 390px the inline version left about 90px of field, which is
+   * not enough to see what you typed.
+   */
+  .navbar__inner { flex-wrap: wrap; row-gap: 10px; }
+  .navbar__search { order: 3; flex: 1 0 100%; }
+  .navbar__search form { max-width: none; }
 }

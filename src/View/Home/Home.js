@@ -23,18 +23,44 @@ function RevealSection({ children, className = '', effect = 'fade-up', delay = 0
   )
 }
 
-export default function Home({ banner, content }) {
+/**
+ * The home page sections, in order.
+ *
+ * `content` is the whole set of editable blocks, straight from the database.
+ * `bestSellers` is separate because it is derived from sales rather than
+ * edited — the block only supplies the heading and the link.
+ *
+ * The two guards are not defensive noise: `Banner` indexes `slides[current]`
+ * and `DualBanner` destructures `[left, ...right]`, so each crashes on an empty
+ * list — and emptying a section is a thing the admin now lets someone do.
+ */
+export default function Home({ content, bestSellers = [] }) {
   return (
     <>
-      <Banner data={banner} />
+      {/*
+        The home page had no `h1` at all.
+
+        It cannot be the hero's headline: that rotates every few seconds and
+        some slides deliberately carry no text, so the page's one top-level
+        heading would change under the reader or vanish entirely. A stable
+        hidden heading says what the site is, once, to a screen reader landing
+        cold and to a crawler deciding what this page is about.
+      */}
+      <h1 className="sr-only">
+        KleanChile — productos de limpieza, librería y artículos de escritorio para instituciones
+      </h1>
+
+      {content.hero.slides.length > 0 && <Banner data={content.hero} />}
 
       <RevealSection effect="fade-up">
-        <BestSellers data={content.bestSellers} />
+        <BestSellers data={content.bestSellers} products={bestSellers} />
       </RevealSection>
 
-      <RevealSection effect="zoom-in" delay={80}>
-        <DualBanner data={content.dualBanner} />
-      </RevealSection>
+      {content.dualBanner.blocks.length > 0 && (
+        <RevealSection effect="zoom-in" delay={80}>
+          <DualBanner data={content.dualBanner} />
+        </RevealSection>
+      )}
 
       {/* 👇 TESTIMONIOS - con efecto fade-up como el resto */}
       <RevealSection effect="fade-up" delay={60}>

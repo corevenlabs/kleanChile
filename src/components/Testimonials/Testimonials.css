@@ -5,7 +5,7 @@
   padding: 60px 0 40px;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--k-body);
 }
 
 .testimonials__inner {
@@ -21,28 +21,29 @@
 }
 
 .testimonials__label {
+  font-family: var(--k-display);
+  font-weight: 600;
+  color: var(--k-blue);
   display: inline-block;
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #999;
+  letter-spacing: 0.16em;
   margin-bottom: 12px;
-  font-weight: 400;
 }
 
 .testimonials__title {
+  font-family: var(--k-display);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--k-navy);
   font-size: 32px;
-  font-weight: 400;
   margin: 0 0 10px;
-  color: #111;
-  letter-spacing: -0.3px;
 }
 
 .testimonials__subtitle {
   font-size: 15px;
-  color: #888;
+  color: var(--k-muted);
   margin: 0;
-  font-weight: 300;
 }
 
 /* =========================
@@ -58,25 +59,37 @@
 /* =========================
    FLECHAS
 ========================= */
+/*
+ * Carousel arrow — the same control in both carousels.
+ *
+ * The glyph was near-black, which is the one colour the palette does not
+ * contain. Brand blue at rest, filling with the gradient on hover, so the
+ * control announces itself only when it is being used.
+ */
 .testimonials__arrow {
   width: 40px;
   height: 40px;
-  border: 1px solid #eaeaea;
-  background: white;
+  border: 1px solid var(--k-line);
+  background: #fff;
   border-radius: 50%;
   font-size: 20px;
+  line-height: 1;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease,
+    box-shadow 0.22s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
+  color: var(--k-blue);
+  box-shadow: 0 6px 18px -10px rgba(14, 42, 107, 0.35);
   flex-shrink: 0;
 }
 
 .testimonials__arrow:hover {
-  border-color: #111;
-  background: #f8f8f8;
+  border-color: transparent;
+  background: var(--k-gradient);
+  color: #fff;
+  box-shadow: var(--k-glow);
 }
 
 .testimonials__arrow:active {
@@ -100,13 +113,14 @@
 .testimonial-card {
   background: white;
   padding: 28px 24px 24px;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
 }
 
 .testimonial-card:hover {
-  border-color: #ddd;
+  border-color: var(--k-aqua);
+  box-shadow: 0 10px 26px -14px rgba(14, 42, 107, 0.32);
   transform: translateY(-2px);
 }
 
@@ -120,9 +134,8 @@
 .testimonial-card__comentario {
   font-size: 15px;
   line-height: 1.7;
-  color: #333;
+  color: var(--k-ink);
   margin: 0 0 20px;
-  font-weight: 300;
 }
 
 .testimonial-card__footer {
@@ -130,31 +143,31 @@
   justify-content: space-between;
   align-items: flex-end;
   padding-top: 16px;
-  border-top: 1px solid #f5f5f5;
+  border-top: 1px solid var(--k-foam);
 }
 
 .testimonial-card__nombre {
   font-size: 14px;
   font-weight: 500;
   margin: 0;
-  color: #111;
+  color: var(--k-ink);
 }
 
 .testimonial-card__cargo {
   font-size: 12px;
-  color: #888;
+  color: var(--k-muted);
   margin: 2px 0 0;
 }
 
 .testimonial-card__empresa {
   font-size: 12px;
-  color: #aaa;
+  color: var(--k-muted);
   margin: 0;
 }
 
 .testimonial-card__fecha {
   font-size: 11px;
-  color: #ccc;
+  color: var(--k-muted);
   flex-shrink: 0;
   margin-left: 16px;
 }
@@ -174,18 +187,18 @@
   height: 6px;
   border: none;
   border-radius: 50%;
-  background: #ddd;
+  background: var(--k-line);
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
 }
 
 .testimonials__dot:hover {
-  background: #bbb;
+  background: var(--k-muted);
 }
 
 .testimonials__dot.active {
-  background: #111;
+  background: var(--k-gradient);
   width: 20px;
   border-radius: 3px;
 }
@@ -195,104 +208,104 @@
 ========================= */
 @media (max-width: 1024px) {
   .testimonials__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  grid-template-columns: repeat(2, 1fr);
+}
 }
 
 @media (max-width: 768px) {
   .testimonials {
-    padding: 40px 0 30px;
-  }
+  padding: 40px 0 30px;
+}
 
-  .testimonials__inner {
-    padding: 0 18px;
-  }
+.testimonials__inner {
+  padding: 0 18px;
+}
 
-  .testimonials__header {
-    margin-bottom: 32px;
-  }
+.testimonials__header {
+  margin-bottom: 32px;
+}
 
-  .testimonials__title {
-    font-size: 26px;
-  }
+.testimonials__title {
+  font-size: 26px;
+}
 
-  .testimonials__subtitle {
-    font-size: 14px;
-  }
+.testimonials__subtitle {
+  font-size: 14px;
+}
 
-  .testimonials__grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
+.testimonials__grid {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
 
-  .testimonials__arrow {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
+.testimonials__arrow {
+  width: 34px;
+  height: 34px;
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: #fff;
+  box-shadow: 0 4px 14px -6px rgba(14, 42, 107, 0.35);
+}
 
-  .testimonials__arrow--prev {
-    left: -8px;
-  }
+.testimonials__arrow--prev {
+  left: -8px;
+}
 
-  .testimonials__arrow--next {
-    right: -8px;
-  }
+.testimonials__arrow--next {
+  right: -8px;
+}
 
-  .testimonial-card {
-    padding: 20px 18px;
-  }
+.testimonial-card {
+  padding: 20px 18px;
+}
 
-  .testimonial-card__comentario {
-    font-size: 14px;
-  }
+.testimonial-card__comentario {
+  font-size: 14px;
+}
 
-  .testimonial-card__footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+.testimonial-card__footer {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
 
-  .testimonial-card__fecha {
-    margin-left: 0;
-  }
+.testimonial-card__fecha {
+  margin-left: 0;
+}
 }
 
 @media (max-width: 480px) {
   .testimonials__title {
-    font-size: 22px;
-  }
+  font-size: 22px;
+}
 
-  .testimonials__subtitle {
-    font-size: 13px;
-  }
+.testimonials__subtitle {
+  font-size: 13px;
+}
 
-  .testimonial-card {
-    padding: 16px 14px;
-  }
+.testimonial-card {
+  padding: 16px 14px;
+}
 
-  .testimonial-card__comentario {
-    font-size: 13px;
-    line-height: 1.6;
-  }
+.testimonial-card__comentario {
+  font-size: 13px;
+  line-height: 1.6;
+}
 
-  .testimonials__arrow {
-    width: 30px;
-    height: 30px;
-    font-size: 14px;
-  }
+.testimonials__arrow {
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+}
 
-  .testimonials__arrow--prev {
-    left: -4px;
-  }
+.testimonials__arrow--prev {
+  left: -4px;
+}
 
-  .testimonials__arrow--next {
-    right: -4px;
-  }
+.testimonials__arrow--next {
+  right: -4px;
+}
 }

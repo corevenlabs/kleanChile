@@ -1,18 +1,18 @@
 .brands {
   background: #fff;
   padding: 40px 0;
-
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--k-foam);
   overflow: hidden;
 }
 
 /* LABEL — mismo color que "ver más productos" */
 .brands__label {
+  font-family: var(--k-display);
+  font-weight: 600;
+  color: var(--k-blue);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #111;
-  font-weight: 500;
+  letter-spacing: 0.16em;
   text-align: center;
   margin-bottom: 28px;
 }
@@ -58,9 +58,11 @@
   animation-play-state: paused;
 }
 
-@keyframes slide-brands {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes slide-brands {0% {
+  transform: translateX(0);
+}100% {
+  transform: translateX(-50%);
+}
 }
 
 /* ITEM */
@@ -92,28 +94,28 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #bbb;
+  color: var(--k-muted);
   transition: color 0.3s ease;
 }
 
 .brands__item:hover .brands__fallback {
-  color: #111;
+  color: var(--k-ink);
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .brands__item {
-    width: 90px;
-    height: 44px;
-  }
+  width: 90px;
+  height: 44px;
+}
 
-  .brands__track {
-    gap: 36px;
-    animation-duration: 22s;
-  }
+.brands__track {
+  gap: 36px;
+  animation-duration: 22s;
+}
 
-  .brands__outer::before,
+.brands__outer::before,
   .brands__outer::after {
-    width: 50px;
-  }
+  width: 50px;
+}
 }

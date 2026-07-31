@@ -1,0 +1,346 @@
+/*
+ * Cart, quick view and order pages.
+ *
+ * Every colour comes from `styles/brand.css`. The one place a green appears is
+ * the WhatsApp handoff, because that button is a promise about which app is
+ * going to open — using the brand blue there would be prettier and would lie.
+ */
+
+/* ── Navbar cart button ─────────────────────────────────────────────────── */
+
+.cart-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: var(--k-radius-pill);
+  background: var(--k-gradient);
+  color: var(--k-white);
+  font-family: var(--k-display);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--k-glow);
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.cart-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -8px rgba(34, 194, 232, 0.7), 0 3px 8px -2px rgba(14, 42, 107, 0.3);
+}
+.cart-button__label { display: none; }
+@media (min-width: 640px) { .cart-button__label { display: inline; } }
+
+/* White on the gradient, so the count reads as part of the button, not an alarm. */
+.cart-button__count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--k-radius-pill);
+  background: var(--k-white);
+  color: var(--k-navy);
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(14, 42, 107, 0.3);
+}
+
+/* Best-seller cards became previewable; the rest of their styling is unchanged. */
+.bs__card--clickable { cursor: pointer; }
+
+/* ── Add to cart ────────────────────────────────────────────────────────── */
+
+.add-to-cart { display: grid; gap: 9px; margin-top: 20px; }
+.add-to-cart__row { display: flex; gap: 10px; align-items: stretch; }
+
+.add-to-cart__qty {
+  width: 72px;
+  padding: 12px 10px;
+  border: 1px solid var(--k-line);
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--k-ink);
+  text-align: center;
+}
+
+.add-to-cart__button {
+  flex: 1;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--k-gradient);
+  color: var(--k-white);
+  font-family: var(--k-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--k-glow);
+  transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+}
+.add-to-cart__button:hover:not(:disabled) { transform: translateY(-1px); filter: saturate(1.1); }
+.add-to-cart__button:disabled {
+  background: var(--k-foam);
+  color: var(--k-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.add-to-cart__feedback { min-height: 20px; font-size: 13px; margin: 0; }
+.add-to-cart__feedback a { color: var(--k-blue); font-weight: 600; }
+.add-to-cart__ok { color: var(--k-ok); }
+.add-to-cart__error { color: var(--k-alert); }
+
+.stock-note { font-size: 12px; color: var(--k-muted); margin: 6px 0 0; }
+.stock-note--out { color: var(--k-alert); font-weight: 600; }
+
+/* ── Quick view modal ───────────────────────────────────────────────────── */
+
+.quickview__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  /* Navy rather than black: even the scrim stays in the palette. */
+  background: rgba(14, 42, 107, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.quickview {
+  position: relative;
+  width: min(880px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: var(--k-white);
+  border-radius: var(--k-radius);
+  display: grid;
+  grid-template-columns: 1fr;
+  box-shadow: 0 30px 70px -20px rgba(14, 42, 107, 0.45);
+}
+@media (min-width: 760px) { .quickview { grid-template-columns: 1fr 1fr; } }
+
+.quickview__close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 2;
+  border: 0;
+  background: rgba(255, 255, 255, 0.92);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--k-muted);
+  cursor: pointer;
+}
+
+.quickview__media { background: var(--k-foam); display: grid; place-items: center; padding: 26px; }
+.quickview__media img { width: 100%; height: 100%; max-height: 380px; object-fit: contain; }
+
+.quickview__body { padding: 30px 30px 34px; }
+.quickview__sku { margin: 0 0 8px; }
+.quickview__body h2 {
+  margin: 0 0 6px;
+  font-family: var(--k-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--k-ink);
+}
+.quickview__type {
+  margin: 0 0 14px;
+  font-family: var(--k-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--k-blue);
+}
+.quickview__price {
+  margin: 0 0 16px;
+  font-family: var(--k-display);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--k-navy);
+}
+.quickview__description { margin: 0; font-size: 14px; line-height: 1.7; color: var(--k-muted); }
+.quickview__link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--k-blue); }
+
+/* ── Cart page ──────────────────────────────────────────────────────────── */
+
+.cart-page { max-width: 1100px; margin: 0 auto; padding: 44px 20px 70px; }
+.cart-page__title {
+  font-family: var(--k-display);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0 0 4px;
+  color: var(--k-navy);
+}
+.cart-page__lead { margin: 0 0 30px; color: var(--k-muted); font-size: 14px; }
+
+.cart-layout { display: grid; gap: 26px; align-items: start; }
+@media (min-width: 900px) { .cart-layout { grid-template-columns: 1fr 330px; } }
+
+.cart-lines { border: 1px solid var(--k-line); border-radius: var(--k-radius); overflow: hidden; }
+
+.cart-line {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 15px;
+  padding: 16px;
+  border-bottom: 1px solid var(--k-line);
+  align-items: center;
+}
+.cart-line:last-child { border-bottom: 0; }
+.cart-line__image { width: 78px; height: 78px; object-fit: cover; border-radius: 10px; background: var(--k-foam); }
+.cart-line__name { margin: 0 0 3px; font-size: 15px; font-weight: 500; color: var(--k-ink); }
+.cart-line__sku { margin: 0 0 9px; font-family: var(--k-mono); font-size: 11px; color: var(--k-muted); }
+.cart-line__controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--k-muted); }
+.cart-line__qty {
+  width: 62px;
+  padding: 7px;
+  border: 1px solid var(--k-line);
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--k-ink);
+  text-align: center;
+}
+.cart-line__total { margin-left: auto; font-family: var(--k-display); font-size: 16px; font-weight: 700; color: var(--k-navy); }
+.cart-line__remove { border: 0; background: none; color: var(--k-alert); font: inherit; font-size: 12px; cursor: pointer; padding: 0; }
+.cart-line__warn { margin: 7px 0 0; font-size: 12px; color: var(--k-warn); }
+
+.cart-summary {
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  padding: 22px;
+  background: var(--k-foam);
+  position: sticky;
+  top: 20px;
+}
+.cart-summary h2 { margin: 0 0 16px; font-family: var(--k-display); font-size: 15px; font-weight: 600; color: var(--k-navy); }
+.cart-summary__row { display: flex; justify-content: space-between; font-size: 14px; color: var(--k-muted); margin-bottom: 9px; }
+.cart-summary__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--k-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--k-navy);
+  padding-top: 13px;
+  border-top: 1px solid var(--k-line);
+  margin-bottom: 16px;
+}
+.cart-summary label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; color: var(--k-muted); margin-bottom: 14px; }
+.cart-summary input { padding: 10px 11px; border: 1px solid var(--k-line); border-radius: 8px; font: inherit; background: var(--k-white); }
+
+/*
+ * WhatsApp green, not brand blue.
+ *
+ * The button names the app it opens, so its colour has to agree with the
+ * promise. This is the one deliberate exception to the palette.
+ */
+.cart-submit {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #25d366;
+  color: #ffffff;
+  font-family: var(--k-display);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.cart-submit:hover:not(:disabled) { background: #1da851; }
+.cart-submit:disabled { background: var(--k-line); color: var(--k-muted); cursor: not-allowed; }
+.cart-summary__note { margin: 12px 0 0; font-size: 11px; color: var(--k-muted); line-height: 1.55; }
+
+.cart-empty { text-align: center; padding: 70px 20px; border: 1px dashed var(--k-line); border-radius: var(--k-radius); background: var(--k-foam); }
+.cart-empty p { color: var(--k-muted); margin: 0 0 18px; }
+.cart-empty a {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--k-gradient);
+  color: var(--k-white);
+  border-radius: var(--k-radius-pill);
+  text-decoration: none;
+  font-family: var(--k-display);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--k-glow);
+}
+
+/* ── Order page ─────────────────────────────────────────────────────────── */
+
+.order-page { max-width: 720px; margin: 0 auto; padding: 50px 20px 70px; }
+.order-page__badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: var(--k-radius-pill);
+  font-family: var(--k-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.order-page__badge--pending { background: #fef3c7; color: var(--k-warn); }
+.order-page__badge--confirmed { background: #dcfce7; color: var(--k-ok); }
+.order-page__badge--cancelled { background: #fee2e2; color: var(--k-alert); }
+.order-page h1 {
+  font-family: var(--k-display);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 14px 0 6px;
+  color: var(--k-navy);
+}
+.order-page__lead { color: var(--k-muted); margin: 0 0 28px; font-size: 14px; line-height: 1.65; }
+
+.order-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  background: #25d366;
+  color: #ffffff;
+  font-family: var(--k-display);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  margin-bottom: 26px;
+}
+.order-whatsapp:hover { background: #1da851; }
+
+.order-lines { border: 1px solid var(--k-line); border-radius: var(--k-radius); overflow: hidden; margin-bottom: 18px; }
+.order-line { display: flex; justify-content: space-between; gap: 14px; padding: 14px 17px; border-bottom: 1px solid var(--k-line); font-size: 14px; color: var(--k-ink); }
+.order-line:last-child { border-bottom: 0; }
+.order-line span { color: var(--k-muted); font-family: var(--k-mono); font-size: 11px; display: block; margin-top: 4px; }
+.order-line strong { font-family: var(--k-display); color: var(--k-navy); white-space: nowrap; }
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--k-display);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--k-navy);
+  padding: 4px 2px 0;
+}

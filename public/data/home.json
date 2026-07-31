@@ -24,7 +24,7 @@
     "blocks": [
       {"id":"cleaning","position":"left","image":"https://images.unsplash.com/photo-1563453392212-326f5e854473?w=900&auto=format&fit=crop&q=80","alt":"Productos de limpieza","eyebrow":"Nueva colección","title":"Productos de Limpieza","description":"Detergentes, desinfectantes y equipos profesionales para hogar e industria.","path":"/cleaning","cta":"Ver productos"},
       {"id":"bookshop","position":"top","image":"https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=900&auto=format&fit=crop&q=80","alt":"Material escolar","eyebrow":"Temporada escolar","title":"Librería & Útiles","path":"/bookshop","cta":"Ver productos"},
-      {"id":"machinery","position":"bottom","image":"https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&auto=format&fit=crop&q=80","alt":"Maquinaria industrial","eyebrow":"Equipamiento","title":"Maquinaria Industrial","path":"/machinery","cta":"Ver productos"}
+      {"id":"machinery","position":"bottom","image":"https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&auto=format&fit=crop&q=80","alt":"Maquinaria industrial","eyebrow":"Equipamiento","title":"Maquinaria Industrial","path":"/cleaning/industrial","cta":"Ver productos"}
     ]
   },
   "whyUs": { "eyebrow": "Por qué elegirnos", "title": "Soluciones confiables para tu negocio", "subtitle": "Una experiencia completa en productos de limpieza, librería y maquinaria industrial.", "reasons": [

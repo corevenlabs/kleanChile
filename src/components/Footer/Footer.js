@@ -2,7 +2,13 @@ import Link from "next/link";
 
 export default function Footer({ data }) {
   return <footer className="footer"><div className="footer__container">
-    <div className="footer__brand"><h2>{data.brand}</h2><p>{data.description}</p></div>
+    <div className="footer__brand">
+      <div className="footer__lockup">
+        <img src="/brand/mark.png" alt="" width={256} height={256} />
+        <h2>{data.brand}</h2>
+      </div>
+      <p>{data.description}</p>
+    </div>
     {data.sections.map((section) => <div className="footer__section" key={section.title}><h3>{section.title}</h3>{section.links.map((link) => <Link key={link.path} href={link.path}>{link.label}</Link>)}</div>)}
     <div className="footer__section"><h3>{data.contact.title}</h3>{data.contact.items.map((item) => <p key={item}>{item}</p>)}</div>
     <div className="footer__location"><h3>{data.location.title}</h3><div className="footer__map"><iframe src={data.location.embedUrl} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" title={data.location.mapTitle} /></div>

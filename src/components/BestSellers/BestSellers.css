@@ -14,12 +14,14 @@
   margin-top: 3%;
 }
 
+/* A real section heading, matching "Por qué elegirnos" and "Testimonios",
+   rather than the small caps label it was — this band is a section, not a note. */
 .bs__title {
-  font-size: 14px;
-  letter-spacing: 2px;
-  font-weight: 500;
-  color: #111;
-  text-transform: uppercase;
+  font-family: var(--k-display);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--k-navy);
   margin: 0;
 }
 
@@ -27,20 +29,20 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #111;
+  font-family: var(--k-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--k-blue);
   text-decoration: none;
-  letter-spacing: 1px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--k-line);
   padding-bottom: 2px;
   transition: border-color 0.2s ease, color 0.2s ease;
   white-space: nowrap;
 }
 
 .bs__link:hover {
-  color: #555;
-  border-color: #111;
+  color: var(--k-navy);
+  border-color: var(--k-cyan);
 }
 
 /* =========================
@@ -66,6 +68,10 @@
 ========================= */
 .bs__card {
   flex: 0 0 260px;
+  /* A column so the price can be pinned to the bottom: without it a name that
+     wraps to two lines pushes its price down and the row stops lining up. */
+  display: flex;
+  flex-direction: column;
   background: #fff;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -81,7 +87,7 @@
   width: 100%;
   height: 320px;
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--k-foam);
   position: relative;
 }
 
@@ -96,56 +102,80 @@
   transform: scale(1.04);
 }
 
-/* BADGE */
+/*
+ * BADGE
+ *
+ * Only one card ever carries one, and only once it has genuinely outsold the
+ * rest — so it is worth the gradient. A pale tint here would read as a label;
+ * the filled pill reads as a rank.
+ */
 .bs__badge {
   position: absolute;
   top: 10px;
   left: 10px;
+  padding: 4px 10px;
+  border-radius: var(--k-radius-pill);
+  font-family: var(--k-display);
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 3px 8px;
+  letter-spacing: 0.06em;
 }
 
 .bs-badge--blue {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: var(--k-gradient);
+  color: #fff;
+  box-shadow: var(--k-glow);
 }
 
 .bs-badge--red {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--k-alert);
+  color: #fff;
 }
 
 .bs-badge--green {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--k-ok);
+  color: #fff;
 }
 
 /* INFO — igual que .card__info */
 .bs__card-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 12px 0;
   text-align: left;
 }
+.bs__card-info .bs__card-price {
+  margin-top: auto;
+  padding-top: 6px;
+}
 
+/* Was uppercase at 12px, which turned every product name into a grey ribbon. */
 .bs__card-name {
-  font-size: 12px;
-  text-transform: uppercase;
-  color: #111;
+  font-family: var(--k-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--k-ink);
   margin-bottom: 4px;
 }
 
 .bs__card-type {
-  font-size: 11px;
-  color: #888;
+  font-family: var(--k-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--k-blue);
   margin-bottom: 6px;
 }
 
 .bs__card-price {
-  font-size: 12px;
-  font-weight: 500;
-  color: #111;
+  font-family: var(--k-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--k-navy);
 }
 
 .bs__wrapper {
@@ -168,6 +198,7 @@
 }
 
 /* ARROWS */
+/* Matches the testimonials arrow — one control, two carousels. */
 .bs__arrow {
   position: absolute;
   top: 50%;
@@ -175,18 +206,23 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--k-line);
+  background: #fff;
+  color: var(--k-blue);
+  box-shadow: 0 8px 22px -10px rgba(14, 42, 107, 0.4);
   font-size: 22px;
+  line-height: 1;
   cursor: pointer;
   z-index: 10;
-  transition: all 0.25s ease;
+  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .bs__arrow:hover {
-  background: #111;
-  color: white;
+  border-color: transparent;
+  background: var(--k-gradient);
+  color: #fff;
+  box-shadow: var(--k-glow);
 }
 
 .bs__arrow--left {

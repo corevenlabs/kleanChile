@@ -1,12 +1,12 @@
 {
   "footer": {
-    "brand": "CleanPro", "description": "Soluciones profesionales de limpieza, librería y maquinaria industrial.",
+    "brand": "KleanChile", "description": "Soluciones profesionales de limpieza, librería y maquinaria industrial.",
     "sections": [
-      {"title":"Empresa","links":[{"label":"Nosotros","path":"/about"},{"label":"Contacto","path":"/contact"}]},
-      {"title":"Categorías","links":[{"label":"Limpieza","path":"/cleaning"},{"label":"Librería","path":"/bookshop"},{"label":"Maquinaria","path":"/machinery"}]}
+      {"title":"Empresa","links":[{"label":"Contacto","path":"/contact"}]},
+      {"title":"Categorías","links":[{"label":"Limpieza","path":"/cleaning"},{"label":"Librería","path":"/bookshop"},{"label":"Escritorio","path":"/desktop"}]}
     ],
-    "contact": {"title":"Contacto","items":["contacto@cleanpro.cl","+56 9 1234 5678","Temuco, Chile"]},
-    "location": {"title":"Ubicación","embedUrl":"https://www.google.com/maps?q=Avenida+Alemania+1000+Temuco&output=embed","mapUrl":"https://maps.google.com/?q=Avenida+Alemania+1000+Temuco","mapTitle":"Ubicación CleanPro","cta":"Ver en Google Maps"},
+    "contact": {"title":"Contacto","items":["contacto@kleanchile.cl","+56 9 1234 5678","Temuco, Chile"]},
+    "location": {"title":"Ubicación","embedUrl":"https://www.google.com/maps?q=Avenida+Alemania+1000+Temuco&output=embed","mapUrl":"https://maps.google.com/?q=Avenida+Alemania+1000+Temuco","mapTitle":"Ubicación KleanChile","cta":"Ver en Google Maps"},
     "copyright":"CorevenLabs Todos los derechos reservados."
   },
   "whatsapp": {"phoneNumber":"569XXXXXXXX","message":"Hola! Quisiera más información.","ariaLabel":"Chat en WhatsApp","icon":"/whatsapp-fill.svg","alt":"WhatsApp"}

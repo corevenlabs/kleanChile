@@ -1,5 +1,5 @@
 {
-  "brand": "CleanPro",
+  "brand": "KleanChile",
   "searchPlaceholder": "Buscar productos...",
   "links": [
     { "name": "Inicio", "path": "/", "dropdown": null },
@@ -18,7 +18,6 @@
       { "title": "Mobiliario", "items": ["Escritorios", "Sillas", "Soportes"] },
       { "title": "Accesorios", "items": ["Lámparas", "Organizadores", "Cables"] }
     ] } },
-    { "name": "Nosotros", "path": "/about", "dropdown": null },
     { "name": "Contacto", "path": "/contact", "dropdown": null }
   ]
 }

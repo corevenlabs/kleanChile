@@ -13,6 +13,9 @@
 /.next
 /out
 
+# uploaded media — the database stores the path, the bytes are not source
+/public/uploads
+
 # misc
 .DS_Store
 .env.local
@@ -23,3 +26,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# playwright-mcp session artifacts
+/.playwright-mcp
+
+# alternate build output used for previewing while dev runs
+/.next-preview

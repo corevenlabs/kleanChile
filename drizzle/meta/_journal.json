@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1785438035571,
+      "tag": "0000_steep_karma",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785439758041,
+      "tag": "0001_sturdy_kree",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785471686937,
+      "tag": "0002_purple_mandarin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1785525578158,
+      "tag": "0003_fix_dead_nav_links",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785527355125,
+      "tag": "0004_repoint_machinery_ctas",
+      "breakpoints": true
+    }
+  ]
+}

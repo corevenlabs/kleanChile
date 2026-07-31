@@ -1,9 +1,12 @@
+/*
+ * The body face is set once, in `styles/brand.css`.
+ *
+ * This file used to declare its own `-apple-system` stack and, being imported
+ * after the tokens, quietly won — so the whole site rendered in the system font
+ * while the type system said otherwise.
+ */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-

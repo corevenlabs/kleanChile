@@ -2,37 +2,120 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { formatClp } from "../../domain/shared/money";
+
+/**
+ * The filter bar and the grid. Rendered inside `View/Category`, which owns the
+ * page wrapper, the heading and the case where there is nothing to show.
+ *
+ * The filters carry a count each. That is the point of the redesign — a row of
+ * bare words tells a buyer nothing about where the catalogue actually is, while
+ * "Químico 5" tells them whether the filter is worth pressing before they press
+ * it. Counts come from the loaded products, so they cannot disagree with the
+ * grid — including on a page narrowed by a menu classification, where they
+ * count the matches rather than the whole category.
+ */
+
+const SORTS = {
+  relevance: { label: "Destacados", compare: null },
+  priceAsc: { label: "Menor precio", compare: (a, b) => a.price - b.price },
+  priceDesc: { label: "Mayor precio", compare: (a, b) => b.price - a.price },
+};
+
+// Types arrive lowercase from the catalogue ("químico"); shown capitalised
+// rather than forced lowercase in CSS, which was making them read as filler.
+const titleCase = (value) => value.charAt(0).toUpperCase() + value.slice(1);
 
 export default function Catalog({ products = [], linkProducts = false }) {
   const [selectedType, setSelectedType] = useState("todos");
-  const [sort, setSort] = useState("none");
-  const types = useMemo(() => ["todos", ...new Set(products.map(({ type }) => type))], [products]);
-  const filtered = useMemo(() => {
-    const result = selectedType === "todos"
-      ? [...products]
-      : products.filter(({ type }) => type === selectedType);
-    if (sort !== "none") result.sort((a, b) => sort === "asc" ? a.price - b.price : b.price - a.price);
+  const [sort, setSort] = useState("relevance");
+
+  const types = useMemo(() => {
+    const counts = new Map();
+    for (const product of products) {
+      counts.set(product.type, (counts.get(product.type) ?? 0) + 1);
+    }
+    return [
+      { value: "todos", label: "Todos", count: products.length },
+      ...[...counts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([value, count]) => ({ value, label: titleCase(value), count })),
+    ];
+  }, [products]);
+
+  const visible = useMemo(() => {
+    const result =
+      selectedType === "todos"
+        ? [...products]
+        : products.filter((product) => product.type === selectedType);
+
+    const compare = SORTS[sort].compare;
+    if (compare) result.sort(compare);
     return result;
   }, [products, selectedType, sort]);
 
   return (
-    <div className="catalog">
+    <>
       <div className="catalog__topbar">
-        <div className="catalog__filters filters">
-          {types.map((type) => (
-            <button key={type} className={`chip ${selectedType === type ? "active" : ""}`} onClick={() => setSelectedType(type)}>{type}</button>
-          ))}
+        {/* "Todos 2 · Químico 2" is not a choice. A narrowed page often lands on
+            a single type, and two pills that select the same two products read
+            as a control that does nothing. */}
+        <div className="catalog__filters" role="group" aria-label="Filtrar por tipo">
+          {types.length > 2 &&
+            types.map((type) => (
+              <button
+                key={type.value}
+                type="button"
+                className={`chip ${selectedType === type.value ? "chip--active" : ""}`}
+                aria-pressed={selectedType === type.value}
+                onClick={() => setSelectedType(type.value)}
+              >
+                {type.label}
+                <span className="chip__count">{type.count}</span>
+              </button>
+            ))}
         </div>
-        <div className="catalog__actions">
-          <button className="sort" onClick={() => setSort((value) => value === "asc" ? "desc" : "asc")}>precio {sort === "asc" ? "↑" : "↓"}</button>
-        </div>
+
+        <label className="catalog__sort">
+          <span>Ordenar</span>
+          <select value={sort} onChange={(event) => setSort(event.target.value)}>
+            {Object.entries(SORTS).map(([value, { label }]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
+
       <div className="catalog__grid">
-        {filtered.map((product) => {
-          const card = <div className="product-card"><div className="product-card__inner"><div className="product-card__img"><img src={product.image} alt={product.name} /></div><div className="product-card__info"><h3>{product.name}</h3><p>${product.price.toLocaleString("es-CL")}</p></div></div></div>;
-          return linkProducts ? <Link key={product.id} href={`/product/${product.id}`} className="product-link">{card}</Link> : <div key={product.id}>{card}</div>;
+        {visible.map((product) => {
+          const card = (
+            <article className={`product-card ${product.inStock ? "" : "product-card--out"}`}>
+              <div className="product-card__img">
+                <img src={product.image} alt={product.name} loading="lazy" />
+                {!product.inStock && <span className="product-card__flag">Sin stock</span>}
+              </div>
+              <div className="product-card__info">
+                <p className="product-card__type">{titleCase(product.type)}</p>
+                <h3>{product.name}</h3>
+                <div className="product-card__foot">
+                  <span className="product-card__price">{formatClp(product.price)}</span>
+                  {product.skuCode && <span className="k-sku">{product.skuCode}</span>}
+                </div>
+              </div>
+            </article>
+          );
+
+          return linkProducts ? (
+            <Link key={product.id} href={`/product/${String(product.id)}`} className="product-link">
+              {card}
+            </Link>
+          ) : (
+            <div key={product.id}>{card}</div>
+          );
         })}
       </div>
-    </div>
+    </>
   );
 }

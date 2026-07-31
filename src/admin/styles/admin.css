@@ -3,12 +3,12 @@
 .admin-shell { min-height:100vh; display:flex; background:var(--admin-bg); color:var(--admin-ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .admin-sidebar { width:250px; position:fixed; inset:0 auto 0 0; padding:28px 20px 22px; background:#fff; border-right:1px solid var(--admin-line); display:flex; flex-direction:column; z-index:20; }
 .admin-brand { display:flex; align-items:center; gap:12px; color:var(--admin-ink); text-decoration:none; padding:0 8px 32px; }
-.admin-brand__mark { width:38px; height:38px; display:grid; place-items:center; border-radius:11px; background:linear-gradient(145deg,#326bd8,#234fae); color:#fff; font-weight:800; }
+.admin-brand__mark { width:38px; height:38px; display:block; object-fit:contain; }
 .admin-brand strong,.admin-brand small { display:block; }.admin-brand strong{font-size:15px}.admin-brand small{font-size:11px;color:#98a2b3;margin-top:2px}
 .admin-nav { display:flex; flex-direction:column; gap:5px; }.admin-nav__label{font-size:10px;letter-spacing:.14em;color:#a0a9b8;padding:0 12px 10px;font-weight:700}
 .admin-nav__link { display:flex; align-items:center; gap:12px; padding:11px 13px; border-radius:9px; color:#667085; text-decoration:none; font-size:14px; font-weight:550; transition:.2s; }
-.admin-nav__link span{font-size:18px;width:20px;text-align:center}.admin-nav__link:hover{background:#f5f7fb;color:var(--admin-ink)}.admin-nav__link.active{background:#edf3ff;color:var(--admin-blue)}
-.admin-sidebar__footer{margin-top:auto;display:grid;gap:8px;border-top:1px solid var(--admin-line);padding-top:18px}.admin-site-link,.admin-sidebar__footer button{padding:10px 12px;border:0;background:none;text-align:left;color:#667085;font:inherit;font-size:13px;text-decoration:none;cursor:pointer}.admin-sidebar__footer button:hover{color:#d14343}
+.admin-nav__link svg{flex-shrink:0;opacity:.75}.admin-nav__link.active svg{opacity:1}.admin-nav__link:hover{background:#f5f7fb;color:var(--admin-ink)}.admin-nav__link.active{background:#edf3ff;color:var(--admin-blue)}
+.admin-sidebar__footer{margin-top:auto;display:grid;gap:8px;border-top:1px solid var(--admin-line);padding-top:18px}.admin-site-link,.admin-sidebar__footer button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border:0;background:none;text-align:left;color:#667085;font:inherit;font-size:13px;text-decoration:none;cursor:pointer;border-radius:8px}.admin-site-link:hover{background:#f5f7fb;color:var(--admin-ink)}.admin-sidebar__footer form{margin:0}.admin-sidebar__footer button:hover{color:#d14343}
 .admin-main { min-width:0; flex:1; margin-left:250px; }.admin-topbar{height:74px;padding:0 38px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.9);border-bottom:1px solid var(--admin-line);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}.admin-topbar strong,.admin-topbar__eyebrow{display:block}.admin-topbar__eyebrow{font-size:10px;color:#98a2b3;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}.admin-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#edf3ff;color:var(--admin-blue);font-size:12px;font-weight:700}
 .admin-page{padding:38px;max-width:1500px;margin:auto}.admin-page__header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:30px}.admin-kicker{font-size:10px;letter-spacing:.13em;color:var(--admin-blue)!important;font-weight:800;margin:0 0 8px!important}.admin-page h1{font-size:28px;letter-spacing:-.03em;margin:0 0 7px}.admin-page__header p{margin:0;color:var(--admin-muted);font-size:14px}.admin-button{border:1px solid var(--admin-blue);background:var(--admin-blue);color:white;padding:10px 16px;border-radius:8px;font:inherit;font-size:13px;font-weight:650;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}.admin-button:hover{background:#2557ba}.admin-button--secondary{background:#fff;color:#526076;border-color:#dce2eb}.admin-button--secondary:hover{background:#f8fafc}
 .admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:20px}.admin-stat{background:#fff;border:1px solid var(--admin-line);border-radius:13px;padding:20px;display:flex;gap:15px;box-shadow:0 4px 18px rgba(35,55,90,.035)}.admin-stat__icon{width:43px;height:43px;display:grid;place-items:center;border-radius:10px;font-size:20px}.admin-stat__icon.blue{background:#edf3ff;color:#3569ce}.admin-stat__icon.green{background:#ebf8f1;color:#2c9a65}.admin-stat__icon.amber{background:#fff7e8;color:#d28a22}.admin-stat span,.admin-stat strong,.admin-stat small{display:block}.admin-stat span{font-size:12px;color:var(--admin-muted)}.admin-stat strong{font-size:24px;margin:2px 0}.admin-stat small{font-size:11px;color:#98a2b3}
@@ -17,5 +17,260 @@
 .admin-modal-backdrop{position:fixed;inset:0;background:rgba(17,28,48,.48);z-index:100;display:grid;place-items:center;padding:20px;backdrop-filter:blur(3px)}.admin-modal{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.2)}.admin-modal__head{padding:22px 24px 16px;display:flex;justify-content:space-between;border-bottom:1px solid var(--admin-line)}.admin-modal__head h2{margin:0;font-size:20px}.admin-modal__head>button{border:0;background:none;font-size:25px;color:#8c96a6;cursor:pointer}.admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px 24px}.admin-form-grid label{display:grid;gap:7px;font-size:11px;font-weight:650;color:#526076}.admin-form-grid .wide{grid-column:1/-1}.admin-form-grid input,.admin-form-grid textarea{width:100%;border:1px solid #dfe4ec;border-radius:8px;padding:10px 11px;font:inherit;color:var(--admin-ink);outline:none}.admin-form-grid input:focus,.admin-form-grid textarea:focus{border-color:#7ea2ea;box-shadow:0 0 0 3px #edf3ff}.admin-image-preview{width:100%;height:160px;object-fit:cover;border-radius:9px}.admin-modal__actions{padding:16px 24px;border-top:1px solid var(--admin-line);display:flex;justify-content:flex-end;gap:8px}
 .admin-banner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.admin-banner-card{background:#fff;border:1px solid var(--admin-line);border-radius:12px;overflow:hidden}.admin-banner-card__image{height:180px;position:relative;background:#e9edf3}.admin-banner-card__image img{width:100%;height:100%;object-fit:cover}.admin-banner-card__image span{position:absolute;top:12px;left:12px;background:rgba(20,31,52,.72);color:#fff;padding:5px 8px;border-radius:5px;font-size:10px}.admin-banner-card__body{padding:17px}.admin-banner-card__body>small{color:var(--admin-blue);font-weight:750;font-size:9px;letter-spacing:.1em}.admin-banner-card__body h2{font-size:16px;margin:6px 0}.admin-banner-card__body p{height:36px;overflow:hidden;color:var(--admin-muted);font-size:11px;line-height:1.5}.admin-banner-card__body>div{display:flex;gap:6px;margin-top:14px}.admin-settings{display:grid;gap:18px;max-width:900px}.admin-settings .admin-form-grid{padding:0}.admin-settings__actions{display:flex;justify-content:flex-end;gap:9px}.admin-saved{background:#eaf8f1;color:#27875a;padding:8px 12px;border-radius:8px;font-size:12px}
 @media(max-width:1000px){.admin-sidebar{width:210px}.admin-main{margin-left:210px}.admin-stats,.admin-banner-grid{grid-template-columns:1fr 1fr}.admin-dashboard-grid{grid-template-columns:1fr}.admin-page{padding:28px}}
-@media(max-width:720px){.admin-sidebar{position:static;width:100%;height:auto;padding:14px}.admin-shell{display:block}.admin-brand{padding:0 5px 14px}.admin-nav{display:grid;grid-template-columns:repeat(4,1fr)}.admin-nav__label,.admin-sidebar__footer{display:none}.admin-nav__link{justify-content:center;padding:9px;font-size:0}.admin-nav__link span{font-size:18px}.admin-main{margin:0}.admin-topbar{display:none}.admin-page{padding:22px 15px}.admin-page__header{align-items:flex-end}.admin-page h1{font-size:23px}.admin-stats,.admin-banner-grid{grid-template-columns:1fr}.admin-toolbar{flex-wrap:wrap}.admin-search{min-width:100%}.admin-count{margin:0}.admin-form-grid{grid-template-columns:1fr}.admin-form-grid label,.admin-form-grid .wide{grid-column:1}.admin-page__header p:not(.admin-kicker){display:none}}
-.admin-login{min-height:100vh;display:grid;grid-template-columns:minmax(380px,520px) 1fr;background:#f5f7fb;color:var(--admin-ink);font-family:Inter,ui-sans-serif,system-ui,sans-serif}.admin-login__card{background:#fff;padding:55px clamp(35px,7vw,85px);display:flex;flex-direction:column;justify-content:center}.admin-login__brand{position:absolute;top:30px;display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}.admin-login__brand span{width:34px;height:34px;display:grid;place-items:center;background:var(--admin-blue);color:#fff;border-radius:9px;font-weight:800}.admin-login__intro{margin-bottom:28px}.admin-login__intro h1{font-size:32px;margin:0 0 8px;letter-spacing:-.04em}.admin-login__intro>p:last-child{font-size:13px;color:var(--admin-muted)}.admin-login form{display:grid;gap:16px}.admin-login form label{display:grid;gap:7px;font-size:11px;font-weight:700;color:#526076}.admin-login form input{height:44px;border:1px solid #dfe4ec;border-radius:8px;padding:0 12px;font:inherit;outline:0}.admin-login form input:focus{border-color:#7ea2ea;box-shadow:0 0 0 3px #edf3ff}.admin-login form .admin-button{height:44px;margin-top:5px}.admin-login__hint{color:#98a2b3;font-size:10px;text-align:center;margin-top:17px}.admin-login__visual{position:relative;background:linear-gradient(135deg,rgba(20,48,104,.88),rgba(39,94,198,.72)),url("https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=1400") center/cover;display:flex;align-items:flex-end;padding:9vw;color:#fff}.admin-login__visual div{max-width:520px}.admin-login__visual span{font-size:10px;letter-spacing:.16em;font-weight:750;opacity:.8}.admin-login__visual h2{font-size:42px;line-height:1.08;letter-spacing:-.04em;margin:12px 0}.admin-login__visual p{max-width:450px;line-height:1.65;opacity:.78;font-size:14px}@media(max-width:800px){.admin-login{grid-template-columns:1fr}.admin-login__visual{display:none}.admin-login__card{min-height:100vh}.admin-login__brand{top:24px}}
+@media(max-width:720px){.admin-sidebar{position:static;width:100%;height:auto;padding:14px}.admin-shell{display:block}.admin-brand{padding:0 5px 14px}.admin-nav{display:grid;grid-template-columns:repeat(4,1fr)}.admin-nav__label,.admin-sidebar__footer{display:none}.admin-nav__link{justify-content:center;padding:11px;font-size:0}.admin-nav__link svg{font-size:initial}.admin-main{margin:0}.admin-topbar{display:none}.admin-page{padding:22px 15px}.admin-page__header{align-items:flex-end}.admin-page h1{font-size:23px}.admin-stats,.admin-banner-grid{grid-template-columns:1fr}.admin-toolbar{flex-wrap:wrap}.admin-search{min-width:100%}.admin-count{margin:0}.admin-form-grid{grid-template-columns:1fr}.admin-form-grid label,.admin-form-grid .wide{grid-column:1}.admin-page__header p:not(.admin-kicker){display:none}}
+.admin-login{min-height:100vh;display:grid;grid-template-columns:minmax(380px,520px) 1fr;background:#f5f7fb;color:var(--admin-ink);font-family:Inter,ui-sans-serif,system-ui,sans-serif}.admin-login__card{background:#fff;padding:55px clamp(35px,7vw,85px);display:flex;flex-direction:column;justify-content:center}.admin-login__brand{position:absolute;top:30px;display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}.admin-login__brand img{width:34px;height:34px;object-fit:contain}.admin-login__intro{margin-bottom:28px}.admin-login__intro h1{font-size:32px;margin:0 0 8px;letter-spacing:-.04em}.admin-login__intro>p:last-child{font-size:13px;color:var(--admin-muted)}.admin-login form{display:grid;gap:16px}.admin-login form label{display:grid;gap:7px;font-size:11px;font-weight:700;color:#526076}.admin-login form input{height:44px;border:1px solid #dfe4ec;border-radius:8px;padding:0 12px;font:inherit;outline:0}.admin-login form input:focus{border-color:#7ea2ea;box-shadow:0 0 0 3px #edf3ff}.admin-login form .admin-button{height:44px;margin-top:5px}.admin-login__hint{color:#98a2b3;font-size:10px;text-align:center;margin-top:17px}.admin-login__visual{position:relative;background:linear-gradient(135deg,rgba(20,48,104,.88),rgba(39,94,198,.72)),url("https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=1400") center/cover;display:flex;align-items:flex-end;padding:9vw;color:#fff}.admin-login__visual div{max-width:520px}.admin-login__visual span{font-size:10px;letter-spacing:.16em;font-weight:750;opacity:.8}.admin-login__visual h2{font-size:42px;line-height:1.08;letter-spacing:-.04em;margin:12px 0}.admin-login__visual p{max-width:450px;line-height:1.65;opacity:.78;font-size:14px}@media(max-width:800px){.admin-login{grid-template-columns:1fr}.admin-login__visual{display:none}.admin-login__card{min-height:100vh}.admin-login__brand{top:24px}}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTROLES DE FORMULARIO
+
+   Antes solo estaban estilados los inputs que caían dentro de .admin-form-grid.
+   Todo lo demás — los <select>, los textos de ayuda y sobre todo el input de
+   archivo — salía con la apariencia nativa del navegador, que es lo que hacía
+   ver el panel a medio terminar.
+
+   Estas reglas van por elemento dentro de .admin-page y .admin-login, así que
+   un control nuevo queda bien puesto sin tener que acordarse de una clase.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+   `align-content:start` es lo que impide que un campo se estire por culpa de
+   su vecino: el <label> es grid y la celda toma el alto de la fila, así que un
+   texto de ayuda bajo «Stock contado» estaba alargando el input de «Tipo» que
+   tiene al lado. Se veían dos campos de distinto alto en la misma línea.
+*/
+.admin-page label { display:grid; gap:7px; align-content:start; font-size:11px; font-weight:650; color:#526076; }
+
+/*
+   Por exclusión y no por lista de tipos.
+
+   Antes esto enumeraba input[type="text"], [type="email"], etc. Un
+   <input> sin atributo `type` se comporta como texto pero NO lo matchea ningún
+   selector [type="text"] — así que «Nombre», «Precio» y «Tipo» del modal de
+   productos caían solo en la regla vieja .admin-form-grid input, que hereda la
+   fuente de su <label>: 11px y semi-negrita. Salían visiblemente más chicos que
+   el resto de los campos del mismo formulario.
+
+   Escrito así, un campo nuevo queda bien puesto se le ponga type o no.
+*/
+.admin-page input:not([type="file"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]):not([type="color"]):not([type="search"]),
+.admin-page textarea,
+.admin-page select {
+  width:100%; border:1px solid #dfe4ec; border-radius:8px; padding:10px 11px;
+  font:inherit; font-size:13px; color:var(--admin-ink); background:#fff; outline:none;
+  transition:border-color .16s, box-shadow .16s;
+  /* `font:inherit` también trae el 650 del <label>, así que lo escrito salía
+     tan grueso como el nombre del campo y las dos cosas competían. */
+  font-weight:400;
+}
+.admin-page textarea { line-height:1.55; resize:vertical; min-height:74px; }
+.admin-page select { height:auto; padding-right:30px; cursor:pointer;
+  /* Flecha propia: la nativa cambia de forma en cada navegador. */
+  appearance:none; -webkit-appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 9 7 7 7-7'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 11px center;
+}
+.admin-page input:focus, .admin-page textarea:focus, .admin-page select:focus {
+  border-color:#7ea2ea; box-shadow:0 0 0 3px #edf3ff;
+}
+.admin-page input:disabled, .admin-page textarea:disabled, .admin-page select:disabled {
+  background:#f7f9fc; color:#98a2b3; cursor:not-allowed;
+}
+.admin-page input::placeholder, .admin-page textarea::placeholder { color:#b3bcc9; }
+
+/* La pantalla de ingreso tenía el mismo problema por la misma razón: sus inputs
+   heredan la fuente del <label>, que es de 11px. Se escribía la contraseña en
+   letra más chica que la etiqueta que la nombra. */
+.admin-login form input { font-size:13px; font-weight:400; color:var(--admin-ink); }
+.admin-login form input::placeholder { color:#b3bcc9; }
+
+/* El texto de ayuda bajo un campo. Iba sin estilo y salía del tamaño del body. */
+.admin-page label small, .admin-page .admin-hint {
+  font-size:11px; font-weight:400; color:#8792a4; line-height:1.5;
+}
+.admin-page label small[role="alert"] { color:#c94141; }
+
+/* El input de archivo: el botón nativo era lo más visible de la pantalla. */
+.admin-page input[type="file"] {
+  width:100%; font:inherit; font-size:12px; color:#8792a4; cursor:pointer;
+}
+.admin-page input[type="file"]::file-selector-button {
+  margin-right:11px; padding:8px 14px; border:1px solid #dce2eb; border-radius:7px;
+  background:#fff; color:#526076; font:inherit; font-size:12px; font-weight:650; cursor:pointer;
+  transition:border-color .16s, background .16s;
+}
+.admin-page input[type="file"]::file-selector-button:hover { background:#f8fafc; border-color:#ccdaf5; }
+.admin-page input[type="file"]:disabled::file-selector-button { background:#f7f9fc; color:#98a2b3; cursor:not-allowed; }
+
+/* ── Editor de contenido ─────────────────────────────────────────────────── */
+
+/*
+   Los elementos repetibles eran una tarjeta blanca dentro de otra tarjeta
+   blanca, y a tres niveles la jerarquía se perdía. El elemento interior pasa a
+   ser una superficie hundida con una línea de acento: se lee como parte del
+   grupo y no como una tarjeta suelta.
+*/
+.admin-panel .admin-panel {
+  background:#fbfcfe; border-color:#e9eef6; border-left:3px solid #d6e3f7;
+  border-radius:10px; box-shadow:none; margin-bottom:12px; padding:18px;
+}
+.admin-panel .admin-panel:last-child { margin-bottom:0; }
+.admin-panel .admin-panel h2 { font-size:13px; color:#3c4a60; }
+.admin-panel .admin-panel .admin-form-grid { padding:14px 0 0; }
+.admin-panel .admin-panel .admin-panel { background:#fff; }
+
+.admin-row-actions button svg { display:block; }
+
+/*
+   La vista previa iba con `object-fit:cover` a 160px de alto, que recorta.
+   Para una foto de producto pasa desapercibido; para el ícono de WhatsApp —un
+   SVG cuadrado— llenaba el ancho completo y mostraba un trozo verde irrecono-
+   cible. `contain` sobre un fondo tenue muestra la imagen entera, que es lo
+   único que una vista previa tiene que hacer.
+*/
+.admin-page .admin-image-preview {
+  border:1px solid #e9eef6; object-fit:contain; height:130px;
+  background:#f7f9fc; padding:8px;
+}
+
+/* ── Barra de herramientas ───────────────────────────────────────────────── */
+
+/* Un cero en la columna de stock es lo único que hay que ver de un vistazo. */
+.admin-stock--zero { color:#c94141; font-weight:700; }
+
+/*
+   Botón de desplegar dentro de una tabla.
+
+   El de la columna «Productos» de Pedidos era un <button> sin clase: salía con
+   la apariencia nativa del navegador —gris, esquinas cuadradas, fuente del
+   sistema— en medio de una tabla donde todo lo demás está estilado. Con la
+   flecha al lado se leía como un select a medio terminar.
+
+   El chevron del set apunta a la derecha; se rota, así que hay un solo ícono y
+   la animación entre cerrado y abierto sale gratis.
+*/
+.admin-disclosure {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border:1px solid var(--admin-line); border-radius:7px;
+  background:#fff; color:#526076; font:inherit; font-size:11px; font-weight:650;
+  cursor:pointer; transition:border-color .16s, background .16s, color .16s;
+}
+.admin-disclosure:hover { border-color:#ccdaf5; background:#f8fafc; color:var(--admin-ink); }
+.admin-disclosure svg { transition:transform .18s; transform:rotate(90deg); }
+.admin-disclosure--open { border-color:#ccdaf5; background:#f5f9ff; color:var(--admin-blue); }
+.admin-disclosure--open svg { transform:rotate(-90deg); }
+
+/*
+   Las líneas del pedido desplegado.
+
+   Sin esto quedaban una pegada a la otra —`.admin-product` es flex y sin
+   imagen no separa nada— y la fila expandida no se leía como parte del pedido
+   de arriba, sino como otro registro suelto. El fondo hundido y el filete azul
+   la atan a su fila.
+*/
+.admin-order-detail {
+  background:#fbfcfe;
+  box-shadow:inset 3px 0 0 #d6e3f7;
+}
+.admin-order-detail .admin-product + .admin-product { margin-top:10px; }
+.admin-order-detail .admin-note { margin:12px 0 0; }
+
+/* ── Ancho de las secciones ──────────────────────────────────────────────────
+
+   `.admin-settings` traía `max-width:900px`, así que Portada, Configuración e
+   Importar quedaban notoriamente más angostas que Productos y Pedidos, que
+   ocupan el ancho completo de `.admin-page`. Ahora todas ocupan lo mismo.
+
+   Se mantienen dos columnas. Probé tres para aprovechar el ancho nuevo y se ve
+   peor: los campos que ocupan la fila entera (descripciones, imágenes) llegan
+   hasta el borde y los de a pares se quedan en dos tercios, así que el
+   formulario termina con el margen derecho dentado. Con dos columnas todo
+   cierra en la misma línea.
+   ────────────────────────────────────────────────────────────────────────── */
+.admin-settings { max-width:none; }
+
+/*
+   El buscador es un <label>, pero no es la etiqueta de un campo: es el campo,
+   con el ícono adentro. `.admin-page label{display:grid}` le ganaba por orden
+   de archivo al `display:flex` propio, así que ícono e input quedaban en dos
+   filas y el input se salía por abajo de su propia caja. Se veía como un
+   recuadro con un segundo recuadro colgando.
+
+   Va con `label.admin-search` para ganar por especificidad y no por posición,
+   que es lo que hizo que esto se rompiera en silencio la primera vez.
+*/
+.admin-page label.admin-search {
+  display:flex; align-items:center; gap:8px; height:auto; padding:0 12px;
+}
+.admin-search svg { flex-shrink:0; color:#98a2b3; }
+
+/* El input no dibuja su propia caja: la caja es el contenedor. */
+.admin-page .admin-search input[type="search"] {
+  border:0; border-radius:0; padding:10px 0; background:transparent; width:100%;
+}
+.admin-page .admin-search input:focus { box-shadow:none; }
+/* El foco se muestra en el conjunto, que es lo que la persona ve como un campo. */
+.admin-page .admin-search:focus-within { border-color:#7ea2ea; box-shadow:0 0 0 3px #edf3ff; }
+
+.admin-toolbar select { width:auto; min-width:190px; }
+/* La barra alinea por línea base de cajas de distinto alto; `stretch` las
+   iguala sin fijar una altura que después haya que mantener en dos lugares. */
+.admin-toolbar { align-items:stretch; }
+.admin-toolbar .admin-count { align-self:center; }
+.admin-count { white-space:nowrap; }
+
+.admin-button svg { flex-shrink:0; }
+.admin-button--ghost { background:none; border-color:transparent; color:#526076; }
+.admin-button--ghost:hover { background:#f2f5f9; }
+
+/* Estado vacío con algo que hacer, no solo un aviso. */
+.admin-empty { display:grid; gap:12px; justify-items:center; }
+.admin-empty svg { color:#c3ccda; }
+
+/* ── Importador ──────────────────────────────────────────────────────────── */
+
+.import-mapping { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
+.import-mapping label { gap:6px; }
+/* El encabezado tal cual viene del archivo: se muestra literal para que la
+   persona lo reconozca en su planilla, con el ancho acotado por si es largo. */
+.import-mapping__header {
+  font-family:ui-monospace,"Cascadia Mono",monospace; font-size:11px; font-weight:600;
+  color:#3c4a60; background:#f2f5f9; border-radius:6px; padding:6px 9px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+.import-counts { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
+.import-count {
+  border:1px solid var(--admin-line); border-radius:11px; padding:15px;
+  display:grid; gap:3px; background:#fff;
+}
+.import-count strong { font-size:26px; line-height:1; }
+.import-count span { font-size:11px; color:var(--admin-muted); }
+.import-count--created { border-color:#bfe6d1; background:#f4fbf7; }
+.import-count--created strong { color:#1c7a52; }
+.import-count--updated { border-color:#c6d9f7; background:#f5f9ff; }
+.import-count--updated strong { color:#2557ba; }
+.import-count--error { border-color:#f2cccc; background:#fef7f7; }
+.import-count--error strong { color:#c94141; }
+
+.import-chip--created { background:#e7f6ee; color:#1c7a52; }
+.import-chip--updated { background:#e9f1fe; color:#2557ba; }
+.import-chip--error   { background:#fdeaea; color:#c94141; }
+
+.import-changes { display:grid; gap:4px; font-size:11px; color:#526076; }
+.import-changes b { color:#8792a4; font-weight:650; margin-right:4px; }
+.import-changes svg { display:inline; vertical-align:-1px; color:#a4adbb; }
+.import-error { color:#c94141; font-size:11px; }
+
+.import-done {
+  display:flex; align-items:center; gap:14px; margin-bottom:18px;
+  border-color:#bfe6d1; background:#f4fbf7;
+}
+.import-done svg { color:#1c7a52; flex-shrink:0; }
+.import-done h2 { margin:0 0 2px; }
+.import-done p { margin:0; font-size:12px; color:var(--admin-muted); }
+
+@media(max-width:720px){
+  .import-counts { grid-template-columns:repeat(2,1fr); }
+}
+.import-warning { display:inline-flex; align-items:center; gap:5px; margin-top:5px; font-size:11px; color:#a86a12; }
+.import-warning svg { flex-shrink:0; }

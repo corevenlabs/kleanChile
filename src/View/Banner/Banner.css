@@ -42,86 +42,162 @@
 /* ─────────────────────────────
    OVERLAY
 ───────────────────────────── */
+/*
+ * The scrim.
+ *
+ * Two layers, because one cannot do both jobs. The first is directional: a
+ * navy wash anchored bottom-left, dense enough under the text to guarantee
+ * contrast and gone by the middle of the frame so the photograph still reads.
+ * The second is a flat tint that stops a blown-out white product shot from
+ * washing the type out entirely.
+ *
+ * Navy rather than black — the brand's own dark, so the hero belongs to the
+ * same palette as everything below it.
+ */
 .hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.78) 0%,
-    rgba(0, 0, 0, 0.30) 55%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
+  background:
+    linear-gradient(
+      to top right,
+      rgba(8, 26, 66, 0.92) 0%,
+      rgba(8, 26, 66, 0.72) 26%,
+      rgba(8, 26, 66, 0.12) 62%,
+      rgba(8, 26, 66, 0) 100%
+    ),
+    linear-gradient(to top, rgba(8, 26, 66, 0.55) 0%, rgba(8, 26, 66, 0.1) 60%);
+}
+
+/* Artwork that carries its own message gets barely any veil. */
+.hero__overlay--bare {
+  background: linear-gradient(to top, rgba(8, 26, 66, 0.34) 0%, rgba(8, 26, 66, 0) 34%);
 }
 
 /* ─────────────────────────────
    CONTENIDO
 ───────────────────────────── */
+/*
+ * The message sits bottom-left, not centred.
+ *
+ * Centred type lands in the middle of the frame, which is exactly where a
+ * product photograph puts its subject — so the headline competed with whatever
+ * the picture was of. Anchored to one corner it reads as a caption on the
+ * image rather than a second poster printed over it, and the scrim only has to
+ * darken the corner it occupies instead of the whole photo.
+ */
 .hero__content {
   position: absolute;
-  bottom: 10%;
+  bottom: 12%;
   left: 0;
   right: 0;
-  text-align: center;
-  padding: 0 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 0 48px;
   z-index: 2;
 }
 
 .hero__eyebrow {
+  font-family: var(--k-display);
   font-size: 11px;
-  letter-spacing: 3px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 10px;
+  /* Cyan is the one brand colour bright enough to hold at this size on a photo. */
+  color: var(--k-cyan);
+  margin-bottom: 12px;
 }
 
 .hero__title {
-  font-size: 44px;
-  font-weight: 500;
-  line-height: 1.15;
+  font-family: var(--k-display);
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.08;
   color: #fff;
-  margin-bottom: 14px;
-  letter-spacing: -0.5px;
+  max-width: 15ch;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+  /* A close shadow, not a glow: it buys legibility over a bright product shot
+     without the type looking like it is floating. */
+  text-shadow: 0 2px 18px rgba(8, 26, 66, 0.55);
 }
 
 .hero__desc {
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.7);
-  max-width: 520px;
-  margin: 0 auto 26px;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 46ch;
+  margin: 0 0 28px;
   line-height: 1.6;
+  text-shadow: 0 1px 10px rgba(8, 26, 66, 0.5);
 }
 
+/*
+ * The hero's one action, carrying the brand gradient.
+ *
+ * It was an outlined square that read as a disabled control against the photo.
+ * Filled and pill-shaped, it matches the cart button and the active filter, so
+ * the three primary actions on the site share one shape and one colour.
+ */
 .hero__cta {
   display: inline-block;
-  padding: 12px 26px;
-  background: transparent;
+  padding: 14px 30px;
+  background: var(--k-gradient);
   color: #fff;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-family: var(--k-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  transition: all 0.25s ease;
-  border-radius: 0 !important;
+  border: 0;
+  border-radius: var(--k-radius-pill) !important;
+  box-shadow: var(--k-glow);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .hero__cta:hover {
-  background: #fff;
-  color: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px -8px rgba(34, 194, 232, 0.75), 0 4px 10px -2px rgba(14, 42, 107, 0.35);
 }
 
 /* ─────────────────────────────
    PROGRESS BAR
 ───────────────────────────── */
+/* Aligned with the text rather than centred, now that the text has a side. */
 .hero__progress {
   position: absolute;
-  bottom: 22px;
+  bottom: 26px;
   left: 50%;
   transform: translateX(-50%);
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 48px;
   display: flex;
+  align-items: center;
   gap: 8px;
   z-index: 2;
+}
+
+/* Sits with the slide markers, deliberately quieter than them: it is a control
+   most people never need and keyboard users must be able to find. */
+.hero__playpause {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-left: 6px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background: rgba(8, 26, 66, 0.35);
+  color: var(--k-white);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.hero__playpause:hover {
+  background: rgba(8, 26, 66, 0.6);
+  border-color: var(--k-white);
 }
 
 .progress-bar {
@@ -158,28 +234,40 @@
   }
 
   .hero__title {
-    font-size: 30px;
+    max-width: 100%;
   }
 
   .hero__desc {
     font-size: 14px;
-    max-width: 90%;
+    max-width: 100%;
+  }
+
+  .hero__content,
+  .hero__progress {
+    padding: 0 22px;
   }
 
   .hero__content {
-    padding: 0 24px;
-    bottom: 12%;
+    bottom: 14%;
+  }
+
+  /* The scrim turns bottom-up on a portrait screen, where there is no
+     left-hand corner to anchor to. */
+  .hero__overlay {
+    background: linear-gradient(
+      to top,
+      rgba(8, 26, 66, 0.94) 0%,
+      rgba(8, 26, 66, 0.6) 42%,
+      rgba(8, 26, 66, 0.15) 75%,
+      rgba(8, 26, 66, 0.05) 100%
+    );
   }
 }
 
 @media (max-width: 480px) {
   .hero {
-    height: 60vh;
-    min-height: 380px;
-  }
-
-  .hero__title {
-    font-size: 24px;
+    height: 62vh;
+    min-height: 400px;
   }
 
   .hero__desc {
@@ -187,7 +275,7 @@
   }
 
   .hero__cta {
-    padding: 10px 20px;
-    font-size: 10px;
+    padding: 12px 24px;
+    font-size: 12px;
   }
 }

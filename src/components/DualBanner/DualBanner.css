@@ -6,7 +6,7 @@
   grid-template-columns: 1fr 1fr;
   height: 600px;
   gap: 4px;
-  background: #f0f0f0;
+  background: var(--k-foam);
 }
 
 /* COLUMNA DERECHA: apilada */
@@ -74,21 +74,24 @@
 }
 
 .dual__eyebrow {
+  font-family: var(--k-display);
+  font-weight: 600;
+  color: var(--k-cyan);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.16em;
   margin-bottom: 8px;
-  font-weight: 400;
 }
 
 .dual__title {
+  font-family: var(--k-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 16px rgba(8, 26, 66, 0.5);
   font-size: 32px;
-  font-weight: 600;
   color: #fff;
   line-height: 1.15;
   margin: 0 0 20px;
-  letter-spacing: -0.5px;
 }
 
 .dual__desc {
@@ -102,29 +105,46 @@
 /* =========================
    BOTÓN
 ========================= */
+/*
+ * The on-image action.
+ *
+ * Solid white rather than the brand gradient, and deliberately so: three of
+ * these sit side by side, and the gradient is reserved for the one primary
+ * action on a screen. A filled white pill still reads as a button over any
+ * photograph, and it fills with the gradient on hover — so the brand colour
+ * marks intent rather than decorating three tiles at rest.
+ *
+ * Sentence case, matching the hero's "Ver servicios"; the letterspaced
+ * uppercase was the last of the old styling on this page.
+ */
 .dual__btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-family: var(--k-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
   text-decoration: none;
   padding: 12px 24px;
-  transition: all 0.25s ease;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 0;
+  border-radius: var(--k-radius-pill);
+  transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .dual__btn--light {
-  color: #fff;
-  background: transparent;
+  color: var(--k-navy);
+  background: #fff;
+  box-shadow: 0 6px 20px -8px rgba(8, 26, 66, 0.5);
 }
 
 .dual__btn--light:hover {
-  background: #fff;
-  color: #111;
-  border-color: #fff;
+  background: var(--k-gradient);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--k-glow);
 }
 
 /* Bloque pequeño: título más chico */
@@ -144,47 +164,47 @@
 ========================= */
 @media (max-width: 900px) {
   .dual {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    height: auto;
-  }
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  height: auto;
+}
 
-  .dual__block--left {
-    height: 380px;
-  }
+.dual__block--left {
+  height: 380px;
+}
 
-  .dual__right {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    height: 260px;
-  }
+.dual__right {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  height: 260px;
+}
 }
 
 @media (max-width: 560px) {
   .dual {
-    gap: 3px;
-  }
+  gap: 3px;
+}
 
-  .dual__right {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    height: 400px;
-  }
+.dual__right {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 400px;
+}
 
-  .dual__block--left {
-    height: 300px;
-  }
+.dual__block--left {
+  height: 300px;
+}
 
-  .dual__title {
-    font-size: 26px;
-  }
+.dual__title {
+  font-size: 26px;
+}
 
-  .dual__block--top .dual__title,
+.dual__block--top .dual__title,
   .dual__block--bottom .dual__title {
-    font-size: 20px;
-  }
+  font-size: 20px;
+}
 
-  .dual__content {
-    padding: 20px 20px;
-  }
+.dual__content {
+  padding: 20px 20px;
+}
 }

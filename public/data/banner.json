@@ -3,6 +3,6 @@
   "slides": [
     { "id": 1, "eyebrow": "SERVICIOS PROFESIONALES", "title": "Limpieza que transforma espacios", "description": "Soluciones de limpieza profesional para hogares, empresas e industrias.", "cta": "Ver servicios", "image": "/image/BannerLimpieza.png", "alt": "Limpieza profesional", "path": "/cleaning" },
     { "id": 2, "eyebrow": "ARTÍCULOS ESCOLARES", "title": "Todo para el aula y oficina", "description": "Papelería, útiles escolares y suministros de oficina de calidad.", "cta": "Ver catálogo", "image": "/image/BannerEscolar.png", "alt": "Material escolar", "path": "/bookshop" },
-    { "id": 3, "eyebrow": "EQUIPOS INDUSTRIALES", "title": "Maquinaria confiable para industria", "description": "Equipos duraderos para producción, mantenimiento y operación industrial.", "cta": "Ver equipos", "image": "/image/BannerMaquinaria.png", "alt": "Maquinaria industrial", "path": "/machinery" }
+    { "id": 3, "eyebrow": "EQUIPOS INDUSTRIALES", "title": "Maquinaria confiable para industria", "description": "Equipos duraderos para producción, mantenimiento y operación industrial.", "cta": "Ver equipos", "image": "/image/BannerMaquinaria.png", "alt": "Maquinaria industrial", "path": "/cleaning/industrial" }
   ]
 }

@@ -5,15 +5,22 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 30px;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--k-body);
 }
 
 /* =========================
    BREADCRUMB
 ========================= */
+/* Was `opacity: .55` over inherited ink — the same 55%-grey treatment the
+   catalogue filters used to have, and below AA at this size. `--k-muted` is
+   the blue-grey the rest of the site uses for secondary text. */
 .breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
   font-size: 13px;
-  opacity: 0.55;
+  color: var(--k-muted);
   margin-bottom: 35px;
 }
 
@@ -42,7 +49,7 @@
 .product-image-box {
   width: 100%;
   height: 480px;
-  background: #f8f8f8;
+  background: var(--k-foam);
   border-radius: 8px;
   overflow: hidden;
   position: relative;
@@ -76,17 +83,33 @@
    INFORMACIÓN PRODUCTO
 ========================= */
 .product-info h1 {
+  font-family: var(--k-display);
   font-size: 32px;
-  font-weight: 400;
-  margin: 0 0 15px;
-  color: #111;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 14px;
+  color: var(--k-ink);
 }
 
+/* The number a buyer is here for — it should outweigh the description. */
 .price {
-  font-size: 20px;
-  margin-bottom: 25px;
-  color: #222;
-  font-weight: 500;
+  font-family: var(--k-display);
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 22px;
+  color: var(--k-navy);
+}
+
+/*
+ * The buy controls stop short of the column edge.
+ *
+ * `flex: 1` on the button let it stretch the full width of a wide product
+ * column, which made a single action look like a page-wide banner.
+ */
+.product-info .add-to-cart {
+  max-width: 420px;
 }
 
 /* =========================
@@ -99,7 +122,7 @@
 .description {
   font-size: 15px;
   line-height: 1.8;
-  color: #333;
+  color: var(--k-ink);
   margin: 0;
   white-space: pre-line;
 }
@@ -108,7 +131,7 @@
    ESPECIFICACIONES
 ========================= */
 .specs-section {
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--k-line);
   padding-top: 25px;
 }
 
@@ -122,15 +145,15 @@
 .specs-header h3 {
   font-size: 18px;
   font-weight: 500;
-  color: #111;
+  color: var(--k-ink);
   margin: 0;
 }
 
 /* BOTÓN EN BLANCO */
 .download-btn {
   background: white;
-  color: #111;
-  border: 1px solid #ddd;
+  color: var(--k-ink);
+  border: 1px solid var(--k-line);
   padding: 10px 20px;
   border-radius: 4px;
   font-size: 13px;
@@ -144,7 +167,7 @@
 }
 
 .download-btn:hover {
-  border-color: #0d1f5c;;
+  border-color: var(--k-navy);;
   transform: translateY(-2px);
 
 }
@@ -162,18 +185,18 @@
   display: grid;
   grid-template-columns: 220px 1fr;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--k-foam);
   font-size: 14px;
   gap: 20px;
 }
 
 .specs-key {
   font-weight: 500;
-  color: #555;
+  color: var(--k-muted);
 }
 
 .specs-value {
-  color: #222;
+  color: var(--k-ink);
 }
 
 /* =========================
@@ -186,18 +209,18 @@
 
 .documents button {
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--k-line);
   padding: 12px 24px;
   cursor: pointer;
   font-size: 13px;
   transition: all 0.25s ease;
   border-radius: 4px;
-  color: #222;
+  color: var(--k-ink);
 }
 
 .documents button:hover {
-  border-color: #111;
-  background: #f5f5f5;
+  border-color: var(--k-ink);
+  background: var(--k-foam);
 }
 
 /* =========================
@@ -265,7 +288,7 @@
 
   .specs-key {
     font-weight: 600;
-    color: #333;
+    color: var(--k-ink);
   }
 
   .documents button {
@@ -291,7 +314,7 @@
   }
 
   .price {
-    font-size: 18px;
+    font-size: 26px;
   }
 
   .breadcrumb {

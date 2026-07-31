@@ -1,48 +1,17 @@
+/*
+ * Home page sections.
+ *
+ * The hero lives entirely in `View/Banner/Banner.css`. This file used to
+ * carry a second, competing hero — a light split-panel design that `Banner.js`
+ * never renders — and because it is imported after Banner.css its `.hero__title`
+ * and `.hero__desc` won, painting navy text onto a photograph.
+ */
+
 /* ─── GLOBAL RESET (include in index.css if not already) ─────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-body {
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  color: #1f2937;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ─── HERO ────────────────────────────────────────────────────── */
-.hero {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr auto;
-  min-height: 560px;
-  max-height: 680px;
-  background: #edf2fb;
-  overflow: hidden;
-  margin-top: 5%;
-}
-
-/* ── Text panel (left) ── */
-.hero__text {
-  grid-column: 1;
-  grid-row: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 56px 48px 56px 64px;
-  z-index: 2;
-  position: relative;
-}
-
-/* Fade-slide animations */
-.hero__text--enter {
-  animation: fadeSlideIn 0.4s ease both;
-}
-.hero__text--exit {
-  animation: fadeSlideOut 0.35s ease both;
-  pointer-events: none;
 }
 
 @keyframes fadeSlideIn {
@@ -54,119 +23,6 @@ body {
   to   { opacity: 0; transform: translateX(20px); }
 }
 
-.hero__icon-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: #dde7f8;
-  margin-bottom: 18px;
-}
-
-.hero__icon-badge svg {
-  width: 24px;
-  height: 24px;
-}
-
-.hero__eyebrow {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #1a3faa;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-
-.hero__title {
-  font-size: clamp(1.8rem, 3.2vw, 2.7rem);
-  font-weight: 800;
-  line-height: 1.15;
-  color: #0d1f5c;
-  margin-bottom: 18px;
-  letter-spacing: -0.5px;
-}
-
-.hero__desc {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: #4b5563;
-  max-width: 380px;
-  margin-bottom: 32px;
-}
-
-.hero__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #1a3faa;
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  padding: 14px 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  width: fit-content;
-  transition: background 0.18s ease, transform 0.15s ease;
-}
-
-.hero__cta:hover {
-  background: #143289;
-  transform: translateY(-1px);
-}
-
-.hero__cta svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* ── Image panel (right) ── */
-.hero__image-panel {
-  grid-column: 2;
-  grid-row: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Mezcla la imagen con el fondo del hero */
-.hero__image-panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 180px;
-  height: 100%;
-  z-index: 2;
-  pointer-events: none;
-
-  background: linear-gradient(
-    to right,
-    #edf2fb 0%,
-    rgba(237, 242, 251, 0.95) 15%,
-    rgba(237, 242, 251, 0.75) 35%,
-    rgba(237, 242, 251, 0.35) 70%,
-    transparent 100%
-  );
-}
-
-.hero__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  position: relative;
-  z-index: 1;
-}
-
-.hero__image--enter {
-  animation: imgFadeIn 0.5s ease both;
-}
-.hero__image--exit {
-  animation: imgFadeOut 0.35s ease both;
-}
-
 @keyframes imgFadeIn {
   from { opacity: 0; transform: scale(1.03); }
   to   { opacity: 1; transform: scale(1); }
@@ -176,74 +32,14 @@ body {
   to   { opacity: 0; transform: scale(0.97); }
 }
 
-/* ── Arrow buttons ── */
-.hero__arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-  transition: box-shadow 0.18s ease, transform 0.18s ease;
-}
-
-.hero__arrow:hover {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
-  transform: translateY(-50%) scale(1.05);
-}
-
-.hero__arrow svg {
-  width: 20px;
-  height: 20px;
-  color: #374151;
-}
-
-.hero__arrow--left  { left: 16px; }
-.hero__arrow--right { right: 16px; }
-
-/* ── Dots ── */
-.hero__dots {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 10;
-}
-
-.hero__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(26, 63, 170, 0.25);
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  padding: 0;
-}
-
-.hero__dot--active {
-  background: #1a3faa;
-  transform: scale(1.2);
-}
-
 /* ─── FEATURE CARDS ───────────────────────────────────────────── */
 .features {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 2%;
   gap: 0;
-  background: #f8faff;
-  border-top: 1px solid #e5eaf5;
+  background: var(--k-foam);
+  border-top: 1px solid var(--k-line);
 }
 
 .features__card {
@@ -255,7 +51,7 @@ body {
 
   gap: 18px;
   padding: 36px 40px;
-  border-right: 1px solid #e5eaf5;
+  border-right: 1px solid var(--k-line);
   transition: background 0.18s ease;
 }
 
@@ -264,7 +60,7 @@ body {
 }
 
 .features__card:hover {
-  background: #eef3fc;
+  background: var(--k-foam);
 }
 
 .features__icon {
@@ -272,11 +68,11 @@ body {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: #dde7f8;
+  background: var(--k-line);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a3faa;
+  color: var(--k-blue);
 }
 
 .features__icon svg {
@@ -292,14 +88,14 @@ body {
 .features__title {
   font-size: 0.98rem;
   font-weight: 700;
-  color: #0d1f5c;
+  color: var(--k-navy);
   margin-bottom: 6px;
 }
 
 .features__desc {
   font-size: 0.85rem;
   line-height: 1.55;
-  color: #6b7280;
+  color: var(--k-muted);
 }
 
 /* ── Base: todas las secciones empiezan invisibles ── */
@@ -386,9 +182,6 @@ body {
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .hero__text {
-    padding: 40px 32px 40px 40px;
-  }
 
   .features__card {
     padding: 28px 24px;
@@ -397,43 +190,6 @@ body {
 
 /* Mobile landscape / large phone */
 @media (max-width: 768px) {
-  .hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    min-height: unset;
-    max-height: unset;
-  }
-
-  /* Image goes first on mobile */
-  .hero__image-panel {
-    grid-column: 1;
-    grid-row: 1;
-    height: 260px;
-  }
-
-  .hero__text {
-    grid-column: 1;
-    grid-row: 2;
-    padding: 36px 24px 48px;
-    align-items: flex-start;
-  }
-
-  .hero__eyebrow {
-    font-size: 0.68rem;
-  }
-
-  .hero__desc {
-    font-size: 0.9rem;
-    max-width: 100%;
-  }
-
-  .hero__arrow--left  { left: 10px; top: 130px; }
-  .hero__arrow--right { right: 10px; top: 130px; }
-
-  .hero__dots {
-    bottom: unset;
-    top: 234px;
-  }
 
   /* Feature cards: stack vertically */
   .features {
@@ -442,38 +198,11 @@ body {
 
   .features__card {
     border-right: none;
-    border-bottom: 1px solid #e5eaf5;
+    border-bottom: 1px solid var(--k-line);
     padding: 24px 20px;
   }
 
   .features__card:last-child {
     border-bottom: none;
-  }
-}
-
-/* Small phones */
-@media (max-width: 480px) {
-  .hero__image-panel {
-    height: 220px;
-  }
-
-  .hero__text {
-    padding: 28px 20px 40px;
-  }
-
-  .hero__title {
-    font-size: 1.7rem;
-  }
-
-  .hero__cta {
-    padding: 12px 22px;
-    font-size: 0.88rem;
-  }
-
-  .hero__arrow--left  { left: 8px; top: 110px; }
-  .hero__arrow--right { right: 8px; top: 110px; }
-
-  .hero__dots {
-    top: 196px;
   }
 }

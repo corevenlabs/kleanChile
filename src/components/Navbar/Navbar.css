@@ -18,18 +18,61 @@
 }
 
 .navbar__brand {
+  position: relative;
   text-decoration: none;
   display: flex;
   align-items: center; /* el brand sí se puede centrar, no forma parte del hover */
   gap: 10px;
 }
-.navbar__mark { width: 38px; height: 38px; display: block; }
+.navbar__mark {
+  position: relative;
+  z-index: 1;
+  width: 38px;
+  height: 38px;
+  display: block;
+  animation: navbar-mark-intro 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.navbar__brand-name {
+  display: block;
+  overflow: hidden;
+}
 .navbar__brand-text {
+  display: block;
   font-family: var(--k-display);
   font-weight: 800;
   font-size: 1.35rem;
   letter-spacing: -0.03em;
   color: var(--k-navy);
+  animation: navbar-name-intro 820ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
+}
+
+@keyframes navbar-mark-intro {
+  from {
+    opacity: 0;
+    transform: scale(0.72) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes navbar-name-intro {
+  from {
+    opacity: 0;
+    transform: translateX(-105%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar__mark,
+  .navbar__brand-text {
+    animation: none;
+  }
 }
 
 .navbar__links {

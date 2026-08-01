@@ -3,6 +3,24 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { formatClp } from "../../domain/shared/money";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
+
+function ProductReveal({ children, index }) {
+  const ref = useScrollReveal({
+    threshold: 0.1,
+    rootMargin: "40px 0px -36px 0px",
+  });
+
+  return (
+    <div
+      ref={ref}
+      className="product-reveal scroll-section scroll-section--fade-up"
+      style={{ "--delay": `${(index % 4) * 55}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
 
 /**
  * The filter bar and the grid. Rendered inside `View/Category`, which owns the
@@ -89,7 +107,7 @@ export default function Catalog({ products = [], linkProducts = false }) {
       </div>
 
       <div className="catalog__grid">
-        {visible.map((product) => {
+        {visible.map((product, index) => {
           const card = (
             <article className={`product-card ${product.inStock ? "" : "product-card--out"}`}>
               <div className="product-card__img">
@@ -107,12 +125,16 @@ export default function Catalog({ products = [], linkProducts = false }) {
             </article>
           );
 
-          return linkProducts ? (
-            <Link key={product.id} href={`/product/${String(product.id)}`} className="product-link">
-              {card}
-            </Link>
-          ) : (
-            <div key={product.id}>{card}</div>
+          return (
+            <ProductReveal key={product.id} index={index}>
+              {linkProducts ? (
+                <Link href={`/product/${String(product.id)}`} className="product-link">
+                  {card}
+                </Link>
+              ) : (
+                card
+              )}
+            </ProductReveal>
           );
         })}
       </div>

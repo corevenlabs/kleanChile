@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
  * Agrega la clase `is-visible` cuando el elemento entra al viewport.
  * @param {Object} options - IntersectionObserver options
  */
-export function useScrollReveal(options = {}) {
+export function useScrollReveal({ repeat = false, ...options } = {}) {
   const ref = useRef(null)
 
   useEffect(() => {
@@ -16,7 +16,9 @@ export function useScrollReveal(options = {}) {
       ([entry]) => {
         if (entry.isIntersecting) {
           el.classList.add('is-visible')
-          observer.unobserve(el) // solo una vez
+          if (!repeat) observer.unobserve(el)
+        } else if (repeat) {
+          el.classList.remove('is-visible')
         }
       },
       {
@@ -28,7 +30,7 @@ export function useScrollReveal(options = {}) {
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [repeat])
 
   return ref
 }

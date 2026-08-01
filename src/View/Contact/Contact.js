@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 /**
  * The contact page.
  *
@@ -39,6 +43,24 @@ const ICONS = {
 
 export default function Contact({ footer, whatsapp }) {
   const lines = footer.contact.items.map((line) => ({ line, ...classify(line) }));
+  const email = lines.find(({ kind }) => kind === "Correo")?.line ?? "";
+  const [feedback, setFeedback] = useState("");
+
+  function sendMessage(event) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
+    const sender = String(form.get("email") ?? "").trim();
+    const message = String(form.get("message") ?? "").trim();
+
+    const subject = encodeURIComponent(`Consulta web de ${name}`);
+    const body = encodeURIComponent(
+      `Nombre: ${name}\nCorreo: ${sender}\n\nMensaje:\n${message}`,
+    );
+
+    setFeedback("Abriremos tu correo con el mensaje listo para enviar.");
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  }
 
   // Hidden when there is no number. A dead wa.me link is the one thing this
   // page cannot afford to ship, and the number seeds empty by design.
@@ -107,25 +129,40 @@ export default function Contact({ footer, whatsapp }) {
           )}
         </div>
 
-        {footer.location.embedUrl && (
-          <div className="contact__map">
-            <iframe
-              src={footer.location.embedUrl}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              title={footer.location.mapTitle}
-            />
-            <a
-              className="contact__map-cta"
-              href={footer.location.mapUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {footer.location.cta}
-            </a>
+        <form className="contact__form" onSubmit={sendMessage}>
+          <div className="contact__form-head">
+            <p className="contact__form-kicker">Cuéntanos tu requerimiento</p>
+            <h2>Envíanos un mensaje</h2>
+            <p>Déjanos tus datos y prepararemos una respuesta para tu necesidad.</p>
           </div>
-        )}
+
+          <label className="contact__field">
+            <span>Nombre</span>
+            <input name="name" type="text" autoComplete="name" required />
+          </label>
+
+          <label className="contact__field">
+            <span>Correo</span>
+            <input name="email" type="email" autoComplete="email" required />
+          </label>
+
+          <label className="contact__field">
+            <span>Mensaje</span>
+            <textarea name="message" rows="6" required />
+          </label>
+
+          <button className="contact__submit" type="submit" disabled={!email}>
+            Enviar mensaje
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 2 11 13" />
+              <path d="m22 2-7 20-4-9-9-4Z" />
+            </svg>
+          </button>
+
+          <p className="contact__feedback" aria-live="polite">
+            {email ? feedback : "Configura un correo de contacto para habilitar el envío."}
+          </p>
+        </form>
       </div>
     </div>
   );

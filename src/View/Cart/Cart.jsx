@@ -88,7 +88,7 @@ export default function Cart({ lines, dropped }) {
         <div className="cart-lines">
           {lines.map((line) => (
             <div className="cart-line" key={line.productId}>
-              <img className="cart-line__image" src={line.image} alt="" />
+              {line.image && <img className="cart-line__image" src={line.image} alt="" />}
               <div>
                 <p className="cart-line__name">{line.name}</p>
                 {line.skuCode && <p className="cart-line__sku">SKU {line.skuCode}</p>}

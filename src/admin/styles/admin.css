@@ -118,6 +118,12 @@
 .admin-panel .admin-panel .admin-form-grid { padding:14px 0 0; }
 .admin-panel .admin-panel .admin-panel { background:#fff; }
 
+/* El hueco de un producto sin foto, del mismo tamaño que la miniatura. */
+.admin-product__sin-imagen {
+  width:42px; height:42px; flex-shrink:0; display:grid; place-items:center;
+  border-radius:7px; background:#f3f5f8; color:#c3ccda;
+}
+
 /* ── Campo de imagen ─────────────────────────────────────────────────────────
 
    Miniatura y controles en una fila, en vez de la vista previa de 130px debajo

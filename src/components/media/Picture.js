@@ -27,6 +27,19 @@ export default function Picture({
   className,
   ...rest
 }) {
+  /*
+   * Sin imagen no se dibuja un `<img>` vacío.
+   *
+   * `src=""` le dice al navegador que vuelva a pedir la página actual, React lo
+   * reporta como error, y en desarrollo el overlay de Next se abre encima de
+   * todo y bloquea los clics. Un producto sin foto es un caso normal —el
+   * importador acepta filas sin columna de imagen— así que se resuelve acá y no
+   * en cada sitio que llama.
+   */
+  if (!src) {
+    return <span className={className} aria-hidden="true" data-sin-imagen="" {...rest} />;
+  }
+
   const parsed = parseRenditionUrl(src);
 
   const img = (

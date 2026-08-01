@@ -45,7 +45,7 @@ export default function ProductQuickView({ product, onClose }) {
         </button>
 
         <div className="quickview__media">
-          <img src={product.image} alt={product.name} />
+          {product.image && <img src={product.image} alt={product.name} />}
         </div>
 
         <div className="quickview__body">

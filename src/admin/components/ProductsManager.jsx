@@ -241,7 +241,21 @@ export default function ProductsManager({ products }) {
               <tr key={product.id}>
                 <td>
                   <div className="admin-product">
-                    <img src={product.image} alt="" />
+                    {/*
+                      Un producto sin imagen es legítimo, y `<img src="">` no lo
+                      es: el navegador lo interpreta como «recargá esta página
+                      entera», React lo reporta como error de consola, y en
+                      desarrollo eso abre el overlay de Next a pantalla completa
+                      — que intercepta todos los clics. Un solo producto sin
+                      foto dejaba el panel entero sin responder.
+                    */}
+                    {product.image ? (
+                      <img src={product.image} alt="" />
+                    ) : (
+                      <span className="admin-product__sin-imagen" aria-hidden="true">
+                        <Icon name="portada" size={16} />
+                      </span>
+                    )}
                     <div>
                       <strong>{product.name}</strong>
                       <small>#{product.id}</small>

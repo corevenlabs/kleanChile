@@ -58,7 +58,11 @@ export default function Banner({ data }) {
   return (
     <section className="hero" aria-roledescription="carrusel" aria-label="Destacados">
       <div className="hero__bg">
-        {slides.map((s, i) => (
+        {/* Una diapositiva sin imagen no dibuja nada: `src=""` es un error de
+            consola que en desarrollo abre el overlay de Next sobre toda la
+            página. Se filtra dentro del map y no antes, porque `current` indexa
+            este mismo arreglo y reindexarlo desincronizaría el carrusel. */}
+        {slides.map((s, i) => !s.image ? null : (
           <img
             key={s.id}
             src={s.image}

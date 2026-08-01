@@ -177,7 +177,7 @@ export default function SearchBox({ placeholder = "Buscar productos...", onDone 
               }}
               onMouseEnter={() => setActive(index)}
             >
-              <img src={product.image} alt="" width={40} height={40} loading="lazy" />
+              {product.image && <img src={product.image} alt="" width={40} height={40} loading="lazy" />}
               <span className="search-menu__text">
                 <strong>{product.name}</strong>
                 <small>

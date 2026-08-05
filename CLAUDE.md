@@ -51,7 +51,7 @@ There are two content stores, and the distinction is the main thing to understan
 
 The JSONB looseness stops at `src/domain/content/schemas.js`, which parses every block with Zod on the way in and on the way out. Two rules there:
 
-- **Every field has a default**, so `schema.parse({})` succeeds and a never-saved block degrades to an empty section instead of throwing mid-render.
+- **Every field has a default**, so `schema.parse({})` succeeds and a never-saved block degrades to an empty section instead of throwing mid-render. **A nested object must use `.prefault({})`, not `.default({})`** — in Zod 4 a default is the output value and is not re-parsed, so `.default({})` hands back a literal `{}` with none of its own fields filled in. `parse({})` still succeeds, which is what makes it easy to miss; the component is what breaks, one layer down, on `contact.items.map`. Scalars and arrays are unaffected: `""` and `[]` already are the finished value.
 - **Anything a component uses as a lookup key is an enum** (`whyUs.icon`, `bestSellers.badge`, `dualBanner.position`). Free text there renders a blank icon or an unstyled badge — a bug that ships because nothing errors.
 
 `public/data/*.json` is now **seed input only**. Nothing at runtime reads it. Editing those files changes nothing until `npm run db:seed` runs.

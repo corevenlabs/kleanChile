@@ -188,13 +188,31 @@ export const footerSchema = z.object({
       }),
     )
     .default([]),
+  /*
+   * `prefault`, no `default`, y la diferencia no es cosmética.
+   *
+   * En Zod 4 el valor de `.default()` es la **salida** y no se vuelve a parsear:
+   * `.default({})` entrega literalmente `{}`, sin `title` y sin `items`. La
+   * promesa de «todo campo tiene default, así que un bloque nunca guardado
+   * degrada a una sección vacía» se cumplía a medias — `parse({})` no tiraba,
+   * pero devolvía un objeto al que le faltaban las claves que el componente usa,
+   * y el `Footer` reventaba con «Cannot read properties of undefined» al hacer
+   * `contact.items.map`.
+   *
+   * `.prefault({})` sí pasa el valor por el schema, así que los defaults de
+   * adentro se aplican. Solo hace falta en objetos anidados: un `.default([])`
+   * de arreglo o un `.default("")` de texto ya son el valor final.
+   *
+   * Esto se vio con una base migrada y sin sembrar, que es exactamente el estado
+   * de un despliegue nuevo entre `db:migrate` y la primera edición.
+   */
   contact: z
     .object({
       title: text("Contacto"),
       /** Rendered as free lines: email, phone, city. */
       items: z.array(z.string()).default([]),
     })
-    .default({}),
+    .prefault({}),
   location: z
     .object({
       title: text("Ubicación"),
@@ -203,7 +221,7 @@ export const footerSchema = z.object({
       mapTitle: text(),
       cta: text("Ver en Google Maps"),
     })
-    .default({}),
+    .prefault({}),
   copyright: text(),
 });
 

@@ -286,6 +286,21 @@ Ported from the sibling `azarwear` project: scrypt password hashing (`src/infra/
 
 There is no sign-up route by design. Accounts come from `npm run admin:create`.
 
+### The edge: headers and the preview curtain
+
+Target is Vercel + Neon + R2, the same as `azarwear` — `docs/DEPLOY.md` is the checklist. Two pieces live outside the app:
+
+**Security headers are static, in `next.config.js`.** A per-request nonce would make every response dynamic to buy a stricter `script-src`, and nothing here loads a third-party script. One directive is deliberately open and cannot be closed: **`img-src` accepts any `https:`**, because *an image is a URL* — the catalogue points at supplier photos and the importer takes a column of links. Narrow it to the CDN and half the shop goes blank. `frame-src` allows Google Maps, which is the footer's embed; change the `embedUrl` to another provider and it must be added, with a blank rectangle as the only symptom.
+
+**`middleware.js` is a curtain, not a lock.** `PREVIEW_PASSWORD` set puts the whole site behind HTTP Basic auth so a client can review it before launch; unset, the file returns on its first line. Turning it off is deleting a variable — there is no branch to merge and no code to revert, which is the part that otherwise gets forgotten.
+
+Two things differ from azarwear's version and both are forced:
+
+- **`/api` is inside the gate here.** azarwear exempts it because its Vercel cron authenticates with `Authorization: Bearer`, and that header holds one scheme. There is no cron in this project, and leaving `/api/buscar` open would serve the whole catalogue — names and prices — while the site is supposedly private.
+- **The comparison hashes both sides with SHA-256** instead of `timingSafeEqual`. Next 15 runs middleware on the Edge runtime, where `node:crypto` does not exist. Comparing digests leaks nothing usable about the password even with a plain `===`.
+
+`middleware.js` sits at the repo root because `app/` does, and it is thin for the same reason `page.js` files are: the logic is in `src/lib/previewGate.js`.
+
 ## Deliberate decisions
 
 - **Prices are integer Chilean pesos, not cents.** This departs from azarwear's "money is always integer cents" rule because CLP is zero-decimal — there is no centavo to represent. `src/domain/shared/money.js` formats and parses; `parseClp` exists because `Number("2.990")` returns 2.99, which would price a three-thousand-peso product at three pesos.

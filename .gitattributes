@@ -1,0 +1,16 @@
+# Los finales de línea se normalizan a LF en el repositorio.
+#
+# El desarrollo es en Windows y el despliegue en Linux; sin esto un archivo
+# tocado en cada lado aparece como "cambiado entero" en el diff, y el ruido
+# tapa el cambio real. Git ya venía avisando de la conversión en cada commit.
+* text=auto eol=lf
+
+# Binarios: nunca convertir, o el archivo queda corrupto.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.pdf binary
+*.xlsx binary

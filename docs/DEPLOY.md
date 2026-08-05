@@ -64,6 +64,7 @@ mensaje claro, no con un `undefined` tres capas más abajo.
 | `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` | El par de llaves S3 del bucket. |
 | `R2_BUCKET` | `kleanchile` |
 | `NEXT_PUBLIC_CDN_URL` | `https://cdn.kleanchile.cl` |
+| `PREVIEW_PASSWORD` | **Temporal.** Ver el paso 5b. Bórrala para abrir el sitio. |
 
 Las cinco de R2 son **todas o ninguna**: `storageConfig()` en `src/env.js`
 rechaza el estado intermedio nombrando las que faltan. Medio configurado es el
@@ -108,6 +109,13 @@ base, no JWT firmados. Tampoco Resend ni cron.
 > **Antes de tener el bucket real** puedes correr todo esto contra el MinIO que
 > levanta `docker compose up -d`: mismo protocolo S3, mismas URLs firmadas,
 > mismo preflight. Las variables están en `docker-compose.yml`.
+>
+> Con MinIO usa `npm run dev`, no un build de producción. La CSP se calcula
+> **en el build**, y `R2_ENDPOINT` —que es lo que apunta al bucket local— solo
+> existe ahí. Un `next build` hecho sin esa variable deja el bucket local fuera
+> de `connect-src`, y la subida falla con un error de CSP que no tiene nada que
+> ver con el bucket. En producción no aplica: `R2_ENDPOINT` no se usa y la
+> política lleva el comodín de R2.
 
 ## 4. Dominio y DNS
 
@@ -126,6 +134,65 @@ base, no JWT firmados. Tampoco Resend ni cron.
       Vercel soporta los dos sin más configuración.
 - [ ] Revisa el log del primer build: debe compilar limpio. El CI
       (`.github/workflows/ci.yml`) corre el mismo build en cada push a `main`.
+- [ ] No hace falta `vercel.json`: no hay cron ni rutas con configuración
+      especial. Si el proyecto de Neon está en una región lejana a la de las
+      funciones, ahí es donde se ajusta (`"regions"`) — cada consulta paga ese
+      viaje, y el panel hace varias por página.
+
+## 5a. Cabeceras de seguridad
+
+Van en `next.config.js` como cabeceras estáticas de respuesta, no por
+middleware: un nonce por petición obligaría a que cada respuesta fuera dinámica,
+y acá no se carga un solo script de terceros que lo justifique.
+
+Cuatro permisos de la CSP son deliberados y conviene conocerlos antes de
+apretarlos:
+
+- **`img-src` acepta cualquier `https:`.** Es la directiva que no se puede
+  cerrar sin romper el proyecto: *una imagen es una URL*, el catálogo apunta a
+  fotos de proveedores y el importador toma una columna de enlaces. Limitarla al
+  CDN dejaría media tienda en blanco. Una `<img>` no ejecuta nada, así que lo
+  peor que logra un enlace hostil es no cargar.
+- **`frame-src` permite Google Maps**, que es el mapa del pie y de contacto. Si
+  algún día se cambia el `embedUrl` por otro proveedor, hay que agregarlo acá; el
+  síntoma es un recuadro en blanco.
+- **`connect-src` permite el bucket**, porque la subida hace PUT directo desde
+  el navegador. Sin eso la CSP rompería justo lo que protege.
+- **`'unsafe-inline'`** en scripts y estilos: Next inserta su arranque de
+  hidratación en línea y nosotros emitimos JSON-LD. Sin nonce no hay forma de
+  distinguirlos de una inyección; lo que lo hace tolerable es que todo el HTML
+  sale del servidor desde datos propios.
+
+## 5b. Vista previa privada (mientras el cliente revisa)
+
+Para que el cliente vea el sitio y el público no, sin sacarlo de línea:
+
+- [ ] En Vercel → Settings → Environment Variables, añade **`PREVIEW_PASSWORD`**
+      (y opcionalmente `PREVIEW_USER`; por defecto es `kleanchile`). Ámbito:
+      **Production**.
+- [ ] **Vuelve a desplegar.** Vercel solo aplica variables nuevas en un
+      despliegue nuevo.
+- [ ] Entra al dominio: el navegador pedirá usuario y contraseña. Eso es lo que
+      le pasas al cliente.
+
+**Para abrirlo al público: borra `PREVIEW_PASSWORD` y vuelve a desplegar.** No
+hay código que revertir ni rama que fusionar — `middleware.js` sale por la
+primera línea cuando la variable no está.
+
+Detalles que conviene saber:
+
+- Mientras la cortina esté puesta **Google no indexa nada**: todo responde 401,
+  incluido `/robots.txt` y el `sitemap.xml`. Eso es exactamente lo que quieres
+  antes de lanzar.
+- **`/api` también queda detrás**, a diferencia de azarwear. Allá se exceptúa
+  porque el cron de Vercel se autentica con `Authorization: Bearer` y esa
+  cabecera admite un solo esquema. Acá no hay cron, y dejar `/api/buscar`
+  abierto entregaría el catálogo entero —nombres y precios— mientras el sitio se
+  supone privado. El buscador sigue funcionando para quien ya pasó la cortina.
+- El panel sigue pidiendo su propio login. Esto es una cortina, no reemplaza la
+  autorización real: `requireUser()` sigue en cada página y cada Server Action.
+- Es autenticación básica sobre HTTPS: la contraseña viaja cifrada pero queda
+  guardada en el navegador del cliente. No reutilices una que uses en otro lado.
 
 ## 6. Datos iniciales
 
@@ -147,6 +214,15 @@ base, no JWT firmados. Tampoco Resend ni cron.
 
 ## 7. Verificación post-deploy
 
+> Si dejaste puesta la cortina del paso 5b, quítala antes de esta sección o
+> haz cada comprobación con `-u usuario:contraseña` — si no, todo responde 401
+> y no estarás midiendo nada.
+
+- [ ] Cabeceras de seguridad presentes:
+      `curl -sI https://<dominio> | grep -i "content-security\|strict-transport"`
+- [ ] Abre la consola del navegador en la portada y en una ficha de producto:
+      **cero violaciones de CSP**. Es donde aparecería un recurso que la política
+      dejó fuera, y se ve como una sección vacía sin ningún error de servidor.
 - [ ] `https://<dominio>/sitemap.xml` lista el dominio real, no localhost.
 - [ ] `https://<dominio>/robots.txt` apunta al sitemap y bloquea `/admin`,
       `/api`, `/carrito`, `/pedido`.

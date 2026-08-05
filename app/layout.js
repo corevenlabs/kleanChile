@@ -8,6 +8,7 @@ import "../src/View/Banner/Banner.css";
 import "../src/View/Home/Home.css";
 import "../src/styles/catalog.css";
 import "../src/View/Contact/Contact.css";
+import "../src/View/About/About.css";
 import "../src/View/ProductDetail/ProductDetail.css";
 import "../src/components/Navbar/Navbar.css";
 import "../src/components/Footer/Footer.css";

@@ -40,6 +40,7 @@ export default async function sitemap() {
   const entries = [
     { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/contact"), changeFrequency: "yearly", priority: 0.4 },
+    { url: absoluteUrl("/nosotros"), changeFrequency: "yearly", priority: 0.6 },
   ];
 
   for (const { category, products } of byCategory) {

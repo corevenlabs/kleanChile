@@ -119,6 +119,19 @@
 .chip:hover {
   border-color: var(--k-aqua);
   background: var(--k-foam);
+  color: var(--k-blue);
+}
+
+/* Keep the label readable when the selected gradient pill is hovered. */
+.chip--active:hover {
+  border-color: transparent;
+  background: var(--k-white);
+  color: var(--k-blue);
+}
+
+.chip--active:hover .chip__count {
+  background: var(--k-foam);
+  color: var(--k-blue);
 }
 
 .chip__count {
@@ -274,8 +287,14 @@
 
 .product-link {
   display: block;
+  height: 100%;
   color: inherit;
   text-decoration: none;
+}
+
+.product-reveal {
+  min-width: 0;
+  height: 100%;
 }
 
 /* ── Card ────────────────────────────────────────────────────────────────── */

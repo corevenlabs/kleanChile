@@ -191,6 +191,8 @@ Anything that mutates content **must** invalidate the matching tag, or the store
 
 **The public routes are dynamic, not prerendered.** The cart count in the navbar reads an `httpOnly` cookie in `app/(public)/layout.js`, and in Next 15 without PPR that makes the whole route render on demand. The alternative — fetching the count from the browser after hydration — keeps the pages static but shows an empty badge on first paint and needs its own refresh path after every add. Page *data* is still cached by tag, so a dynamic render is a render, not a round trip to Postgres.
 
+**And that layout says `export const dynamic = "force-dynamic"` out loud.** Being dynamic by consequence was not enough: during `next build` Next still *attempts* the prerender, and reaches the content query before it reaches the cookie that would make it give up. So building required a Postgres that was up and already migrated — which is how the first Vercel deploy failed with `relation "content_blocks" does not exist`, a data step reported as a build error. Declaring it means the build renders none of the storefront and opens no connection, so a deploy no longer waits on Neon waking from autosuspend. Nothing about what gets served changes; those routes were already `ƒ`.
+
 ### Images
 
 ```

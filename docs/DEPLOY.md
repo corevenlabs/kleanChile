@@ -43,8 +43,12 @@ esto.
 
 - [ ] Crea el proyecto/branch de producción.
 - [ ] Copia el connection string **pooled**, con `?sslmode=require`.
-- [ ] Aplica las migraciones contra esa base:
+- [ ] **Aplica las migraciones antes del primer despliegue:**
       `DATABASE_URL="<prod>" npm run db:migrate`
+      Sin esto la tienda arranca y devuelve 500 en cada página con
+      `relation "content_blocks" does not exist`. El build ya no falla por esto
+      —no toca la base—, así que el despliegue sale «verde» y el sitio está
+      roto; es el orden que hay que respetar, no un aviso que Vercel vaya a dar.
 - [ ] **No corras `db:seed` en producción.** Carga el catálogo real por
       `/admin/productos` o en lote por `/admin/importar`.
 

@@ -49,8 +49,23 @@ esto.
       `relation "content_blocks" does not exist`. El build ya no falla por esto
       —no toca la base—, así que el despliegue sale «verde» y el sitio está
       roto; es el orden que hay que respetar, no un aviso que Vercel vaya a dar.
-- [ ] **No corras `db:seed` en producción.** Carga el catálogo real por
-      `/admin/productos` o en lote por `/admin/importar`.
+- [ ] **No corras `db:seed` en producción.** Lee `public/data/*.json`, que es el
+      sitio *original*: todo lo que se corrigió después vive en migraciones de
+      datos o se editó desde el panel, y sembrar lo reescribiría con la versión
+      vieja. Carga el catálogo real por `/admin/productos` o en lote por
+      `/admin/importar`.
+- [ ] Para arrancar con la portada ya armada en local, cópiala en vez de
+      sembrarla:
+      ```bash
+      SOURCE_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/kleanchile" \
+      TARGET_DATABASE_URL="<prod>" \
+      node --conditions=react-server scripts/copy-content.js --products 6
+      ```
+      Copia los nueve bloques de contenido y los productos que le pidas, con su
+      asiento de inventario y adelantando `sku_code_seq` para que el próximo
+      producto creado en producción no choque contra un código ya usado.
+      Acepta `--skus KC…,KC…` para elegirlos a mano y `--dry-run` para ver el
+      plan sin escribir.
 
 Si de todos modos siembras para tener el contenido de portada, recuerda que el
 seed trae 46 productos de ejemplo y que `--reset` borra todo antes.

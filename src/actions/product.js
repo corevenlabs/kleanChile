@@ -32,6 +32,11 @@ const productInput = z.object({
   image: z.string().trim().default(""),
   description: z.string().trim().default(""),
   specs: z.record(z.string(), z.string()).default({}),
+  /**
+   * La ficha técnica en PDF. Una URL, como la imagen — puede ser un archivo
+   * subido acá o un enlace al documento del fabricante.
+   */
+  specSheet: z.string().trim().default(""),
   isActive: z.boolean().default(true),
   position: z.number().int().default(0),
   /** Opening stock, only meaningful when creating. */
@@ -47,8 +52,8 @@ export async function saveProductAction(input) {
     return { status: "error", message: first?.message ?? "Datos inválidos." };
   }
 
-  const { id, price, image, stock, ...rest } = parsed.data;
-  const row = { ...rest, priceClp: price, imageUrl: image };
+  const { id, price, image, specSheet, stock, ...rest } = parsed.data;
+  const row = { ...rest, priceClp: price, imageUrl: image, specSheetUrl: specSheet };
 
   if (id) {
     // Stock is deliberately not part of an edit. It moves only through the

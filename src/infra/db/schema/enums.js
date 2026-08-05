@@ -38,6 +38,16 @@ export const importRowStatus = pgEnum("import_row_status", [
   "error",
 ]);
 
+/**
+ * Qué clase de archivo hay detrás de una fila de `media`.
+ *
+ * Una imagen se procesa —tiene ancho, alto y un escalón de renditions— y un
+ * documento se guarda tal cual llegó. Es la diferencia que hace que las
+ * dimensiones sean nulables: un PDF no tiene ninguna, y un cero ahí sería un
+ * dato inventado.
+ */
+export const mediaKind = pgEnum("media_kind", ["image", "document"]);
+
 /** Why a stock level changed. Every movement carries one. */
 export const inventoryReason = pgEnum("inventory_reason", [
   "sale",

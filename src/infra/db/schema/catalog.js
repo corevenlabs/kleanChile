@@ -78,6 +78,24 @@ export const products = pgTable(
     specs: jsonb("specs").notNull().default({}),
 
     /**
+     * La ficha técnica del proveedor, en PDF.
+     *
+     * **Una ficha es una URL**, por la misma razón que una imagen lo es: el
+     * catálogo mezcla archivos subidos acá con enlaces a documentos que ya
+     * viven en el sitio del fabricante, y el importador toma una columna de
+     * texto. Un identificador a una tabla obligaría a migrar las tres cosas.
+     *
+     * Cuando está puesta, la ficha del producto muestra **este** documento en
+     * vez de la tabla de `specs`. Las dos conviven en la base a propósito: la
+     * tabla sigue alimentando el `brand` de los datos estructurados, y quitar
+     * el PDF la devuelve a la vista sin haber perdido nada.
+     *
+     * Vacía, el botón de descarga entrega un PDF generado al vuelo desde
+     * `specs` — ver `app/(public)/product/[id]/ficha-tecnica/route.js`.
+     */
+    specSheetUrl: text("spec_sheet_url").notNull().default(""),
+
+    /**
      * Units on the shelf.
      *
      * **Never written directly.** Every change goes through an

@@ -19,11 +19,17 @@ const nextConfig = {
    * hace que se cargue con `require` desde node_modules, que es lo que Vercel y
    * cualquier runtime Node esperan.
    *
-   * Solo lo alcanza `app/api/admin/media/route.js` — a propósito. Ver la nota en
+   * Solo lo alcanzan los dos Route Handlers que lo necesitan —
+   * `app/api/admin/media/route.js` y la ficha técnica en PDF. Ver la nota en
    * `infra/storage/imageKeys.js` sobre por qué los nombres de rendition viven
    * aparte del pipeline.
+   *
+   * `pdfkit` va por otra razón: lee sus métricas de fuente (`.afm`) del disco,
+   * desde su propio directorio en node_modules, en tiempo de ejecución. Un
+   * bundler que lo empaqueta se lleva el código y deja los datos atrás, y el
+   * fallo aparece recién al generar el primer PDF en producción.
    */
-  serverExternalPackages: ["sharp"],
+  serverExternalPackages: ["sharp", "pdfkit"],
 
   experimental: {
     serverActions: {

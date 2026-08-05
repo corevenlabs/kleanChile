@@ -36,6 +36,8 @@ const toView = (row) => ({
   image: row.imageUrl,
   description: row.description,
   specs: row.specs ?? {},
+  /** La ficha técnica en PDF, o "" si el producto no tiene una subida. */
+  specSheet: row.specSheetUrl ?? "",
   stockOnHand: row.stockOnHand,
   inStock: row.stockOnHand > 0,
 });
@@ -157,6 +159,7 @@ export const getBestSellers = unstable_cache(
         imageUrl: row.image_url,
         description: row.description,
         specs: row.specs,
+        specSheetUrl: row.spec_sheet_url,
         stockOnHand: row.stock_on_hand,
       }),
       unitsSold: Number(row.sold),

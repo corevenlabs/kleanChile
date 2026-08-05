@@ -10,6 +10,7 @@ import {
 import { setStockAction } from "../../actions/order";
 import { CATEGORIES, CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { formatClp } from "../../domain/shared/money";
+import DocumentField from "./DocumentField";
 import Icon from "./Icon";
 import ImageField from "./ImageField";
 
@@ -31,6 +32,7 @@ const emptyProduct = {
   image: "",
   description: "",
   specs: {},
+  specSheet: "",
   isActive: true,
   position: 0,
   stock: 0,
@@ -468,7 +470,49 @@ export default function ProductsManager({ products }) {
                   onChange={(event) => setSpecsText(event.target.value)}
                 />
                 <small>Una por línea, con el formato «clave: valor».</small>
+
+                {/*
+                  El aviso solo aparece cuando hay las dos cosas cargadas.
+
+                  Mostrarlo siempre lo convertiría en decoración que nadie lee;
+                  acá aparece justo en el estado que hace falta explicar, que es
+                  ese en el que la persona acaba de escribir una tabla que el
+                  cliente no va a ver.
+                */}
+                {editing.specSheet && specsText.trim() !== "" && (
+                  <small className="admin-note" role="status">
+                    <Icon name="alerta" size={13} /> Mientras haya un PDF cargado, esta tabla no se
+                    muestra en la tienda. Se guarda igual: quita el PDF y vuelve a aparecer.
+                  </small>
+                )}
+
+                {/*
+                  El enlace a lo que el cliente va a descargar.
+
+                  Solo con producto guardado, porque la ruta lee de la base: en
+                  un producto nuevo abriría un 404 y parecería que la generación
+                  está rota. Y solo sin PDF cargado, que es cuando el documento
+                  generado es el que se entrega.
+                */}
+                {editing.id && !editing.specSheet && specsText.trim() !== "" && (
+                  <small>
+                    <a
+                      href={`/product/${String(editing.id)}/ficha-tecnica`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Ver la ficha técnica que se genera con esta tabla
+                    </a>
+                  </small>
+                )}
               </label>
+
+              <DocumentField
+                label="Ficha técnica (PDF)"
+                value={editing.specSheet}
+                onChange={(value) => setEditing({ ...editing, specSheet: value })}
+                hint="Opcional. Si cargas un PDF, la ficha del producto muestra ese archivo en lugar de la tabla de arriba."
+              />
             </div>
 
             {error && (

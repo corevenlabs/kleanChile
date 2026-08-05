@@ -29,6 +29,10 @@ const TYPES = {
   ".avif": "image/avif",
   ".gif": "image/gif",
   ".svg": "image/svg+xml",
+  /* Las fichas técnicas siguen exactamente el mismo camino que las imágenes
+     cuando no hay bucket configurado. Sin esta línea la subida parece funcionar
+     —el archivo queda escrito en disco— y el enlace da 404. */
+  ".pdf": "application/pdf",
 };
 
 export async function GET(request, { params }) {

@@ -117,6 +117,23 @@ export async function objectExists(key) {
 }
 
 /**
+ * Tamaño y tipo de un objeto, sin traerse sus bytes.
+ *
+ * Lo usa la confirmación de una subida de documento: el archivo fue directo del
+ * navegador al bucket, así que el servidor nunca lo vio y esta es la única
+ * forma de saber qué llegó realmente. Un PDF de 30 MB anunciado como 2 MB se
+ * detecta acá y no cuando un cliente intenta abrirlo.
+ */
+export async function statObject(key) {
+  try {
+    const head = await client().send(new HeadObjectCommand({ Bucket: bucket(), Key: key }));
+    return { size: head.ContentLength ?? 0, contentType: head.ContentType ?? null };
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Una URL de vida corta a la que el navegador puede hacer PUT directo.
  *
  * Las subidas del panel se saltan el servidor por completo: una foto de 12 MB

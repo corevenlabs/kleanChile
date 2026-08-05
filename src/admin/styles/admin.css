@@ -152,6 +152,37 @@
 /* Verde: es la única confirmación de que el archivo llegó y se procesó. */
 .admin-image-field__done { color:#27875a !important; font-weight:600 !important; }
 
+/* ── Campo de ficha técnica ──────────────────────────────────────────────────
+
+   Reusa la caja del campo de imagen entera: son la misma clase de control —un
+   archivo que termina siendo una URL— y darles apariencias distintas solo haría
+   que uno de los dos pareciera el importante.
+
+   Lo único propio es la miniatura, que acá no puede mostrar el archivo: un PDF
+   no tiene vista previa sin un visor, así que muestra el ícono y el nombre va
+   debajo en texto.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.admin-image-field__thumb--doc { color:#8896aa; background:#f4f7fb; }
+
+.admin-doc-field__name {
+  font-family:var(--admin-mono, ui-monospace, monospace);
+  word-break:break-all;
+}
+
+/* El enlace «Ver» comparte fila con dos <button>; sin esto se alinea por línea
+   base de texto y queda unos píxeles más abajo que sus vecinos. */
+.admin-image-field__actions a.admin-button {
+  display:inline-flex; align-items:center; text-decoration:none;
+}
+
+/* El aviso dentro de un <label>, que declara `display:grid` para sus hijos. */
+label .admin-note {
+  display:flex; align-items:flex-start; gap:7px; margin-top:8px;
+  background:#fff8ec; color:#8a6224;
+}
+label .admin-note svg { flex-shrink:0; margin-top:1px; }
+
 .admin-row-actions button svg { display:block; }
 
 /*

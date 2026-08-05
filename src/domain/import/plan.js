@@ -96,6 +96,7 @@ const COLUMN = {
   price: "priceClp",
   description: "description",
   image: "imageUrl",
+  specSheet: "specSheetUrl",
   active: "isActive",
 };
 

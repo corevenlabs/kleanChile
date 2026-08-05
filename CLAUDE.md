@@ -199,6 +199,14 @@ browser  →  requestImageUploadAction  →  presigned PUT  →  R2 (uploads/tmp
          →  the field holds a URL
 ```
 
+A spec-sheet PDF takes the same shape with one step fewer — nothing to process, so it lands on its final key straight away and only has to be confirmed:
+
+```
+browser  →  requestDocumentUploadAction  →  presigned PUT  →  R2 (docs/v1/<uuid>/<slug>.pdf)
+         →  confirmDocumentUploadAction  →  HEAD + media row
+         →  the field holds a URL
+```
+
 **An image is a URL, and that does not change.** azarwear makes an image a row in `media` that products reference; here the seeded catalog points at supplier URLs, the importer takes a URL column, and the editor lets you paste any link. Changing that would mean migrating the schema, the importer, the seed and every component.
 
 So the URL is made self-describing instead — the original's dimensions live in the path:
@@ -213,15 +221,43 @@ Three properties follow, and they are worth more than the table would be:
 - The full `srcset` is derived **with no database read**, because the original width is the only thing needed to know which renditions exist, and it travels in the URL.
 - A supplier URL does not match the pattern, `parseRenditionUrl` returns null, and `Picture` falls back to a plain `<img>`. The two kinds coexist, which is what let this be adopted one component at a time.
 
-**`media` records what is in the bucket; nothing rendered depends on it.** Drop the table and the storefront renders identically. It exists to answer "what did we upload, who uploaded it, why is the bucket 4 GB" — questions the URL cannot.
+**`media` records what is in the bucket; nothing rendered depends on it.** Drop the table and the storefront renders identically. It exists to answer "what did we upload, who uploaded it, why is the bucket 4 GB" — questions the URL cannot. Spec-sheet PDFs are rows in the same table (`kind = 'document'`, dimensions null), because that question does not distinguish between the two and two tables would each answer half of it.
 
 **R2 is optional, as a group.** All five `R2_*` variables or none: `storageConfig()` rejects the half-configured state by name, because that is the one that fails late — uploads appear to work, then fail at presign, or succeed into a bucket whose public URL nobody set. With none of them, uploads write to `public/uploads/` as before, which keeps `npm run dev` working on a bare checkout.
 
 **There is a local bucket.** `docker compose up -d` also starts MinIO on `:9000` with the bucket created and public-read. Point `R2_ENDPOINT` at it (see `docker-compose.yml`) and the whole path runs locally — presigned PUT, CORS preflight, sharp, the database write. That substitution is only possible because `r2.js` speaks plain S3 with no Cloudflare-specific calls, and it is the only way to exercise this without real credentials. `R2_ENDPOINT` also switches the client to path-style addressing, which MinIO needs and R2 accepts.
 
-**`sharp` is reachable from exactly one module** (`app/api/admin/media/route.js`) and is in `serverExternalPackages`. `imageKeys.js` holds every naming rule with no dependencies at all, precisely so a page can name a rendition without pulling a native binary into its graph. Keep that split.
+**`sharp` is reachable only from Route Handlers** — `app/api/admin/media/route.js` and the spec-sheet PDF — and is in `serverExternalPackages`. Never from a page, a component or a Server Action. `imageKeys.js` holds every naming rule with no dependencies at all, precisely so a page can name a rendition without pulling a native binary into its graph. Keep that split.
 
 `PIPELINE_REVISION` is folded into every key. Bump it when widths, formats or quality change — otherwise new settings collide with objects encoded under the old ones and nothing regenerates.
+
+### The spec sheet, in two forms
+
+A product's "Especificaciones" section has two mutually exclusive shapes, and which one a customer sees is decided by one column:
+
+```
+products.spec_sheet_url = ""   →  the specs table  +  a PDF generated from it
+products.spec_sheet_url = URL  →  a download card for that PDF, and no table
+```
+
+**A spec sheet is a URL**, exactly like an image, and for the same reasons: manufacturers publish these documents on their own sites, the importer takes a text column (`Ficha técnica (URL)`), and the editor lets you paste any link. A `media` id would have meant migrating the schema, the importer and the editor to buy nothing.
+
+**The generated PDF is derived, not stored.** `app/(public)/product/[id]/ficha-tecnica` renders it per request from the same tagged cache the product page reads, so editing a spec changes the document with no synchronisation step in between. Storing it would cost an object per product, a regeneration on every typo fix, and an orphan left behind by each one. The seam if this ever costs too much is the route — cache the buffer under `CATALOG_TAG` — not the generator.
+
+That route **redirects** when a PDF has been uploaded, so both ways of asking for the sheet answer the same document. A generated PDF quietly disagreeing with the manufacturer's official one is the failure nobody finds until a customer holds both.
+
+**The two stores coexist on purpose.** Uploading a PDF hides the table; it does not delete it. `product.specs.marca` still feeds the `brand` in the structured data, and removing the PDF brings the table back without anyone retyping it. The admin says so, but only in the state where it matters — when both are filled in.
+
+`pdfkit` is in `serverExternalPackages` for a different reason than `sharp`: it reads its font metrics (`.afm`) off disk from inside its own package at runtime, so a bundler that inlines it ships the code and leaves the data behind — and that fails on the first PDF in production, not at build time.
+
+Two things in `specSheet.js` are load-bearing and both were bugs first:
+
+- **The footer lowers `page.margins.bottom` to zero while it draws.** It writes below the bottom margin, and to pdfkit that is content overflowing — it adds a page, which gets its own footer, which overflows again. A three-page document came out with six.
+- **The logo is opened once with `doc.openImage`.** `doc.image(buffer)` re-embeds the bytes per call, so a five-page sheet carried five copies of the mark.
+
+`documentKeys.js` holds the naming rules with no dependencies, mirroring `imageKeys.js`. Document keys are **not** content-addressed the way image keys are: a PDF is stored exactly as it arrived, so hashing it would mean pulling back from the bucket a file the browser just uploaded, to deduplicate a case that barely happens.
+
+**The size limit is checked twice, and the second time is the real one.** A presigned S3 PUT cannot carry a size limit — only POST policies can — so the browser's check is a courtesy and `confirmUploadedDocument` re-measures with a `HEAD` and deletes what is over. The local path caps at 4 MB instead of 20, because there the file really does travel through the Server Action body.
 
 ### Metadata, sharing and accessibility
 

@@ -80,7 +80,7 @@ base, no JWT firmados. Tampoco Resend ni cron.
 > previsualizar un enlace. El fallback es `http://localhost:3000` a propósito:
 > se detecta de un vistazo, un dominio mal escrito no.
 
-## 3. R2 (imágenes y CORS)
+## 3. R2 (imágenes, fichas técnicas y CORS)
 
 - [ ] Bucket creado, con dominio público `cdn.kleanchile.cl`
       (Cloudflare → R2 → bucket → Settings → Custom Domains).
@@ -97,6 +97,8 @@ base, no JWT firmados. Tampoco Resend ni cron.
         "MaxAgeSeconds": 3600
       }]
       ```
+      La misma política cubre las fichas técnicas en PDF: van por un PUT
+      firmado idéntico, solo que a `docs/v1/…` y con `application/pdf`.
 - [ ] Compruébalo:
       `npm run media:verify -- --r2 --cors https://kleanchile.cl`
       Sube un objeto de prueba bajo `uploads/tmp/verify-`, lo lee, hace el
@@ -117,9 +119,11 @@ base, no JWT firmados. Tampoco Resend ni cron.
 ## 5. Despliegue
 
 - [ ] Conecta el repo. Framework: Next.js (autodetectado).
-- [ ] `sharp` está en `serverExternalPackages` (`next.config.js`): es un binario
-      nativo y el bundler no puede empaquetarlo. Vercel lo soporta sin más
-      configuración.
+- [ ] `sharp` y `pdfkit` están en `serverExternalPackages` (`next.config.js`).
+      `sharp` es un binario nativo que el bundler no puede empaquetar; `pdfkit`
+      lee sus métricas de fuente del disco en tiempo de ejecución, y empaquetado
+      se queda sin ellas — falla al generar el primer PDF, no en el build.
+      Vercel soporta los dos sin más configuración.
 - [ ] Revisa el log del primer build: debe compilar limpio. El CI
       (`.github/workflows/ci.yml`) corre el mismo build en cada push a `main`.
 

@@ -26,6 +26,7 @@ export async function snapshotBySku() {
       priceClp: products.priceClp,
       description: products.description,
       imageUrl: products.imageUrl,
+      specSheetUrl: products.specSheetUrl,
       isActive: products.isActive,
       stockOnHand: products.stockOnHand,
     })

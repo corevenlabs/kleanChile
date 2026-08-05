@@ -176,6 +176,112 @@
   transform: translateY(0);
 }
 
+/* Ahora es un <a> a la ruta que genera el PDF, no un <button> sin handler. */
+.download-btn {
+  text-decoration: none;
+}
+
+/* ── Ficha técnica subida en PDF ─────────────────────────────────────────────
+
+   Reemplaza la tabla cuando el producto tiene un documento del fabricante
+   cargado. Es una tarjeta enlazada entera —no un texto con un botón al lado—
+   porque todo lo que hay dentro conduce al mismo sitio, y un objetivo de 60 px
+   de alto se acierta con el pulgar a la primera.
+
+   Sin gradiente: la marca gasta `--k-gradient` una sola vez por vista, y en
+   esta página ya la lleva «Agregar al carrito», que es la acción principal.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.spec-sheet {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  background: var(--k-foam);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.spec-sheet:hover {
+  border-color: var(--k-blue);
+  transform: translateY(-2px);
+}
+
+.spec-sheet__badge {
+  flex-shrink: 0;
+  width: 46px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid var(--k-line);
+  /* La esquina doblada: dice «documento» sin cargar un ícono más. */
+  border-radius: 4px 10px 4px 4px;
+  font-family: var(--k-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--k-alert);
+}
+
+.spec-sheet__text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.spec-sheet__text strong {
+  font-family: var(--k-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--k-ink);
+}
+
+.spec-sheet__text small {
+  font-size: 12px;
+  color: var(--k-muted);
+  /* Un nombre de archivo largo no debe empujar el botón fuera de la tarjeta. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spec-sheet__cta {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border: 1px solid var(--k-navy);
+  border-radius: 4px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--k-navy);
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  /*
+   * El botón baja a línea completa.
+   *
+   * Con `flex-wrap` solo no bastaba: el nombre del archivo tiene `min-width:0`,
+   * así que se encogía para dejar sitio al botón en vez de empujarlo, y los tres
+   * elementos seguían apretados en una fila. `flex-basis:100%` lo fuerza a su
+   * propia línea, que además le da un objetivo táctil del ancho de la tarjeta.
+   */
+  .spec-sheet {
+    flex-wrap: wrap;
+  }
+
+  .spec-sheet__cta {
+    flex-basis: 100%;
+    padding: 12px 18px;
+    text-align: center;
+  }
+}
+
 .specs-grid {
   display: flex;
   flex-direction: column;

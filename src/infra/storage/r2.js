@@ -42,6 +42,24 @@ function client() {
     endpoint: cfg.endpoint ?? `https://${cfg.accountId}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId: cfg.accessKeyId, secretAccessKey: cfg.secretAccessKey },
     /*
+     * Sin checksum automático, y esto importa sobre todo al firmar.
+     *
+     * Desde la versión 3.729 el SDK calcula un CRC32 por defecto. En una subida
+     * normal es correcto, pero en una **URL firmada** el firmante no conoce el
+     * archivo —lo va a subir el navegador después— así que estampa en la query
+     * el CRC32 de un cuerpo vacío:
+     *
+     *     x-amz-checksum-crc32=AAAAAA==
+     *
+     * Es un valor firmado, y por tanto una afirmación sobre un contenido que no
+     * coincidirá con ningún archivo real. Un bucket que lo valide rechaza la
+     * subida; MinIO lo ignora, así que el camino local no lo delata.
+     *
+     * `WHEN_REQUIRED` lo deja solo donde la API lo exige de verdad. No se pierde
+     * integridad: el PUT va por HTTPS, que ya trae la suya.
+     */
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    /*
      * Direccionamiento por ruta cuando el endpoint viene puesto a mano.
      *
      * MinIO en `localhost:9000` no puede resolver `bucket.localhost`, que es lo

@@ -53,7 +53,7 @@ export const getProductsByCategory = unstable_cache(
 
     return rows.map(toView);
   },
-  ["products-by-category"],
+  ["products-by-category-v2"],
   { tags: [CATALOG_TAG] },
 );
 
@@ -78,7 +78,7 @@ export const getSearchableProducts = unstable_cache(
 
     return rows.map(toView);
   },
-  ["searchable-products"],
+  ["searchable-products-v2"],
   { tags: [CATALOG_TAG] },
 );
 
@@ -100,7 +100,7 @@ export const getProduct = unstable_cache(
 
     return row ? toView(row) : null;
   },
-  ["product-by-id"],
+  ["product-by-id-v2"],
   { tags: [CATALOG_TAG] },
 );
 
@@ -165,6 +165,6 @@ export const getBestSellers = unstable_cache(
       unitsSold: Number(row.sold),
     }));
   },
-  ["best-sellers"],
+  ["best-sellers-v2"],
   { tags: [CATALOG_TAG, SALES_TAG] },
 );

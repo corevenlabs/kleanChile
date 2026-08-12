@@ -319,16 +319,28 @@
 
 .product-card__img {
   position: relative;
-  aspect-ratio: 4 / 3;
-  background: var(--k-foam);
+  width: 100%;
+  height: clamp(220px, 24vw, 300px);
+  background: var(--k-white);
   overflow: hidden;
 }
 
+.product-card__img picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .product-card__img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.35s ease;
+  position: absolute;
+  inset: 14px;
+  display: block;
+  width: calc(100% - 28px);
+  height: calc(100% - 28px);
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
   /* Catalogue images are supplier URLs and some will eventually 404. Styling
      the element means the alt text degrades into a caption on the foam panel
      rather than default blue serif sprawling over the card. */
@@ -338,7 +350,11 @@
 }
 
 .product-card:hover .product-card__img img {
-  transform: scale(1.04);
+  transform: none;
+}
+
+.product-card__img .product-card__photo--enhanced {
+  filter: brightness(0.96) contrast(1.22) saturate(1.18);
 }
 
 .product-card__flag {
@@ -356,10 +372,10 @@
   text-transform: uppercase;
 }
 
-/* Out of stock reads as unavailable without hiding the product. */
+/* El estado lo comunica la etiqueta; la foto debe conservar color y contraste. */
 .product-card--out .product-card__img img {
-  filter: grayscale(0.7);
-  opacity: 0.62;
+  filter: none;
+  opacity: 1;
 }
 
 .product-card__info {

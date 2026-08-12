@@ -17,8 +17,8 @@ export async function GET() {
   const headers = FIELDS.map((field) => field.label);
 
   const examples = [
-    ["", "Detergente Industrial 5L", "Limpieza", "químico", "12990", "40", "Detergente concentrado para uso industrial.", "https://…/detergente.jpg", "Sí"],
-    ["KC0000013", "", "", "", "13500", "", "", "", ""],
+    ["PROV-123", "Detergente Industrial 5L", "Limpieza", "químico", "12990", "40", "Detergente concentrado para uso industrial.", "https://…/detergente.jpg", "", "Sí"],
+    ["PROV-123", "", "", "", "13500", "", "", "", "", ""],
   ];
 
   const escape = (cell) => (/[",;\n]/.test(cell) ? `"${cell.replace(/"/g, '""')}"` : cell);

@@ -9,6 +9,8 @@ import { formatClp } from "../../domain/shared/money";
 import { documentNameFromUrl } from "../../infra/storage/documentKeys";
 import { absoluteImage, absoluteUrl } from "../../lib/site";
 
+const LOW_CONTRAST_SKUS = new Set(["552296", "552313", "552328", "552315"]);
+
 /** The route 404s on a missing product, so this always has one. */
 export default function ProductDetail({ product }) {
   // Specs are free-form and admin-editable, so a product may legitimately have
@@ -38,7 +40,7 @@ export default function ProductDetail({ product }) {
     <nav className="breadcrumb" aria-label="Ruta"><Link href="/">Inicio</Link> / <Link href={`/${product.category}`}>{categoryLabel}</Link> / <span>{product.name}</span></nav><div className="product-layout">
     {/* La imagen principal de la página: `priority` para que no espere detrás de
         la heurística de carga diferida. */}
-    <div className="product-image-box"><div className="product-image-wrapper"><Picture src={product.image} alt={product.name} sizes="(max-width: 900px) 100vw, 520px" priority /></div></div>
+    <div className="product-image-box"><div className="product-image-wrapper"><Picture src={product.image} alt={product.name} className={LOW_CONTRAST_SKUS.has(product.skuCode) ? "product-image--enhanced" : undefined} sizes="(max-width: 900px) 100vw, 520px" priority /></div></div>
     <div className="product-info">{product.skuCode && <p className="quickview__sku">SKU {product.skuCode}</p>}<h1>{product.name}</h1><div className="price">{formatClp(product.price)}</div><div className="description-section"><p className="description">{product.description}</p></div>
       <AddToCartForm productId={product.id} inStock={product.inStock} stockOnHand={product.stockOnHand} />
 

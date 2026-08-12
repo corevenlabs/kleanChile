@@ -74,6 +74,10 @@
   transform-origin: center;
 }
 
+.product-image-box .product-image--enhanced {
+  filter: brightness(0.96) contrast(1.22) saturate(1.18);
+}
+
 /* ZOOM AL HACER HOVER */
 .product-image-box:hover img {
   transform: scale(1.8);

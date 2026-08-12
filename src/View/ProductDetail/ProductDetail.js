@@ -83,7 +83,15 @@ export default function ProductDetail({ product }) {
             <p className="quickview__sku">SKU {product.skuCode}</p>
           )}
           <h1>{product.name}</h1>
-          <div className="price">{formatClp(product.price)}</div>
+          <div className={`price ${priceOnRequest ? "price--ask" : ""}`}>
+            {formatPrice(product.price)}
+          </div>
+          {priceOnRequest && (
+            <p className="price-ask-note">
+              Este producto se cotiza. Agrégalo al carrito y te confirmamos el
+              precio por WhatsApp.
+            </p>
+          )}
           <div className="description-section">
             <p className="description">{product.description}</p>
           </div>

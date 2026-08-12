@@ -53,7 +53,10 @@ export async function applyImportPlan({ plan, fileName, mapping, actorId }) {
 
     // Los códigos se piden todos juntos: una llamada a la secuencia por
     // producto multiplica los viajes a la base sin ganar nada.
-    const codes = await allocateSkuCodes(toCreate.length, tx);
+    const codes = await allocateSkuCodes(
+      toCreate.filter((row) => !row.skuCode).length,
+      tx,
+    );
     let nextCode = 0;
 
     const rowRecords = [];
@@ -82,8 +85,10 @@ export async function applyImportPlan({ plan, fileName, mapping, actorId }) {
       let skuCode = row.skuCode;
 
       if (row.status === "created") {
-        skuCode = codes[nextCode];
-        nextCode += 1;
+        if (!skuCode) {
+          skuCode = codes[nextCode];
+          nextCode += 1;
+        }
 
         const [created] = await tx
           .insert(products)

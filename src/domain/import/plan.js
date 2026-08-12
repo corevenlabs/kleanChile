@@ -1,5 +1,4 @@
 import { CATEGORIES, CATEGORY_LABELS } from "../content/vocabulary.js";
-import { isValidSkuCode } from "../catalog/skuCode.js";
 import { parseClp } from "../shared/money.js";
 import { normalizeHeader } from "./columnMapping.js";
 import { fieldLabel, REQUIRED_TO_CREATE } from "./fields.js";
@@ -13,9 +12,8 @@ import { fieldLabel, REQUIRED_TO_CREATE } from "./fields.js";
  * efectos secundarios.
  *
  * Cada fila de entrada produce exactamente una fila de plan. Nada se descarta
- * en silencio: un SKU desconocido aparece como error visible, no como ausencia.
- * Esa es la diferencia entre «40 productos actualizados» y «40 de tus 42 filas
- * se aplicaron y de las otras dos nunca te enteraste».
+ * en silencio: un SKU existente actualiza y uno nuevo crea conservando el
+ * código del archivo. Así el resumen siempre explica qué pasará con cada fila.
  */
 
 const CATEGORY_BY_LABEL = new Map(
@@ -100,6 +98,11 @@ const COLUMN = {
   active: "isActive",
 };
 
+/** Los SKU del cliente pueden ser numéricos y no usan necesariamente el formato interno KC. */
+function validImportedSku(value) {
+  return value.length <= 80 && !/[\u0000-\u001f\u007f]/.test(value);
+}
+
 /**
  * @param rows      [{ rowNumber, values: MappedRow }]
  * @param present   claves de campo efectivamente mapeadas
@@ -132,59 +135,50 @@ export function buildPlan({ rows, present, bySku, byName = new Map() }) {
       continue;
     }
 
-    // ── Actualizar ───────────────────────────────────────────────────────
+    // ── Actualizar por SKU ───────────────────────────────────────────────
     if (sku !== "") {
       row.skuCode = sku;
 
-      if (!isValidSkuCode(sku)) {
+      if (!validImportedSku(sku)) {
         planned.push({ ...row, status: "error", message: `SKU con formato inválido: «${sku}»` });
         continue;
       }
 
       const existing = bySku.get(sku);
-      if (!existing) {
-        planned.push({
-          ...row,
-          status: "error",
-          message: `No existe un producto con SKU ${sku}. Deja la celda vacía para crearlo.`,
-        });
-        continue;
-      }
-
-      // Dos filas para el mismo producto: la segunda pisaría a la primera sin
-      // que nadie lo note, así que se detiene.
       if (seenSku.has(sku)) {
         planned.push({ ...row, status: "error", message: `El SKU ${sku} aparece más de una vez.` });
         continue;
       }
       seenSku.add(sku);
 
-      row.productId = existing.id;
+      if (existing) {
+        row.productId = existing.id;
 
-      for (const [field, value] of Object.entries(parsed)) {
-        if (field === "stock") {
-          if (value !== existing.stockOnHand) {
-            row.stock = value;
-            row.changes.stock = { from: existing.stockOnHand, to: value };
+        for (const [field, value] of Object.entries(parsed)) {
+          if (field === "stock") {
+            if (value !== existing.stockOnHand) {
+              row.stock = value;
+              row.changes.stock = { from: existing.stockOnHand, to: value };
+            }
+            continue;
           }
-          continue;
+          const column = COLUMN[field];
+          if (value !== existing[column]) {
+            row.changes[field] = { from: existing[column], to: value };
+          }
         }
-        const column = COLUMN[field];
-        if (value !== existing[column]) {
-          row.changes[field] = { from: existing[column], to: value };
-        }
-      }
 
-      const status = Object.keys(row.changes).length === 0 ? "skipped" : "updated";
-      planned.push({
-        ...row,
-        status,
-        message: status === "skipped" ? "Sin cambios" : null,
-      });
-      continue;
+        const status = Object.keys(row.changes).length === 0 ? "skipped" : "updated";
+        planned.push({
+          ...row,
+          status,
+          message: status === "skipped" ? "Sin cambios" : null,
+        });
+        continue;
+      }
     }
 
-    // ── Crear ────────────────────────────────────────────────────────────
+    // ── Crear con el SKU del archivo (o uno KC si viene vacío) ──────────
     const missing = REQUIRED_TO_CREATE.filter((field) => parsed[field] === undefined);
     if (missing.length > 0) {
       planned.push({
@@ -206,8 +200,8 @@ export function buildPlan({ rows, present, bySku, byName = new Map() }) {
 
     /*
      * Una fila sin SKU siempre crea. Eso significa que volver a subir el mismo
-     * archivo duplicaría estos productos, y es un error fácil de cometer y
-     * difícil de notar después.
+     * archivo duplicaría esos productos; con SKU, en cambio, una segunda carga
+     * actualiza el producto que se creó en la primera.
      *
      * No se bloquea — dos productos pueden llamarse igual legítimamente — pero
      * se avisa en la vista previa, que es el momento en que todavía se puede

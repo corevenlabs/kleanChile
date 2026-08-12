@@ -171,8 +171,8 @@ export default function ImportWizard() {
               onChange={(event) => pick(event.target.files?.[0])}
             />
             <small>
-              El SKU vacío crea un producto nuevo. Con SKU, actualiza ese producto y solo las
-              columnas que traiga el archivo.
+              El SKU se conserva: si ya existe, actualiza ese producto; si no existe, crea uno
+              nuevo. Si viene vacío, KleanChile genera un código interno.
             </small>
           </label>
         </div>

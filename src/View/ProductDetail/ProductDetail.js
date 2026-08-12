@@ -9,6 +9,8 @@ import { formatPrice, isPriceOnRequest } from "../../domain/shared/pricing";
 import { documentNameFromUrl } from "../../infra/storage/documentKeys";
 import { absoluteImage, absoluteUrl } from "../../lib/site";
 
+const LOW_CONTRAST_SKUS = new Set(["552296", "552313", "552328", "552315"]);
+
 /** The route 404s on a missing product, so this always has one. */
 export default function ProductDetail({ product }) {
   // Specs are free-form and admin-editable, so a product may legitimately have
@@ -42,52 +44,115 @@ export default function ProductDetail({ product }) {
    */
   const priceOnRequest = isPriceOnRequest(product.price);
 
-  return <div className="product-page">
-    <JsonLd data={productLd({ product, url, image: absoluteImage(product.image), brand: product.specs?.marca })} />
-    <JsonLd data={breadcrumbLd(trailOf(product, categoryLabel, url))} />
-    <nav className="breadcrumb" aria-label="Ruta"><Link href="/">Inicio</Link> / <Link href={`/${product.category}`}>{categoryLabel}</Link> / <span>{product.name}</span></nav><div className="product-layout">
-    {/* La imagen principal de la página: `priority` para que no espere detrás de
+  return (
+    <div className="product-page">
+      <JsonLd
+        data={productLd({
+          product,
+          url,
+          image: absoluteImage(product.image),
+          brand: product.specs?.marca,
+        })}
+      />
+      <JsonLd data={breadcrumbLd(trailOf(product, categoryLabel, url))} />
+      <nav className="breadcrumb" aria-label="Ruta">
+        <Link href="/">Inicio</Link> /{" "}
+        <Link href={`/${product.category}`}>{categoryLabel}</Link> /{" "}
+        <span>{product.name}</span>
+      </nav>
+      <div className="product-layout">
+        {/* La imagen principal de la página: `priority` para que no espere detrás de
         la heurística de carga diferida. */}
-    <div className="product-image-box"><div className="product-image-wrapper"><Picture src={product.image} alt={product.name} sizes="(max-width: 900px) 100vw, 520px" priority /></div></div>
-    <div className="product-info">{product.skuCode && <p className="quickview__sku">SKU {product.skuCode}</p>}<h1>{product.name}</h1><div className={`price ${priceOnRequest ? "price--ask" : ""}`}>{formatPrice(product.price)}</div>{priceOnRequest && <p className="price-ask-note">Este producto se cotiza. Agrégalo al carrito y te confirmamos el precio por WhatsApp.</p>}<div className="description-section"><p className="description">{product.description}</p></div>
-      <AddToCartForm productId={product.id} inStock={product.inStock} stockOnHand={product.stockOnHand} />
+        <div className="product-image-box">
+          <div className="product-image-wrapper">
+            <Picture
+              src={product.image}
+              alt={product.name}
+              className={
+                LOW_CONTRAST_SKUS.has(product.skuCode)
+                  ? "product-image--enhanced"
+                  : undefined
+              }
+              sizes="(max-width: 900px) 100vw, 520px"
+              priority
+            />
+          </div>
+        </div>
+        <div className="product-info">
+          {product.skuCode && (
+            <p className="quickview__sku">SKU {product.skuCode}</p>
+          )}
+          <h1>{product.name}</h1>
+          <div className="price">{formatClp(product.price)}</div>
+          <div className="description-section">
+            <p className="description">{product.description}</p>
+          </div>
+          <AddToCartForm
+            productId={product.id}
+            inStock={product.inStock}
+            stockOnHand={product.stockOnHand}
+          />
 
-      {product.specSheet ? (
-        <div className="specs-section">
-          <div className="specs-header"><h3>Especificaciones</h3></div>
-          {/*
+          {product.specSheet ? (
+            <div className="specs-section">
+              <div className="specs-header">
+                <h3>Especificaciones</h3>
+              </div>
+              {/*
             Una tarjeta con un enlace, no un visor incrustado. Un PDF dentro de
             un <object> en iOS Safari muestra la primera página y no scrollea, y
             este catálogo se mira sobre todo desde el teléfono.
           */}
-          <a className="spec-sheet" href={product.specSheet} target="_blank" rel="noreferrer" download>
-            <span className="spec-sheet__badge" aria-hidden="true">PDF</span>
-            <span className="spec-sheet__text">
-              <strong>Ficha técnica</strong>
-              {sheetName && <small>{sheetName}</small>}
-            </span>
-            <span className="spec-sheet__cta">Descargar</span>
-          </a>
-        </div>
-      ) : specs.length > 0 && (
-        <div className="specs-section">
-          <div className="specs-header">
-            <h3>Especificaciones</h3>
-            {/*
+              <a
+                className="spec-sheet"
+                href={product.specSheet}
+                target="_blank"
+                rel="noreferrer"
+                download
+              >
+                <span className="spec-sheet__badge" aria-hidden="true">
+                  PDF
+                </span>
+                <span className="spec-sheet__text">
+                  <strong>Ficha técnica</strong>
+                  {sheetName && <small>{sheetName}</small>}
+                </span>
+                <span className="spec-sheet__cta">Descargar</span>
+              </a>
+            </div>
+          ) : (
+            specs.length > 0 && (
+              <div className="specs-section">
+                <div className="specs-header">
+                  <h3>Especificaciones</h3>
+                  {/*
               Un enlace y no un <button>: durante mucho tiempo esto fue un botón
               sin handler, que es la peor versión de las dos — parece que hace
               algo. Ahora apunta a la ruta que arma el PDF desde esta misma
               tabla, así que lo que se descarga no puede diferir de lo que se ve.
             */}
-            <a className="download-btn" href={`/product/${String(product.id)}/ficha-tecnica`}>
-              📄 Descargar ficha técnica
-            </a>
-          </div>
-          <div className="specs-grid">{specs.map(([label, value]) => <div className="specs-row" key={label}><span className="specs-key">{label}</span><span className="specs-value">{value}</span></div>)}</div>
+                  <a
+                    className="download-btn"
+                    href={`/product/${String(product.id)}/ficha-tecnica`}
+                  >
+                    📄 Descargar ficha técnica
+                  </a>
+                </div>
+                <div className="specs-grid">
+                  {specs.map(([label, value]) => (
+                    <div className="specs-row" key={label}>
+                      <span className="specs-key">{label}</span>
+                      <span className="specs-value">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          )}
         </div>
-      )}
+      </div>
     </div>
-  </div></div>;
+  );
 }
 
 /*

@@ -173,9 +173,9 @@ applyImportPlan    infra/  → one transaction, or nothing
 
 **Everything arrives as text.** A spreadsheet's idea of a type is not to be trusted: a SKU stored as a number loses its leading zeros, and Excel will guess a date out of anything. Each field is coerced deliberately in `plan.js` instead.
 
-**Every input row produces exactly one planned row.** Nothing is dropped silently — an unknown SKU is a visible error, not an absence. That is the difference between "40 products updated" and "40 of your 42 rows applied and you never found out about the other two".
+**Every input row produces exactly one planned row.** Nothing is dropped silently. A known SKU updates; an unknown supplier SKU creates a product with that exact code, provided the creation fields are present.
 
-Matching is by SKU: blank creates and mints a code, a known SKU updates, an unknown one errors. **Only the columns present in the file are touched**, so a two-column sheet of SKU + price is a safe bulk price update. Stock is an absolute count and goes through `applyMovement`, never written directly — see the inventory rules above.
+Matching is by SKU: blank creates and mints a KC code, a known SKU updates, and an unknown SKU creates while preserving the supplied code. **Only the columns present in the file are touched**, so a two-column sheet of SKU + price is a safe bulk price update. Stock is an absolute count and goes through `applyMovement`, never written directly — see the inventory rules above.
 
 `buildPlan` is pure and takes the catalog snapshot as an argument, so `scripts/verify-import.js <file>` can dry-run any spreadsheet without a browser, and `--apply` additionally re-checks the ledger invariant.
 

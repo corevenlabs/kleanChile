@@ -41,6 +41,10 @@ const SORTS = {
   priceDesc: { label: "Mayor precio", compare: (a, b) => b.price - a.price },
 };
 
+// Estas composiciones vienen del proveedor a menos de 160 px y pierden fuerza
+// al ampliarse. La corrección es de presentación; no altera logos ni portadas.
+const LOW_CONTRAST_SKUS = new Set(["552296", "552313", "552328", "552315"]);
+
 // Types arrive lowercase from the catalogue ("químico"); shown capitalised
 // rather than forced lowercase in CSS, which was making them read as filler.
 const titleCase = (value) => value.charAt(0).toUpperCase() + value.slice(1);
@@ -118,6 +122,11 @@ export default function Catalog({ products = [], linkProducts = false }) {
                 <Picture
                   src={product.image}
                   alt={product.name}
+                  className={
+                    LOW_CONTRAST_SKUS.has(product.skuCode)
+                      ? "product-card__photo--enhanced"
+                      : undefined
+                  }
                   sizes="(max-width: 720px) 50vw, (max-width: 1000px) 33vw, 300px"
                 />
                 {!product.inStock && <span className="product-card__flag">Sin stock</span>}

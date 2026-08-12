@@ -87,14 +87,28 @@
   width: 100%;
   height: 320px;
   overflow: hidden;
-  background: var(--k-foam);
+  display: grid;
+  place-items: center;
+  background: var(--k-white);
   position: relative;
 }
 
+.bs__card-img picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .bs__card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  position: absolute;
+  inset: 16px;
+  display: block;
+  width: calc(100% - 32px);
+  height: calc(100% - 32px);
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
   transition: transform 0.35s ease;
 }
 

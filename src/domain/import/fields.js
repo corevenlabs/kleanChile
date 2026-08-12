@@ -11,7 +11,8 @@ export const FIELDS = [
   {
     key: "sku",
     label: "SKU",
-    hint: "Déjalo vacío para crear un producto nuevo. Si viene, actualiza el producto con ese código.",
+    hint:
+      "Conserva el código del proveedor. Si ya existe, actualiza ese producto; si no existe, crea uno nuevo con ese mismo SKU.",
     aliases: ["sku", "codigo", "código", "cod", "codigo sku", "código sku", "code"],
   },
   {

@@ -8,15 +8,14 @@
       { "title": "Equipos", "items": ["Aspiradoras", "Mopas", "Fregonas"] },
       { "title": "Accesorios", "items": ["Guantes", "Paños", "Escobas"] }
     ] } },
-    { "name": "Librería", "path": "/bookshop", "dropdown": { "title": "Librería", "sections": [
-      { "title": "Lectura", "items": ["Novelas", "Ficción", "Ensayos"] },
-      { "title": "Educación", "items": ["Escolar", "Universitario", "Técnico"] },
-      { "title": "Ofertas", "items": ["Descuentos", "Outlet", "Promos"] }
+    { "name": "Librería", "path": "/bookshop", "dropdown": { "title": "Librería y papelería", "sections": [
+      { "title": "Papel", "items": ["Cuadernos y croqueras", "Papeles y blocks"] },
+      { "title": "Escritura", "items": ["Lápices y corrección", "Marcadores y destacadores"] },
+      { "title": "Manualidades", "items": ["Adhesivos y cintas", "Corte y manualidades"] }
     ] } },
     { "name": "Artículos de escritorio", "path": "/desktop", "dropdown": { "title": "Artículos de escritorio", "sections": [
-      { "title": "Periféricos", "items": ["Teclados", "Mouse", "Webcams"] },
-      { "title": "Mobiliario", "items": ["Escritorios", "Sillas", "Soportes"] },
-      { "title": "Accesorios", "items": ["Lámparas", "Organizadores", "Cables"] }
+      { "title": "Archivo", "items": ["Archivadores y carpetas", "Fundas y plastificado"] },
+      { "title": "Escritorio", "items": ["Corcheteras y perforadoras", "Corchetes y chinches"] }
     ] } },
     { "name": "Contacto", "path": "/contact", "dropdown": null }
   ]

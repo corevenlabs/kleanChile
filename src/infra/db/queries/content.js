@@ -4,6 +4,24 @@ import { unstable_cache } from "next/cache";
 import { CONTENT_KEYS, defaultBlock, parseBlock } from "../../../domain/content/schemas.js";
 import { db } from "../client.js";
 import { contentBlocks } from "../schema/index.js";
+import navigationDefaults from "../../../../public/data/navigation.json";
+
+/**
+ * Reemplaza únicamente la navegación de demostración que traía el proyecto.
+ * Una navegación que ya haya sido personalizada desde el panel se conserva.
+ */
+function upgradeLegacyNavigation(value) {
+  const links = Array.isArray(value?.links) ? value.links : [];
+  const itemsAt = (path) =>
+    links
+      .find((link) => link.path === path)
+      ?.dropdown?.sections?.flatMap((section) => section.items) ?? [];
+
+  const isDemoMenu =
+    itemsAt("/bookshop").includes("Novelas") && itemsAt("/desktop").includes("Teclados");
+
+  return isDemoMenu ? navigationDefaults : value;
+}
 
 /**
  * Reading the editable page content.
@@ -32,13 +50,15 @@ async function readAll() {
   return Object.fromEntries(
     CONTENT_KEYS.map((key) => [
       key,
-      stored.has(key) ? parseBlock(key, stored.get(key)) : defaultBlock(key),
+      stored.has(key)
+        ? parseBlock(key, key === "navigation" ? upgradeLegacyNavigation(stored.get(key)) : stored.get(key))
+        : defaultBlock(key),
     ]),
   );
 }
 
 /** Every block, parsed and defaulted. Cached. */
-export const getContent = unstable_cache(readAll, ["content-blocks"], {
+export const getContent = unstable_cache(readAll, ["content-blocks-v2"], {
   tags: [CONTENT_TAG],
 });
 
@@ -53,5 +73,7 @@ export async function getBlockForEdit(key) {
     where: (table, { eq }) => eq(table.key, key),
   });
 
-  return row ? parseBlock(key, row.value) : defaultBlock(key);
+  return row
+    ? parseBlock(key, key === "navigation" ? upgradeLegacyNavigation(row.value) : row.value)
+    : defaultBlock(key);
 }

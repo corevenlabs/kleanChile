@@ -34,6 +34,50 @@ const quote = (value) => {
   return /[";\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
 
+/**
+ * Familias que usa el submenú real del catálogo. El texto de `type` coincide
+ * con cada enlace para que el filtro de la tienda encuentre todos los artículos.
+ */
+function classifyProduct(name) {
+  const normalized = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase();
+
+  if (/CUADERNO|CROQUERA/.test(normalized)) {
+    return { category: "Librería", type: "Cuadernos y croqueras" };
+  }
+  if (/PAPEL|BLOCK DE APUNTES/.test(normalized)) {
+    return { category: "Librería", type: "Papeles y blocks" };
+  }
+  if (/DESTACADOR|MARCADOR/.test(normalized)) {
+    return { category: "Librería", type: "Marcadores y destacadores" };
+  }
+  if (/CORRECTOR|LAPIZ|GOMA DE BORRAR|SACAPUNTA/.test(normalized)) {
+    return { category: "Librería", type: "Lápices y corrección" };
+  }
+  if (/ADHESIVO|CINTA ADH/.test(normalized)) {
+    return { category: "Librería", type: "Adhesivos y cintas" };
+  }
+  if (/TIJERA|CUCHILLO CARTONERO/.test(normalized)) {
+    return { category: "Librería", type: "Corte y manualidades" };
+  }
+  if (/ARCHV|ARCHIVADOR|CARPETA|ANOTADOR/.test(normalized)) {
+    return { category: "Escritorio", type: "Archivadores y carpetas" };
+  }
+  if (/FUNDA|TERMOLAMINAR/.test(normalized)) {
+    return { category: "Escritorio", type: "Fundas y plastificado" };
+  }
+  if (/CORCHETERA|PERFORADORA/.test(normalized)) {
+    return { category: "Escritorio", type: "Corcheteras y perforadoras" };
+  }
+  if (/CORCHETE|PUSH PINS/.test(normalized)) {
+    return { category: "Escritorio", type: "Corchetes y chinches" };
+  }
+
+  throw new Error(`No hay una familia definida para «${name}».`);
+}
+
 const rows = [
   [
     "SKU",
@@ -55,6 +99,7 @@ for (let rowNumber = 2; rowNumber <= sheet.rowCount; rowNumber += 1) {
   const name = sheet.getCell(rowNumber, 3).text.trim();
   const description = sheet.getCell(rowNumber, 4).text.trim();
   if (!sku && !name) continue;
+  const classification = classifyProduct(name);
 
   let imageUrl = "";
   const candidates = imagesByRow.get(rowNumber) ?? [];
@@ -76,14 +121,14 @@ for (let rowNumber = 2; rowNumber <= sheet.rowCount; rowNumber += 1) {
   rows.push([
     sku,
     name,
-    "Escritorio",
-    "Artículo de oficina",
+    classification.category,
+    classification.type,
     "0",
     "0",
     description,
     imageUrl,
     "",
-    "No",
+    "Sí",
   ]);
 }
 

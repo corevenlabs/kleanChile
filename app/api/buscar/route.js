@@ -1,5 +1,5 @@
 import { searchProducts } from "../../../src/domain/catalog/search.js";
-import { formatClp } from "../../../src/domain/shared/money.js";
+import { formatPrice } from "../../../src/domain/shared/pricing.js";
 import { getSearchableProducts } from "../../../src/infra/db/queries/catalog.js";
 
 /**
@@ -32,7 +32,7 @@ export async function GET(request) {
     (product) => ({
       id: product.id,
       name: product.name,
-      price: formatClp(product.price),
+      price: formatPrice(product.price),
       image: product.image,
       skuCode: product.skuCode,
       inStock: product.inStock,

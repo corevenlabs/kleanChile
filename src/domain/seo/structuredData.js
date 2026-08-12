@@ -15,6 +15,8 @@
  * ranking boost, so an absent field is left absent rather than guessed.
  */
 
+import { isPriceOnRequest } from "../shared/pricing.js";
+
 const CURRENCY = "CLP";
 
 /**
@@ -51,8 +53,32 @@ export function organizationLd({ url, name, description, logo, contact }) {
  *
  * `priceValidUntil` is deliberately omitted: prices here change when someone
  * edits them, and inventing a date would be inventing a commitment.
+ *
+ * Un producto a cotizar no lleva `offers` **en absoluto**. La tentación es
+ * emitir `price: "0"` porque es lo que dice la columna, y el resultado sería
+ * que Google publique el producto como gratis: un resultado enriquecido que
+ * miente, que es exactamente lo que esta capa existe para no hacer. Schema.org
+ * no tiene forma de decir "precio a consultar" — un `Product` sin oferta es
+ * válido, pierde la fila de precio en el buscador, y eso es lo correcto: la
+ * página tampoco publica uno.
  */
 export function productLd({ product, url, image, brand }) {
+  const offers = isPriceOnRequest(product.price)
+    ? {}
+    : {
+        offers: {
+          "@type": "Offer",
+          url,
+          priceCurrency: CURRENCY,
+          // Whole pesos: CLP has no minor unit, so no decimal point belongs here.
+          price: String(product.price),
+          availability: product.inStock
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          itemCondition: "https://schema.org/NewCondition",
+        },
+      };
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -63,17 +89,7 @@ export function productLd({ product, url, image, brand }) {
     ...(product.skuCode ? { sku: product.skuCode } : {}),
     ...(brand ? { brand: { "@type": "Brand", name: brand } } : {}),
     ...(product.type ? { category: product.type } : {}),
-    offers: {
-      "@type": "Offer",
-      url,
-      priceCurrency: CURRENCY,
-      // Whole pesos: CLP has no minor unit, so no decimal point belongs here.
-      price: String(product.price),
-      availability: product.inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      itemCondition: "https://schema.org/NewCondition",
-    },
+    ...offers,
   };
 }
 

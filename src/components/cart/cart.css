@@ -173,6 +173,14 @@
   letter-spacing: -0.02em;
   color: var(--k-navy);
 }
+/* Sin precio publicado. Ver la nota en brand.css. */
+.quickview__price--ask {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  color: var(--k-muted);
+}
 .quickview__description { margin: 0; font-size: 14px; line-height: 1.7; color: var(--k-muted); }
 .quickview__link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--k-blue); }
 
@@ -218,6 +226,8 @@
   text-align: center;
 }
 .cart-line__total { margin-left: auto; font-family: var(--k-display); font-size: 16px; font-weight: 700; color: var(--k-navy); }
+/* Sin precio publicado. Ver la nota en brand.css. */
+.cart-line__total--ask { font-size: 13px; font-weight: 600; color: var(--k-muted); }
 .cart-line__remove { border: 0; background: none; color: var(--k-alert); font: inherit; font-size: 12px; cursor: pointer; padding: 0; }
 .cart-line__warn { margin: 7px 0 0; font-size: 12px; color: var(--k-warn); }
 
@@ -244,6 +254,24 @@
   border-top: 1px solid var(--k-line);
   margin-bottom: 16px;
 }
+
+/*
+ * "+ 2 productos a consultar", pegado al total y no al pie del resumen.
+ *
+ * El margen negativo la sube hasta debajo de la cifra: separada por los 16px
+ * del total quedaría flotando junto al campo del nombre, que es donde el ojo
+ * ya dejó de leer el monto.
+ */
+.cart-summary__ask,
+.order-total__ask {
+  font-family: var(--k-body);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--k-muted);
+  text-align: right;
+}
+.cart-summary__ask { margin: -12px 0 16px; }
+.order-total__ask { margin: 4px 2px 0; }
 .cart-summary label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; color: var(--k-muted); margin-bottom: 14px; }
 .cart-summary input { padding: 10px 11px; border: 1px solid var(--k-line); border-radius: 8px; font: inherit; background: var(--k-white); }
 

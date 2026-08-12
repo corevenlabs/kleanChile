@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import ProductDetail from "../../../../src/View/ProductDetail/ProductDetail";
 import { CATEGORY_LABELS } from "../../../../src/domain/content/vocabulary.js";
 import { getProduct } from "../../../../src/infra/db/queries/catalog.js";
-import { formatClp } from "../../../../src/domain/shared/money.js";
+import { formatPrice, isPriceOnRequest } from "../../../../src/domain/shared/pricing.js";
 import { absoluteImage, absoluteUrl } from "../../../../src/lib/site.js";
 
 /**
@@ -33,7 +33,11 @@ export async function generateMetadata({ params }) {
    */
   const description = product.description?.trim()
     ? product.description.trim().slice(0, 300)
-    : `${product.name} — ${formatClp(product.price)}. ${CATEGORY_LABELS[product.category]} para instituciones, con despacho a todo Chile.`;
+    : // "Producto — A consultar." leído en un resultado de búsqueda no dice
+      // nada; sin precio publicado, la frase invita a pedirlo.
+      isPriceOnRequest(product.price)
+      ? `${product.name} — cotización a pedido. ${CATEGORY_LABELS[product.category]} para instituciones, con despacho a todo Chile.`
+      : `${product.name} — ${formatPrice(product.price)}. ${CATEGORY_LABELS[product.category]} para instituciones, con despacho a todo Chile.`;
 
   return {
     title: product.name,

@@ -35,7 +35,7 @@ export const FIELDS = [
   {
     key: "price",
     label: "Precio",
-    hint: "En pesos. Acepta 12990, 12.990 o $12.990. Obligatorio al crear.",
+    hint: "En pesos. Acepta 12990, 12.990 o $12.990. Escribe 0 para publicarlo sin precio («A consultar»). Obligatorio al crear.",
     aliases: ["precio", "price", "valor", "valor neto", "precio venta", "pvp"],
   },
   {

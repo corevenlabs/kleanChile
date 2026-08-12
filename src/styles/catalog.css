@@ -411,6 +411,13 @@
   color: var(--k-navy);
 }
 
+/* Sin precio publicado. Ver la nota en brand.css. */
+.product-card__price--ask {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--k-muted);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1000px) {

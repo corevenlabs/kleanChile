@@ -103,6 +103,19 @@
 }
 
 /*
+ * Sin precio publicado, más chico y sin el peso de una cifra — a 34px y en
+ * navy, "A consultar" se lee como el precio y no como su ausencia. Ver la nota
+ * en brand.css.
+ */
+.price--ask {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  color: var(--k-muted);
+}
+
+/*
  * The buy controls stop short of the column edge.
  *
  * `flex: 1` on the button let it stretch the full width of a wide product

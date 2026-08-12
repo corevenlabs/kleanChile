@@ -1,6 +1,7 @@
 import Search from "../../../src/View/Search/Search";
 import { searchProducts } from "../../../src/domain/catalog/search.js";
 import { getSearchableProducts } from "../../../src/infra/db/queries/catalog.js";
+import { absoluteUrl } from "../../../src/lib/site.js";
 
 /**
  * `/buscar?q=cloro`
@@ -17,6 +18,11 @@ import { getSearchableProducts } from "../../../src/infra/db/queries/catalog.js"
 export const metadata = {
   title: "Buscar",
   robots: { index: false, follow: true },
+  /* Explícita porque, sin declararla, se hereda la canónica de la portada —
+     ver la nota en `contact/page.js`. Acá pesa menos que allá, porque la página
+     es `noindex` de todas formas, pero una canónica que apunta a otra página es
+     una señal contradictoria y no cuesta nada no emitirla. */
+  alternates: { canonical: absoluteUrl("/buscar") },
 };
 
 export default async function Page({ searchParams }) {

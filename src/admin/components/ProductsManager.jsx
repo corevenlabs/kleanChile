@@ -9,7 +9,8 @@ import {
 } from "../../actions/product";
 import { setStockAction } from "../../actions/order";
 import { CATEGORIES, CATEGORY_LABELS } from "../../domain/content/vocabulary";
-import { formatClp } from "../../domain/shared/money";
+import { formatClp, parseClp } from "../../domain/shared/money";
+import { isPriceOnRequest } from "../../domain/shared/pricing";
 import DocumentField from "./DocumentField";
 import Icon from "./Icon";
 import ImageField from "./ImageField";
@@ -271,7 +272,11 @@ export default function ProductsManager({ products }) {
                   </span>
                 </td>
                 <td>
-                  <strong>{formatClp(product.price)}</strong>
+                  {isPriceOnRequest(product.price) ? (
+                    <span className="admin-chip">A consultar</span>
+                  ) : (
+                    <strong>{formatClp(product.price)}</strong>
+                  )}
                 </td>
                 {/* Solo lectura. El stock se ajusta en el editor, donde el
                     campo dice cuánto había y qué movimiento va a registrar. */}
@@ -389,6 +394,20 @@ export default function ProductsManager({ products }) {
                     setEditing({ ...editing, price: event.target.value })
                   }
                 />
+                {/*
+                  El cero es una función, no un descuido, así que el formulario
+                  tiene que decirlo donde se escribe. Sin esta línea nadie
+                  descubre la opción, y quien deje un cero por error va a creer
+                  que publicó un producto gratis.
+                */}
+                <small className="admin-hint">
+                  {/* Exactamente 0, no `isPriceOnRequest`: el campo vacío y
+                      "abc" también parsean a nada, y ninguno de los dos es
+                      todavía una decisión de publicar sin precio. */}
+                  {parseClp(editing.price) === 0
+                    ? "En 0: la tienda muestra «A consultar». Se puede pedir igual y el precio se cotiza por WhatsApp."
+                    : "Escribe 0 para publicarlo sin precio («A consultar»)."}
+                </small>
               </label>
               <label>
                 Categoría

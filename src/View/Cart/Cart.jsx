@@ -7,8 +7,8 @@ import {
   requestOrderAction,
   setCartQuantityAction,
 } from "../../actions/cart";
-import { lineTotal, subtotal } from "../../domain/cart/totals";
-import { formatClp } from "../../domain/shared/money";
+import { cartTotal, formatLineTotal } from "../../domain/cart/totals";
+import { formatPrice, isPriceOnRequest } from "../../domain/shared/pricing";
 
 /**
  * The cart page.
@@ -69,7 +69,7 @@ export default function Cart({ lines, dropped }) {
     );
   }
 
-  const total = subtotal(lines);
+  const total = cartTotal(lines);
 
   return (
     <div className="cart-page">
@@ -95,9 +95,18 @@ export default function Cart({ lines, dropped }) {
 
                 <div className="cart-line__controls">
                   <QuantityForm line={line} />
-                  <span>× {formatClp(line.unitPrice)}</span>
+                  {/* Sin precio, el "× A consultar" repetiría palabra por
+                      palabra lo que dice la columna del total, en la misma
+                      línea. La cantidad ya está en el campo de al lado. */}
+                  {!isPriceOnRequest(line.unitPrice) && (
+                    <span>× {formatPrice(line.unitPrice)}</span>
+                  )}
                   <RemoveForm productId={line.productId} />
-                  <strong className="cart-line__total">{formatClp(lineTotal(line))}</strong>
+                  <strong
+                    className={`cart-line__total ${isPriceOnRequest(line.unitPrice) ? "cart-line__total--ask" : ""}`}
+                  >
+                    {formatLineTotal(line)}
+                  </strong>
                 </div>
 
                 {line.exceedsStock && (
@@ -118,10 +127,16 @@ export default function Cart({ lines, dropped }) {
             <span>{lines.reduce((count, line) => count + line.quantity, 0)}</span>
           </div>
 
+          {/*
+            Con productos a consultar el total deja de ser el precio final, y la
+            nota lo dice en la misma fila donde está el número. Ponerla al pie
+            del resumen sería ponerla debajo del botón de enviar.
+          */}
           <div className="cart-summary__total">
             <span>Total</span>
-            <span>{formatClp(total)}</span>
+            <span>{total.label}</span>
           </div>
+          {total.note && <p className="cart-summary__ask">{total.note}</p>}
 
           <label>
             Tu nombre (opcional)

@@ -178,6 +178,13 @@
   color: var(--k-navy);
 }
 
+/* Sin precio publicado. Ver la nota en brand.css. */
+.bs__card-price--ask {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--k-muted);
+}
+
 .bs__wrapper {
   position: relative;
 }

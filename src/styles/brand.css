@@ -157,6 +157,29 @@ picture {
 }
 
 /*
+ * "A consultar" — el precio que todavía no existe.
+ *
+ * Un producto con precio cero se vende cotizando (ver `domain/shared/pricing`).
+ * Donde iría el monto va esa frase, y tiene que leerse como un estado y no como
+ * una cifra: mismo lugar, mismo peso visual, texto más chico y en `--k-muted`,
+ * que es el gris azulado de esta paleta y no un `#888`.
+ *
+ * Los modificadores `--ask` viven en la hoja de cada componente y no acá, aunque
+ * todos digan lo mismo. Cada uno tiene que ganarle a su propia regla base
+ * (`.product-card__price`, `.price`, `.bs__card-price`), y **todas esas hojas se
+ * importan después de esta**: una definición común acá perdería por orden de
+ * importación en los cinco casos. Lo único compartido es la nota de abajo, que
+ * no compite con nada.
+ */
+.price-ask-note {
+  font-family: var(--k-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--k-muted);
+  margin: -8px 0 18px;
+}
+
+/*
  * Next remounts the public route template on every navigation. Animating that
  * boundary keeps the persistent navbar steady while the new page settles in.
  */

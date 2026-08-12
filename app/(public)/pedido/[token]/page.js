@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { lineTotal } from "../../../../src/domain/cart/totals.js";
+import { cartTotal, formatLineTotal } from "../../../../src/domain/cart/totals.js";
 import { buildOrderMessage, whatsappUrl } from "../../../../src/domain/orders/whatsappMessage.js";
-import { formatClp } from "../../../../src/domain/shared/money.js";
+import { formatPrice, isPriceOnRequest } from "../../../../src/domain/shared/pricing.js";
 import { getContent } from "../../../../src/infra/db/queries/content.js";
 import { getOrderByToken } from "../../../../src/infra/db/queries/orders.js";
 
@@ -33,6 +33,8 @@ export default async function Page({ params }) {
 
   const content = await getContent();
   const status = STATUS[order.status] ?? STATUS.pending;
+
+  const orderTotal = cartTotal(order.lines);
 
   const message = buildOrderMessage({
     orderNumber: order.number,
@@ -74,18 +76,29 @@ export default async function Page({ params }) {
               {line.name}
               <span>
                 {line.skuCode ? `SKU ${line.skuCode} · ` : ""}
-                {line.quantity} × {formatClp(line.unitPrice)}
+                {/* Sin precio, "2 × A consultar" diría lo mismo que la columna
+                    de al lado; la cantidad sola es lo que falta ahí. */}
+                {isPriceOnRequest(line.unitPrice)
+                  ? `${String(line.quantity)} ${line.quantity === 1 ? "unidad" : "unidades"}`
+                  : `${String(line.quantity)} × ${formatPrice(line.unitPrice)}`}
               </span>
             </div>
-            <strong>{formatClp(lineTotal({ unitPrice: line.unitPrice, quantity: line.quantity }))}</strong>
+            <strong>{formatLineTotal({ unitPrice: line.unitPrice, quantity: line.quantity })}</strong>
           </div>
         ))}
       </div>
 
+      {/*
+        El total se recalcula desde las líneas guardadas en vez de mostrar
+        `order.total`, que es un entero y no sabe distinguir "cero pesos" de
+        "todavía sin cotizar". Los dos números son el mismo — las líneas son las
+        que sumaron ese total al registrarse — pero solo uno puede decirlo.
+      */}
       <div className="order-total">
         <span>Total</span>
-        <span>{formatClp(order.total)}</span>
+        <span>{orderTotal.label}</span>
       </div>
+      {orderTotal.note && <p className="order-total__ask">{orderTotal.note}</p>}
 
       <p className="order-page__lead" style={{ marginTop: 28 }}>
         Guarda este enlace para revisar el estado de tu pedido.{" "}

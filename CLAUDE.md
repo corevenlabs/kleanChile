@@ -130,6 +130,24 @@ cart (cookie)  →  requestOrderAction  →  order (pending), stock untouched
 
 **The cart is an httpOnly cookie** of `{productId, quantity}` — no names, no prices. Those are read from the database wherever the cart renders and when the order is placed, so the browser never states what something costs. There is no `carts` table because nothing needs one here; add one when abandoned carts must be visible in the admin.
 
+### Price on request is price zero
+
+Part of the catalogue is sold by quoting — the price depends on volume, delivery or a standing agreement, and the shop would rather the customer write first. That state is **`price_clp = 0`**, not a new column, and `src/domain/shared/pricing.js` is the single definition of it.
+
+Zero is free to mean this because zero is not a price this shop can charge. A boolean beside the price would mean two fields that can contradict each other, and `price = 12000, on_request = true` has no correct reading. It would also have to be threaded through the importer, the seed, the editor and `order_items` — all of which already carry the price.
+
+**It changes what is shown, not what can be done.** A product with no published price is added to the cart, ordered, confirmed and stock-moved exactly like any other; the gate is stock, as it always was. What is missing is the amount, not the availability, and a shelf that has the item but refuses the order sends the customer off to find a phone number on their own.
+
+Three consequences, each of which was a way to publish a lie:
+
+- **The cart total stops being an integer.** A line without a price adds zero, so plain arithmetic would show `$12.000` for a basket where two of four items are still to be quoted — a number the customer reads as what they will pay. `cartTotal` returns `{ amount, label, note }`: `amount` is still the sum and is still what `orders.total_clp` stores, but `label` and `note` are what gets rendered, and they say that something is missing. With nothing priced at all the total is `A consultar`. The order page and the admin rebuild it from the stored lines for the same reason — `order.total` is an integer and cannot tell "zero pesos" from "not quoted yet".
+- **`productLd` emits no `offers` at all.** `price: "0"` is what the column says and would tell Google the product is free. Schema.org has no way to say "on request"; a `Product` without an offer is valid, loses the price row in search results, and that is correct — the page does not publish one either.
+- **Sorting by price puts them last in both directions.** They are not the cheapest thing in the shop, and they are not the most expensive either. What is unknown goes after what is known.
+
+The `--ask` modifiers deliberately live in each component's own stylesheet rather than together in `brand.css`, even though they all say the same thing: every one has to beat its own base rule (`.product-card__price`, `.price`, `.bs__card-price`) and all of those files are imported *after* `brand.css`. A shared definition there would lose to import order in every case — see the note on global stylesheets under "Visual identity".
+
+The price field in `/admin/productos` says so under the input, and says something different once the value really is `0`. Without that line nobody discovers the feature, and anyone who leaves a zero by accident thinks they published a free product.
+
 ### Visual identity
 
 Everything is derived from the logo in `public/image/`, not invented. `src/styles/brand.css` holds the tokens and states the reasoning; two rules matter when adding UI:
@@ -305,7 +323,7 @@ Two things differ from azarwear's version and both are forced:
 
 ## Deliberate decisions
 
-- **Prices are integer Chilean pesos, not cents.** This departs from azarwear's "money is always integer cents" rule because CLP is zero-decimal — there is no centavo to represent. `src/domain/shared/money.js` formats and parses; `parseClp` exists because `Number("2.990")` returns 2.99, which would price a three-thousand-peso product at three pesos.
+- **Prices are integer Chilean pesos, not cents.** This departs from azarwear's "money is always integer cents" rule because CLP is zero-decimal — there is no centavo to represent. `src/domain/shared/money.js` formats and parses; `parseClp` exists because `Number("2.990")` returns 2.99, which would price a three-thousand-peso product at three pesos. **Zero is not a price, it is "ask us"** — see "Price on request is price zero".
 - **An image is a URL.** Not a media id, not a `MediaRef` — see "Images" below. This is the invariant the importer, the seed and every component depend on.
 - **The rate limiter is in-memory** (`src/lib/rateLimit.js`), so its limit multiplies across instances. It exists to stop unauthenticated requests from burning 32 MB of scrypt each, not to stop guessing — the per-account lockout does that.
 - **`admin.css` is untouched.** All admin UI composes from the classes already in it.

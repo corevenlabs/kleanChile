@@ -9,11 +9,22 @@ import "server-only";
  * requests. Account lockout does not help there — it protects the account, not
  * the machine, and it triggers after the expensive part has already run.
  *
- * **The state is per-process.** Behind several instances each keeps its own
- * counters, so the effective limit multiplies by the instance count. That is
- * accepted rather than solved: this deployment is a single container, and the
- * authoritative protection against guessing is the per-account lockout in
- * `infra/auth/session.js`. Move to a shared store if this ever runs wide.
+ * **The state is per-process, and the target is Vercel** — so in practice this
+ * barely limits anything. Each lambda instance keeps its own counters, a burst
+ * spreads across instances, and a cold start begins with an empty map. Do not
+ * read the numbers below as a cap that holds.
+ *
+ * What actually protects each account is the per-account lockout in
+ * `infra/auth/session.js`: eight failures and the row is locked for fifteen
+ * minutes, in Postgres, where every instance sees it.
+ *
+ * What is left uncovered is the cost of guessing at *unknown* addresses: that
+ * path runs scrypt against `DUMMY_HASH` on purpose — so an unknown address does
+ * not answer faster than a known one and become an account oracle — and no
+ * lockout applies to an account that does not exist. Roughly 32 MB and a slice
+ * of CPU per request, billable, with no upper bound but Vercel's own
+ * concurrency. Accepted for launch; the fix is a shared counter (Upstash,
+ * Vercel KV) keyed by IP, and this module is the only thing that has to change.
  */
 
 const buckets = new Map();

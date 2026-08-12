@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { formatClp } from "../../domain/shared/money";
+import { formatPrice, isPriceOnRequest } from "../../domain/shared/pricing";
 import AddToCartForm from "./AddToCartForm";
 
 /**
@@ -52,7 +52,16 @@ export default function ProductQuickView({ product, onClose }) {
           {product.skuCode && <p className="quickview__sku">SKU {product.skuCode}</p>}
           <h2>{product.name}</h2>
           {product.type && <p className="quickview__type">{product.type}</p>}
-          <p className="quickview__price">{formatClp(product.price)}</p>
+          <p
+            className={`quickview__price ${isPriceOnRequest(product.price) ? "quickview__price--ask" : ""}`}
+          >
+            {formatPrice(product.price)}
+          </p>
+          {isPriceOnRequest(product.price) && (
+            <p className="price-ask-note">
+              Agrégalo al carrito y te cotizamos por WhatsApp.
+            </p>
+          )}
 
           {product.description && <p className="quickview__description">{product.description}</p>}
 

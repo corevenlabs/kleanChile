@@ -62,17 +62,31 @@ export function unslugify(slug) {
  * Someone who clicked "Lámparas" should read "Lámparas" at the top of the
  * page, not "Lamparas". A slug typed straight into the address bar has no menu
  * entry behind it; that still searches, it just loses the accent.
+ *
+ * `inMenu` is what says which of the two happened, and it is not decoration:
+ * this route answers **any** slug, so the set of URLs that return products is
+ * unbounded — `/cleaning/cloro`, `/cleaning/limpia`, `/cleaning/a-b-c` all
+ * match something and all would be self-canonical, indexable pages showing
+ * overlapping slices of one catalogue. The menu is the finite set; everything
+ * else is a page for a person, not for a crawler. See the `robots` branch in
+ * the route's `generateMetadata`.
+ *
+ * A separate flag rather than testing `section !== null`, because a section
+ * whose title an admin left blank is still a section, and overloading one field
+ * with two meanings is how that becomes a bug nobody can see from the URL.
  */
 export function findClassification(navigation, categoryPath, slug) {
   const link = navigation.links.find((entry) => entry.path === categoryPath);
 
   for (const section of link?.dropdown?.sections ?? []) {
     for (const item of section.items) {
-      if (slugify(item) === slug) return { slug, label: item, section: section.title };
+      if (slugify(item) === slug) {
+        return { slug, label: item, section: section.title, inMenu: true };
+      }
     }
   }
 
-  return { slug, label: unslugify(slug), section: null };
+  return { slug, label: unslugify(slug), section: null, inMenu: false };
 }
 
 /**

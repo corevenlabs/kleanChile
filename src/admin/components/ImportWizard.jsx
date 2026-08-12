@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { analyzeImportAction, applyImportAction } from "../../actions/import";
 import { CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { FIELDS, fieldLabel } from "../../domain/import/fields";
-import { formatClp } from "../../domain/shared/money";
+import { formatPrice } from "../../domain/shared/pricing";
 import Icon from "./Icon";
 
 /**
@@ -35,7 +35,7 @@ const STATUS_LABEL = {
  */
 function showValue(field, value) {
   if (value === null || value === undefined || value === "") return "—";
-  if (field === "price") return formatClp(value);
+  if (field === "price") return formatPrice(value);
   if (field === "active") return value ? "Publicado" : "Oculto";
   if (field === "category") return CATEGORY_LABELS[value] ?? String(value);
   return String(value);

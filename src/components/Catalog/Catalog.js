@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Picture from "../media/Picture";
-import { formatClp } from "../../domain/shared/money";
+import { formatPrice, isPriceOnRequest } from "../../domain/shared/pricing";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 function ProductReveal({ children, index }) {
@@ -35,10 +35,25 @@ function ProductReveal({ children, index }) {
  * count the matches rather than the whole category.
  */
 
+/*
+ * Los productos a consultar quedan al final, ordene por lo que ordene.
+ *
+ * Su precio guardado es cero, así que una comparación aritmética los pondría
+ * primeros en "Menor precio" — la vitrina abriría con lo que parece lo más
+ * barato de la tienda y no tiene precio. Tampoco son los más caros: no se sabe
+ * cuánto cuestan, y lo que no se sabe va después de lo que sí.
+ */
+const byPrice = (direction) => (a, b) => {
+  const askA = isPriceOnRequest(a.price);
+  const askB = isPriceOnRequest(b.price);
+  if (askA !== askB) return askA ? 1 : -1;
+  return direction * (a.price - b.price);
+};
+
 const SORTS = {
   relevance: { label: "Destacados", compare: null },
-  priceAsc: { label: "Menor precio", compare: (a, b) => a.price - b.price },
-  priceDesc: { label: "Mayor precio", compare: (a, b) => b.price - a.price },
+  priceAsc: { label: "Menor precio", compare: byPrice(1) },
+  priceDesc: { label: "Mayor precio", compare: byPrice(-1) },
 };
 
 // Types arrive lowercase from the catalogue ("químico"); shown capitalised
@@ -126,7 +141,11 @@ export default function Catalog({ products = [], linkProducts = false }) {
                 <p className="product-card__type">{titleCase(product.type)}</p>
                 <h3>{product.name}</h3>
                 <div className="product-card__foot">
-                  <span className="product-card__price">{formatClp(product.price)}</span>
+                  <span
+                    className={`product-card__price ${isPriceOnRequest(product.price) ? "product-card__price--ask" : ""}`}
+                  >
+                    {formatPrice(product.price)}
+                  </span>
                   {product.skuCode && <span className="k-sku">{product.skuCode}</span>}
                 </div>
               </div>

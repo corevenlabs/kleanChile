@@ -65,6 +65,23 @@ export async function GET(request, { params }) {
       "Content-Type": type,
       "Content-Length": String(info.size),
       /*
+       * Un SVG es un documento, no un mapa de bits: puede traer `<script>`, y
+       * servido desde **nuestro propio origen** ese script corre con la sesión
+       * del panel. La CSP global de `next.config.js` no lo detiene, porque
+       * permite `script-src 'self' 'unsafe-inline'` para el arranque de Next.
+       *
+       * El navegador intersecta varias cabeceras CSP y se queda con la más
+       * estricta, así que esta segunda apaga todo solo para lo que sale por
+       * acá. No afecta a un `<img src="...svg">`: dibujar el vector no necesita
+       * ningún permiso de los que se quitan.
+       *
+       * Solo lo puede provocar un admin autenticado y solo en el camino sin
+       * bucket —en producción las subidas van a R2, otro origen— así que es
+       * profundidad, no el único cierre.
+       */
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "X-Content-Type-Options": "nosniff",
+      /*
        * Una hora, no un año. Estos nombres llevan bytes aleatorios, no un hash
        * del contenido, así que nada garantiza que el archivo en una ruta dada
        * sea siempre el mismo — a diferencia de las claves de R2, que sí van

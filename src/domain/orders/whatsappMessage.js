@@ -1,5 +1,6 @@
-import { lineTotal, subtotal } from "../cart/totals.js";
+import { cartTotal, lineTotal } from "../cart/totals.js";
 import { formatClp } from "../shared/money.js";
+import { countLabel, isPriceOnRequest } from "../shared/pricing.js";
 
 /**
  * The message the customer sends to request an order.
@@ -19,13 +20,31 @@ export function buildOrderMessage({ orderNumber, lines, customerName = null }) {
 
   for (const line of lines) {
     parts.push(`• ${line.name}`);
+
+    /*
+     * Un producto a consultar entra al mensaje con su cantidad y sin monto.
+     *
+     * Es la línea que hace que este pedido exista: el cliente quiso pedirlo,
+     * la tienda tiene que cotizarlo, y decir "0 × $0 = $0" convertiría eso en
+     * un producto regalado. Sin el "= …" el ojo de quien atiende se detiene
+     * exactamente donde tiene que responder.
+     */
     parts.push(
-      `  SKU ${line.skuCode} · ${String(line.quantity)} × ${formatClp(line.unitPrice)} = ${formatClp(lineTotal(line))}`,
+      isPriceOnRequest(line.unitPrice)
+        ? `  SKU ${line.skuCode} · ${String(line.quantity)} × a consultar`
+        : `  SKU ${line.skuCode} · ${String(line.quantity)} × ${formatClp(line.unitPrice)} = ${formatClp(lineTotal(line))}`,
     );
   }
 
+  const total = cartTotal(lines);
+
   parts.push("");
-  parts.push(`*Total: ${formatClp(subtotal(lines))}*`);
+  parts.push(`*Total: ${total.label}*`);
+  if (total.onRequestCount > 0 && total.note) {
+    // Repetido en palabras y no solo en el símbolo "+": este mensaje se lee en
+    // una notificación del teléfono, muchas veces recortado a dos líneas.
+    parts.push(`(${countLabel(total.onRequestCount)} sin precio, por cotizar)`);
+  }
 
   if (customerName) {
     parts.push("");

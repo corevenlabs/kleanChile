@@ -5,7 +5,7 @@ import Picture from "../../components/media/Picture";
 import { specEntries } from "../../domain/catalog/specLabels";
 import { CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { breadcrumbLd, productLd } from "../../domain/seo/structuredData";
-import { formatClp } from "../../domain/shared/money";
+import { formatPrice, isPriceOnRequest } from "../../domain/shared/pricing";
 import { documentNameFromUrl } from "../../infra/storage/documentKeys";
 import { absoluteImage, absoluteUrl } from "../../lib/site";
 
@@ -32,6 +32,16 @@ export default function ProductDetail({ product }) {
    */
   const sheetName = documentNameFromUrl(product.specSheet);
 
+  /*
+   * Sin precio publicado se vende igual.
+   *
+   * La única diferencia es lo que dice el número: el botón, el stock y el
+   * pedido completo funcionan idénticos, porque lo que falta es el monto y no
+   * la disponibilidad. Un producto que hay en bodega y no se puede pedir sería
+   * una vitrina que manda al cliente a buscar el teléfono por su cuenta.
+   */
+  const priceOnRequest = isPriceOnRequest(product.price);
+
   return <div className="product-page">
     <JsonLd data={productLd({ product, url, image: absoluteImage(product.image), brand: product.specs?.marca })} />
     <JsonLd data={breadcrumbLd(trailOf(product, categoryLabel, url))} />
@@ -39,7 +49,7 @@ export default function ProductDetail({ product }) {
     {/* La imagen principal de la página: `priority` para que no espere detrás de
         la heurística de carga diferida. */}
     <div className="product-image-box"><div className="product-image-wrapper"><Picture src={product.image} alt={product.name} sizes="(max-width: 900px) 100vw, 520px" priority /></div></div>
-    <div className="product-info">{product.skuCode && <p className="quickview__sku">SKU {product.skuCode}</p>}<h1>{product.name}</h1><div className="price">{formatClp(product.price)}</div><div className="description-section"><p className="description">{product.description}</p></div>
+    <div className="product-info">{product.skuCode && <p className="quickview__sku">SKU {product.skuCode}</p>}<h1>{product.name}</h1><div className={`price ${priceOnRequest ? "price--ask" : ""}`}>{formatPrice(product.price)}</div>{priceOnRequest && <p className="price-ask-note">Este producto se cotiza. Agrégalo al carrito y te confirmamos el precio por WhatsApp.</p>}<div className="description-section"><p className="description">{product.description}</p></div>
       <AddToCartForm productId={product.id} inStock={product.inStock} stockOnHand={product.stockOnHand} />
 
       {product.specSheet ? (

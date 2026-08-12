@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import Picture from "../media/Picture";
-import { formatClp } from "../../domain/shared/money";
+import { formatPrice, isPriceOnRequest } from "../../domain/shared/pricing";
 import ProductQuickView from "../cart/ProductQuickView";
 
 const badgeColors = { "Más vendido": "bs-badge--blue", Oferta: "bs-badge--red", Nuevo: "bs-badge--green" };
@@ -48,7 +48,7 @@ export default function BestSellers({ data, products = [] }) {
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setPreview(product); } }}
         >
           <div className="bs__card-img"><Picture src={product.image} alt={product.name} sizes="(max-width: 720px) 60vw, 260px" />{badge && <span className={`bs__badge ${badgeColors[badge]}`}>{badge}</span>}</div>
-          <div className="bs__card-info"><p className="bs__card-name">{product.name}</p><p className="bs__card-type">{product.type}</p><p className="bs__card-price">{formatClp(product.price)}</p></div>
+          <div className="bs__card-info"><p className="bs__card-name">{product.name}</p><p className="bs__card-type">{product.type}</p><p className={`bs__card-price ${isPriceOnRequest(product.price) ? "bs__card-price--ask" : ""}`}>{formatPrice(product.price)}</p></div>
         </div>;
       })}</div>
       <button className="bs__arrow bs__arrow--right" onClick={() => scroll("right")} aria-label="Siguiente">›</button>

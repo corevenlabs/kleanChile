@@ -3,7 +3,8 @@
 import { Fragment, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { cancelOrderAction, confirmOrderAction } from "../../actions/order";
-import { formatClp } from "../../domain/shared/money";
+import { cartTotal } from "../../domain/cart/totals";
+import { formatPrice } from "../../domain/shared/pricing";
 import Icon from "./Icon";
 
 /**
@@ -72,7 +73,10 @@ export default function OrdersManager({ orders }) {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {orders.map((order) => {
+              const total = cartTotal(order.lines);
+
+              return (
               <Fragment key={order.id}>
                 <tr>
                   <td>
@@ -96,8 +100,15 @@ export default function OrdersManager({ orders }) {
                       <Icon name="chevron" size={13} />
                     </button>
                   </td>
+                  {/*
+                    El total se rearma desde las líneas: `order.total` es un
+                    entero y un pedido de puros productos a cotizar vale cero en
+                    esa columna. Quien atiende necesita ver la diferencia entre
+                    "no se cobró nada" y "falta ponerle precio".
+                  */}
                   <td>
-                    <strong>{formatClp(order.total)}</strong>
+                    <strong>{total.label}</strong>
+                    {total.note && <small className="admin-hint">{total.note}</small>}
                   </td>
                   <td>
                     <span className="admin-chip">{STATUS_LABEL[order.status]}</span>
@@ -133,7 +144,7 @@ export default function OrdersManager({ orders }) {
                             <strong>{line.name}</strong>
                             <small>
                               SKU {line.skuCode ?? "—"} · {line.quantity} ×{" "}
-                              {formatClp(line.unitPrice)}
+                              {formatPrice(line.unitPrice)}
                             </small>
                           </div>
                         </div>
@@ -143,7 +154,8 @@ export default function OrdersManager({ orders }) {
                   </tr>
                 )}
               </Fragment>
-            ))}
+              );
+            })}
           </tbody>
         </table>
         {orders.length === 0 && <div className="admin-empty">Todavía no hay pedidos.</div>}

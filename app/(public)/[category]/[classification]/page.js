@@ -55,12 +55,25 @@ export async function generateMetadata({ params }) {
     alternates: { canonical: url },
     openGraph: { title, description, url },
     /*
-     * A classification that matches nothing is a real page for a person who
-     * clicked the menu and a thin-content page for a crawler. It stays
-     * reachable and stays out of the index — `follow` so the links back into
-     * the catalogue are still worth something.
+     * Indexable only if the menu points here and something is on the shelf.
+     *
+     * Two different pages fail that, for two different reasons:
+     *
+     * - **Nothing matches.** A real page for whoever clicked the menu, thin
+     *   content for a crawler. Eight of the seeded items are in this state.
+     * - **The slug is not in the menu.** This route answers anything, so
+     *   `/cleaning/cloro`, `/cleaning/limpia` and `/cleaning/a-b-c` are all
+     *   200s with products on them. Left indexable, that is an unbounded set of
+     *   self-canonical URLs serving overlapping slices of one catalogue —
+     *   duplicate content the shop never decided to publish, and crawl budget
+     *   spent on pages nobody linked. The menu is the finite, intentional set,
+     *   and it is exactly what `app/sitemap.js` submits.
+     *
+     * `follow` in both cases: the links back into the catalogue still count.
      */
-    ...(found.products.length === 0 ? { robots: { index: false, follow: true } } : {}),
+    ...(found.classification.inMenu && found.products.length > 0
+      ? {}
+      : { robots: { index: false, follow: true } }),
   };
 }
 

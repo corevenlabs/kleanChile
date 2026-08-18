@@ -237,7 +237,8 @@
   padding: 22px;
   background: var(--k-foam);
   position: sticky;
-  top: 20px;
+  /* Debajo del navbar pegado, con el mismo respiro que tenía contra el borde. */
+  top: calc(var(--k-nav-h) + 20px);
 }
 .cart-summary h2 { margin: 0 0 16px; font-family: var(--k-display); font-size: 15px; font-weight: 600; color: var(--k-navy); }
 .cart-summary__row { display: flex; justify-content: space-between; font-size: 14px; color: var(--k-muted); margin-bottom: 9px; }

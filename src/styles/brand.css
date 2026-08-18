@@ -50,6 +50,22 @@
   --k-radius-pill: 999px;
 
   /*
+   * La altura de la barra superior.
+   *
+   * Es un token y no un 64px suelto en `Navbar.css` porque la barra quedó
+   * fija: desde que no se va con el scroll, todo lo demás que se pega arriba
+   * —la barra de filtros del catálogo, el resumen del carrito— tiene que
+   * empezar justo debajo de ella o queda tapado. Ese offset se calcula en
+   * hojas que no saben nada del navbar, así que el número tiene que vivir
+   * donde las dos puedan leerlo.
+   *
+   * Es el espacio que la barra **ocupa**, hairline incluido — es contra eso que
+   * se alinea lo de abajo. Por eso `.navbar__inner` mide un pixel menos y no al
+   * revés: lo que necesita saber el resto es dónde termina la barra.
+   */
+  --k-nav-h: 65px;
+
+  /*
    * Type roles.
    *
    * Poppins reproduces the wordmark's geometric-rounded letterforms and gives
@@ -61,6 +77,17 @@
   --k-display: var(--font-poppins), "Segoe UI", system-ui, sans-serif;
   --k-body: var(--font-plex), "Segoe UI", system-ui, sans-serif;
   --k-mono: var(--font-plex-mono), ui-monospace, "Cascadia Mono", monospace;
+}
+
+/*
+ * Un salto a un ancla tiene que aterrizar debajo de la barra, no detrás.
+ *
+ * El navegador alinea el destino con el borde superior del viewport, que ahora
+ * es justo donde está el navbar — sin esto, "Saltar al contenido" deja el
+ * primer título tapado por la barra que acaba de saltear.
+ */
+html {
+  scroll-padding-top: calc(var(--k-nav-h) + 8px);
 }
 
 body {

@@ -46,10 +46,22 @@
 /* =========================
    IMAGEN PRODUCTO - CON ZOOM MEJORADO
 ========================= */
+/*
+ * Blanco, no `--k-foam`.
+ *
+ * Las fotos del catálogo vienen recortadas sobre blanco, así que el tinte
+ * celeste no quedaba detrás de la foto sino alrededor: un marco de color que el
+ * producto no tiene. Sobre blanco la foto llega hasta el borde de la caja.
+ *
+ * El filete reemplaza lo que hacía el fondo. Sin él la caja desaparece —foto
+ * blanca sobre página blanca— y con ella se pierde el área de zoom, que es toda
+ * la caja y no solo la imagen.
+ */
 .product-image-box {
   width: 100%;
   height: 480px;
-  background: var(--k-foam);
+  background: var(--k-white);
+  border: 1px solid var(--k-line);
   border-radius: 8px;
   overflow: hidden;
   position: relative;

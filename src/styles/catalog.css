@@ -66,9 +66,14 @@
 
 /* ── Filter bar ──────────────────────────────────────────────────────────── */
 
+/*
+ * La barra de filtros se pega **debajo** del navbar, no en el borde de la
+ * pantalla: desde que la barra superior también es `sticky`, un `top: 0` acá
+ * significa quedar escondida detrás de ella el resto del scroll.
+ */
 .catalog__topbar {
   position: sticky;
-  top: 0;
+  top: var(--k-nav-h);
   z-index: 20;
   display: flex;
   /* Top-aligned: when the filters wrap, the sort control stays beside the first

@@ -1,5 +1,28 @@
+/*
+ * La barra se queda arriba.
+ *
+ * El buscador es la forma principal de encontrar algo en un catálogo de cien
+ * productos, y estaba a un scroll-hasta-arriba de distancia en cuanto el
+ * cliente bajaba por una categoría. Pegada, la búsqueda y el carrito están
+ * siempre a un clic.
+ *
+ * `sticky` y no `fixed`: fija la sacaría del flujo y habría que compensar con
+ * un `padding-top` en `main` — un segundo número que tiene que coincidir con
+ * la altura de la barra y que se rompe solo cuando la barra crece (en móvil el
+ * buscador baja a su propia fila). Pegada, ocupa su lugar y el contenido
+ * empieza donde siempre empezó.
+ *
+ * `top: 0` es obligatorio: sin un desplazamiento sobre algún eje, `sticky` se
+ * comporta exactamente como `relative` y no falla de ninguna manera visible.
+ *
+ * `isolation` fuerza el contexto de apilamiento aun si alguien le saca el
+ * `z-index`. Ahora la barra se superpone a todo lo que scrollea por debajo, y
+ * quedar detrás de una tarjeta es un fallo que solo aparece a media página.
+ */
 .navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  isolation: isolate;
   background: var(--k-white);
   /* A cyan hairline instead of a grey shadow: the brand's edge, not a generic one. */
   border-bottom: 1px solid var(--k-line);
@@ -14,7 +37,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 32px;
-  height: 64px;
+  height: calc(var(--k-nav-h) - 1px); /* el borde de `.navbar` pone el pixel que falta */
 }
 
 .navbar__brand {
@@ -311,7 +334,7 @@
 .navbar__mobile { display: none; flex-direction: column; padding: 10px 20px 20px; max-height: 0; overflow: hidden; transition: 0.3s ease; }
 /* Scrolls rather than clips: the menu now carries every classification, and a
    fixed height would have silently cut the last category off the bottom. */
-.navbar__mobile--open { display: flex; max-height: calc(100vh - 72px); overflow-y: auto; }
+.navbar__mobile--open { display: flex; max-height: calc(100vh - var(--k-nav-h) - 8px); overflow-y: auto; }
 .navbar__mobile-link { padding: 14px 10px 8px; text-decoration: none; color: var(--k-muted); font-family: var(--k-display); font-weight: 600; }
 
 .navbar__mobile-link--active {
@@ -366,7 +389,20 @@
    * the cart. At 390px the inline version left about 90px of field, which is
    * not enough to see what you typed.
    */
-  .navbar__inner { flex-wrap: wrap; row-gap: 10px; }
-  .navbar__search { order: 3; flex: 1 0 100%; }
+  /*
+   * Alto mínimo, no fijo.
+   *
+   * Con `height` la barra no crecía al envolver: la fila del buscador se salía
+   * por abajo y el campo quedaba flotando sobre los productos, encima de la
+   * barra de filtros. Se disimulaba mientras la barra se iba con el scroll;
+   * desde que se queda arriba, es permanente.
+   */
+  .navbar__inner {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    height: auto;
+    min-height: calc(var(--k-nav-h) - 1px);
+  }
+  .navbar__search { order: 3; flex: 1 0 100%; padding-bottom: 12px; }
   .navbar__search form { max-width: none; }
 }

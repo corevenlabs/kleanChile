@@ -165,6 +165,10 @@ The three category pages share **one** stylesheet, `src/styles/catalog.css`. The
 
 **Every stylesheet here is global**, so duplicate selectors across files are resolved by import order in `app/layout.js`. That has already caused three separate bugs: the catalog above; a second complete hero inside `Home.css` that overrode `Banner.css` and painted navy text onto a photograph; and `body { font-family }` declared in `index.css` and `Home.css`, which silently beat the type system and rendered the whole site in the system font. When a rule "does nothing", check whether a later file redefines it before adding `!important`.
 
+**The navbar is sticky, and that makes its height public.** `--k-nav-h` in `brand.css` is what everything else that pins to the top must offset by — `.catalog__topbar` and `.cart-summary` both do. A `top: 0` on any new sticky element means hiding behind the bar for the rest of the scroll.
+
+The token is a starting value, not the truth: on a phone the search drops to its own row and the bar grows by about forty pixels. `Navbar.js` measures `.navbar__inner` with a `ResizeObserver` and republishes `--k-nav-h` on `:root`, so the offsets follow. It measures the *inner* and not `.navbar` deliberately — the mobile drawer lives inside the bar but is a curtain over the page, and measuring it would shove the filters half a screen down every time someone opens the menu.
+
 The hero renders each line only when it has content. Some banner artwork is a finished poster with its own headline and button; clearing a slide's title and description in the admin leaves the artwork to speak, and the scrim drops to a light tint (`.hero__overlay--bare`). Plain photography — no baked-in text — is what the overlay treatment is designed for.
 
 ### Previewing while `npm run dev` runs

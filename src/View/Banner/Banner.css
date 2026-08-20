@@ -3,9 +3,22 @@
 ───────────────────────────── */
 .hero {
   position: relative;
-  height: 85vh;            /* clave: más impacto visual */
-  min-height: 520px;
-  max-height: 900px;
+  /*
+   * Un 20% más baja de lo que era (85vh / 520 / 900).
+   *
+   * A pantalla casi completa el hero era la página: había que scrollear para
+   * enterarse de que abajo hay un catálogo. Recortado, la primera fila de
+   * productos asoma sola en un portátil, que es lo que el hero está
+   * prometiendo.
+   *
+   * Los tres valores bajan juntos a propósito. El vh manda en una pantalla
+   * normal, pero el mínimo es el que rige en una ventana baja y el máximo en
+   * un monitor alto — dejar cualquiera de los dos donde estaba haría que el
+   * recorte desapareciera justo en esos casos.
+   */
+  height: 68vh;
+  min-height: 416px;
+  max-height: 720px;
   overflow: hidden;
   background-color: #000;
  margin-top: 20px;
@@ -229,8 +242,8 @@
 ───────────────────────────── */
 @media (max-width: 768px) {
   .hero {
-    height: 70vh;
-    min-height: 420px;
+    height: 56vh;
+    min-height: 336px;
   }
 
   .hero__title {
@@ -266,8 +279,8 @@
 
 @media (max-width: 480px) {
   .hero {
-    height: 62vh;
-    min-height: 400px;
+    height: 50vh;
+    min-height: 320px;
   }
 
   .hero__desc {

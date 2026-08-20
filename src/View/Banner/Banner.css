@@ -21,7 +21,6 @@
   max-height: 720px;
   overflow: hidden;
   background-color: #000;
- margin-top: 20px;
 }
 
 /* ─────────────────────────────
@@ -176,7 +175,28 @@
 /* ─────────────────────────────
    PROGRESS BAR
 ───────────────────────────── */
-/* Aligned with the text rather than centred, now that the text has a side. */
+/*
+ * Los controles no se ven, pero siguen estando.
+ *
+ * El pedido fue sacarlos: que el carrusel gire solo y la foto quede limpia.
+ * Borrarlos, en cambio, deja un hero que se mueve por su cuenta sin ninguna
+ * forma de detenerlo, que es exactamente lo que la WCAG 2.2.2 prohíbe para
+ * cualquier cosa que se mueva más de cinco segundos.
+ *
+ * Así que se ocultan en lugar de eliminarse: invisibles y sordos al clic para
+ * quien navega con el mouse —que es lo que se pidió y lo que ve casi todo el
+ * mundo— y de vuelta a la vista apenas alguien los alcanza con el teclado.
+ * Siguen en el DOM, así que un lector de pantalla los sigue anunciando.
+ *
+ * `pointer-events: none` no es cosmético: un botón invisible que igual recibe
+ * clics es peor que uno visible. Sin eso quedaban cinco trampas de 42px
+ * sobre la foto, y la del medio además detiene el carrusel.
+ *
+ * `prefers-reduced-motion` sigue impidiendo que el carrusel arranque siquiera;
+ * eso vive en `Banner.js`, porque el CSS no puede cancelar un `setInterval`.
+ *
+ * Alineados con el texto y no centrados, para cuando se los ve.
+ */
 .hero__progress {
   position: absolute;
   bottom: 26px;
@@ -189,6 +209,14 @@
   align-items: center;
   gap: 8px;
   z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.hero__progress:focus-within {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Sits with the slide markers, deliberately quieter than them: it is a control

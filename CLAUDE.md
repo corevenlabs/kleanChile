@@ -309,6 +309,8 @@ On the accessibility side, four things are load-bearing and easy to undo by acci
 
 - **The home page's `<h1>` is visually hidden** (`.sr-only` in `brand.css`). It cannot be the hero's headline: that rotates every few seconds and some slides deliberately carry no text, so the page's one top-level heading would change under the reader or disappear.
 - **The hero carousel stops.** WCAG 2.2.2 — content that moves by itself for more than five seconds needs a control. There is a pause button, choosing a slide stops the rotation, and `prefers-reduced-motion` never starts it. The CSS block for reduced motion cannot cancel a `setInterval`, which is why the check is in the component too.
+
+  The controls are **hidden, not removed**: the shop wanted the photograph clean, so `.hero__progress` is `opacity: 0` with `pointer-events: none` and comes back on `:focus-within`. That distinction is the whole point — deleting them leaves a hero that moves on its own with no way to stop it, which is the failure the rule names. `pointer-events` is load-bearing rather than cosmetic: an invisible button that still takes clicks is worse than a visible one, and one of these five stops the carousel.
 - **Only the active slide is exposed.** All slides sit in the DOM; the inactive ones get `aria-hidden` and an empty `alt`, or a screen reader reads five alt texts as one page.
 - **The skip link is the first tab stop** on every public page, and `<main id="contenido">` in `app/(public)/layout.js` is what it skips to. Without it, reaching the products means tabbing past twenty-seven menu items on every page.
 

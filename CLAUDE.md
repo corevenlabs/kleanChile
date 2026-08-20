@@ -86,6 +86,16 @@ One dynamic route, not a `[classification]` folder under each of the three categ
 
 Eight of the seeded menu items currently match nothing — the Librería column ("Novelas", "Ficción", "Outlet") was written for a bookshop, not a stationery supplier. That is visible in the UI rather than hidden, and fixed by editing the menu in `/admin/configuracion`.
 
+**The menu is a dropdown anchored to its own item, not a mega-menu.** It used to be `position: absolute` against `.navbar` at `width: 100%` — a 1280px panel that covered the filter bar and the first row of products, which is what the shop asked to have back. `.navbar__item` is now `position: relative` and the panel is sized by its own contents, centred under the category. Its surface is `--k-foam` with the rows lighting up in white: the contrast runs the opposite way to the rest of the site, and that is what makes it read as a list rather than a poster.
+
+`.navDrop` itself is invisible — it only positions, and its `padding-top` is the bridge across the gap to the bar. Without that strip there are a few dead pixels where the pointer has left the `<li>` and not yet reached the panel, and the menu closes in the middle of the reach.
+
+**Past nine items it splits into two columns** (`DOS_COLUMNAS_DESDE` in `Navbar.js`). In one column Limpieza's fifteen classifications came to 480px and scrolled inside a panel that closes when the pointer leaves — and tall is not less intrusive than wide, it covers the same column of products top to bottom. The count is over classifications, not sections, because that is what sets the height.
+
+**The search field is always visible, and sits immediately left of the cart.** It used to hide behind a magnifier button, so finding anything required first discovering the icon. Three things follow: `SearchBox` lost its `autoFocus` — harmless on a box that only appeared on click, focus theft on every page load once it is always mounted; the field's `max-width` is what lets `margin-left: auto` hold it against the cart, since flex-grow would otherwise eat the free space the margin needs; and the categories now collapse into the drawer at **960px** rather than 768, because four of them plus a usable field do not fit below that and the field is the one that has to survive. Below 560px the search drops to its own row, which is what makes the bar 97px there.
+
+`/nosotros` and `/contact` are deliberately **not** in the bar — they were the two links that bought the field its width. Neither page is orphaned: `Footer.js` lists Contacto and injects Nosotros beside it, so both stay linked from every public page and stay in the sitemap. `/contact` left the `navigation` block through `drizzle/0008_navbar_solo_categorias.sql`; "Nosotros" was never in that block at all, it was injected by `Navbar.js` the way the footer still injects it.
+
 ### Search
 
 ```

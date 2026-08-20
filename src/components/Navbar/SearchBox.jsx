@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 const MIN_CHARS = 2;
 const DEBOUNCE_MS = 180;
 
-export default function SearchBox({ placeholder = "Buscar productos...", onDone }) {
+export default function SearchBox({ placeholder = "Buscar productos..." }) {
   const router = useRouter();
   const listId = useId();
   const optionId = (index) => `${listId}-opt-${String(index)}`;
@@ -32,7 +32,6 @@ export default function SearchBox({ placeholder = "Buscar productos...", onDone 
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
 
-  const inputRef = useRef(null);
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -83,7 +82,6 @@ export default function SearchBox({ placeholder = "Buscar productos...", onDone 
 
   const go = (href) => {
     setOpen(false);
-    onDone?.();
     router.push(href);
   };
 
@@ -134,7 +132,6 @@ export default function SearchBox({ placeholder = "Buscar productos...", onDone 
 
           <input
             id={`${listId}-input`}
-            ref={inputRef}
             /* `name="q"` is what makes the no-JavaScript submit land on
                /buscar?q=… — the same URL the router pushes. */
             name="q"
@@ -142,7 +139,6 @@ export default function SearchBox({ placeholder = "Buscar productos...", onDone 
             autoComplete="off"
             placeholder={placeholder}
             value={value}
-            autoFocus
             role="combobox"
             aria-expanded={expanded}
             aria-controls={listId}

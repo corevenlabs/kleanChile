@@ -16,7 +16,6 @@
     { "name": "Artículos de escritorio", "path": "/desktop", "dropdown": { "title": "Artículos de escritorio", "sections": [
       { "title": "Archivo", "items": ["Archivadores y carpetas", "Fundas y plastificado"] },
       { "title": "Escritorio", "items": ["Corcheteras y perforadoras", "Corchetes y chinches"] }
-    ] } },
-    { "name": "Contacto", "path": "/contact", "dropdown": null }
+    ] } }
   ]
 }

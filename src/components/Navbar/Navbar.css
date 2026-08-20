@@ -30,10 +30,23 @@
   z-index: 100;
 }
 
+/*
+ * Logo · categorías · buscador · carrito.
+ *
+ * El buscador va pegado al carrito y no centrado en la barra: son las dos cosas
+ * que la persona usa mientras compra, y estando juntas la mano no cruza la
+ * pantalla entre una y otra.
+ *
+ * `margin-left: auto` en `.navbar__search` es lo que lo mantiene a la derecha.
+ * Funciona porque el campo tiene tope de ancho: cuando ya creció todo lo que
+ * puede, el espacio que sobra lo absorbe ese margen en vez de repartirse. Sin
+ * el tope, el campo se estiraría hasta tocar las categorías y quedaría un
+ * buscador de mil pixeles.
+ */
 .navbar__inner {
   display: flex;
   align-items: stretch; /* antes: center -> generaba el hueco vertical (dead zone) */
-  justify-content: space-between;
+  gap: 14px;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 32px;
@@ -42,6 +55,7 @@
 
 .navbar__brand {
   position: relative;
+  flex: 0 0 auto;
   text-decoration: none;
   display: flex;
   align-items: center; /* el brand sí se puede centrar, no forma parte del hover */
@@ -66,6 +80,7 @@
   font-size: 1.35rem;
   letter-spacing: -0.03em;
   color: var(--k-navy);
+  white-space: nowrap;
   animation: navbar-name-intro 820ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
 }
 
@@ -91,24 +106,16 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .navbar__mark,
-  .navbar__brand-text {
-    animation: none;
-  }
-}
-
 .navbar__links {
-  flex: 2;
+  flex: 0 1 auto;
+  min-width: 0;
   display: flex;
   align-items: stretch; /* que los <li> ocupen todo el alto disponible */
-  justify-content: center;
-  gap: 18px;
+  gap: 2px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.navbar__links--hidden { display: none; }
 
 .navbar__link {
   position: relative;
@@ -121,7 +128,8 @@
   font-family: var(--k-display);
   font-weight: 500;
   font-size: 0.92rem;
-  padding: 0 12px;
+  white-space: nowrap;
+  padding: 0 10px;
 }
 .navbar__link:hover { color: var(--k-navy); }
 
@@ -138,51 +146,164 @@
 .navbar__link--active::after {
   content: "";
   position: absolute;
-  left: 12px;
-  right: 12px;
+  left: 10px;
+  right: 10px;
   bottom: 0;
   height: 3px;
   border-radius: 3px 3px 0 0;
   background: var(--k-gradient);
 }
 
-/* MEGA MENU CORREGIDO */
+/* ── El desplegable de categorías ────────────────────────────────────────── */
+
+/*
+ * `relative`, no `static`.
+ *
+ * Antes el <li> no estaba posicionado, así que el panel se anclaba a `.navbar`
+ * y con `width: 100%` se comía la barra entera: nueve enlaces repartidos en un
+ * cartel de 1280px que tapaba la primera fila de productos. Anclado al <li>, el
+ * panel cuelga de la categoría que uno está mirando y ocupa lo que ocupa su
+ * lista.
+ */
 .navbar__item {
-  position: static;
+  position: relative;
   display: flex;
   align-items: stretch; /* el <li> ahora ocupa el alto completo de la barra */
 }
 
-.megaMenu {
+/*
+ * El envoltorio no se ve: solo posiciona y hace de puente.
+ *
+ * Ese `padding-top` es el tramo entre el borde de la barra y el panel. Sin él
+ * hay unos pixeles muertos donde el puntero ya salió del <li> y todavía no
+ * entró al panel, y el menú se cierra en la cara de la persona a mitad de
+ * camino. Como el padding pertenece al elemento, el mouse nunca sale.
+ */
+.navDrop {
   position: absolute;
-  top: 100%; /* ahora coincide exactamente con el borde real del <li>, sin hueco */
-  left: 0;
-  width: 100%;
-  background: #fff;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-  padding-top: 30px;
-  padding-bottom: 30px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 9px;
   z-index: 999;
 }
 
-.megaMenu__container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
+/*
+ * El panel: fondo espuma, el mismo azul claro que el campo de búsqueda y las
+ * filas de sugerencias. Sobre él, cada ítem se ilumina en blanco al pasar —
+ * el contraste va al revés que en el resto del sitio, y es lo que hace que se
+ * lea como una lista y no como un cartel.
+ *
+ * `width: max-content` con tope: "Corcheteras y perforadoras" cabe en una
+ * línea, y la lista de dos ítems de Escritorio no se estira hasta el ancho de
+ * la de nueve.
+ */
+.navDrop__panel {
+  width: max-content;
+  min-width: 244px;
+  max-width: 320px;
+  max-height: min(70vh, 480px);
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  background: var(--k-foam);
+  box-shadow: 0 18px 42px -20px rgba(14, 42, 107, 0.45);
+  animation: navDrop-in 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.megaMenu__title { font-size: 1.1rem; font-weight: 600; color: var(--k-navy); margin-bottom: 20px; }
+/*
+ * Dos columnas cuando la lista es larga.
+ *
+ * `columns` y no un grid: las secciones tienen distinta cantidad de ítems, y
+ * el flujo de columnas las reparte solo hasta equilibrar el alto. `break-inside`
+ * es lo que impide que un encabezado quede al pie de una columna con sus ítems
+ * en la otra — sin eso el panel se lee como dos listas distintas.
+ */
+.navDrop__panel--ancho {
+  min-width: 396px;
+  max-width: 440px;
+}
+.navDrop__panel--ancho .navDrop__sections {
+  display: block;
+  columns: 2;
+  column-gap: 16px;
+}
+.navDrop__panel--ancho .navDrop__section {
+  break-inside: avoid;
+  margin-bottom: 12px;
+}
 
-.megaMenu__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+@keyframes navDrop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-.megaMenu__section h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; }
-
-.megaMenu__item { display: block; text-decoration: none; color: var(--k-muted); font-size: 0.9rem; padding: 6px 0; }
-.megaMenu__item:hover { color: var(--k-blue); transform: translateX(4px); transition: 0.2s; }
-
-.megaMenu__item--active {
-  color: var(--k-blue);
+/* El título que el admin escribe para el desplegable. Va como antetítulo y no
+   como encabezado: la categoría ya está nombrada en la barra, justo encima. */
+.navDrop__title {
+  margin: 2px 8px 10px;
+  font-family: var(--k-display);
+  font-size: 0.66rem;
   font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--k-muted);
+}
+
+.navDrop__sections { display: flex; flex-direction: column; gap: 10px; }
+
+.navDrop__heading {
+  margin: 0 8px 3px;
+  font-family: var(--k-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--k-navy);
+}
+
+.navDrop__item {
+  display: block;
+  padding: 7px 10px;
+  border-radius: 9px;
+  text-decoration: none;
+  color: var(--k-muted);
+  font-size: 0.86rem;
+  line-height: 1.3;
+  transition: background 0.15s, color 0.15s;
+}
+.navDrop__item:hover { background: var(--k-white); color: var(--k-navy); }
+
+.navDrop__item--active {
+  background: var(--k-white);
+  color: var(--k-blue);
+  font-weight: 600;
+}
+
+.navDrop__all {
+  display: block;
+  margin-top: 10px;
+  padding: 9px 10px 1px;
+  border-top: 1px solid var(--k-line);
+  text-decoration: none;
+  color: var(--k-blue);
+  font-family: var(--k-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.navDrop__all:hover { text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar__mark,
+  .navbar__brand-text,
+  .navDrop__panel {
+    animation: none;
+  }
 }
 
 /* SEARCH, ACTIONS, MOBILE */
@@ -194,8 +315,15 @@
  * beneath it, and a control with a dropdown needs an edge for the dropdown to
  * hang off, or the suggestions read as floating over the page.
  */
-.navbar__search { flex: 2; display: flex; justify-content: center; min-width: 0; }
-.navbar__search form { position: relative; width: 100%; max-width: 560px; }
+.navbar__search {
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 380px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.navbar__search form { position: relative; width: 100%; }
 
 .navbar__search-field {
   display: flex;
@@ -217,7 +345,7 @@
 
 .navbar__search input {
   width: 100%;
-  padding: 11px 0;
+  padding: 10px 0;
   border: none;
   background: none;
   outline: none;
@@ -325,13 +453,12 @@
 
 .search-menu__all button:hover { background: var(--k-foam); }
 
-.navbar__actions { display: flex; align-items: center; gap: 12px; }
-.navbar__icon-btn { background: none; border: none; cursor: pointer; color: var(--k-navy); }
+.navbar__actions { flex: 0 0 auto; display: flex; align-items: center; gap: 12px; }
 
 .navbar__hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
 .navbar__hamburger span { width: 22px; height: 2px; background: var(--k-navy); border-radius: 2px; }
 
-.navbar__mobile { display: none; flex-direction: column; padding: 10px 20px 20px; max-height: 0; overflow: hidden; transition: 0.3s ease; }
+.navbar__mobile { display: none; flex-direction: column; padding: 10px 16px 20px; max-height: 0; overflow: hidden; transition: 0.3s ease; }
 /* Scrolls rather than clips: the menu now carries every classification, and a
    fixed height would have silently cut the last category off the bottom. */
 .navbar__mobile--open { display: flex; max-height: calc(100vh - var(--k-nav-h) - 8px); overflow-y: auto; }
@@ -352,15 +479,22 @@
 }
 
 /*
- * The mega menu is hover-driven, so on a phone its classifications were
- * unreachable — the whole point of the menu missing on the devices most likely
- * to use it. Repeated here as pills, which fits nine of them in three rows.
+ * El desplegable abre con el mouse, así que en un teléfono sus clasificaciones
+ * eran inalcanzables — el menú faltaba justo en los aparatos donde más se usa.
+ * Repetidas acá como pastillas, que entran nueve en tres filas.
+ *
+ * Sobre el mismo fondo espuma que el panel de escritorio, y las pastillas en
+ * blanco encima: son la misma lista, y conviene que se parezcan.
  */
 .navbar__mobile-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 2px 10px 14px;
+  margin: 2px 0 12px;
+  padding: 10px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-radius);
+  background: var(--k-foam);
 }
 
 .navbar__mobile-chip {
@@ -379,30 +513,52 @@
   color: var(--k-white);
 }
 
-@media (max-width: 768px) {
+/* Antes de esconder nada, se achica: el buscador ya no cede espacio, así que
+   son las categorías y el logo los que tienen que dar el paso atrás. */
+@media (max-width: 1080px) {
+  .navbar__inner { gap: 10px; padding: 0 20px; }
+  .navbar__link { padding: 0 7px; font-size: 0.86rem; }
+  .navbar__link--active::after { left: 7px; right: 7px; }
+  .navbar__search { flex-basis: 180px; max-width: 300px; }
+  .navbar__brand-text { font-size: 1.15rem; }
+}
+
+/*
+ * Las categorías se van al cajón antes que en 768px.
+ *
+ * Con el campo de búsqueda siempre a la vista, cuatro categorías y el campo no
+ * entran juntos por debajo de ~960px: uno de los dos queda inservible, y el que
+ * tiene que sobrevivir es el buscador. El cajón repite las categorías enteras,
+ * con sus clasificaciones, así que no se pierde nada.
+ */
+@media (max-width: 960px) {
   .navbar__links { display: none; }
   .navbar__hamburger { display: flex; }
-  .megaMenu { display: none; }
+  .navDrop { display: none; }
+  .navbar__search { max-width: 420px; }
+}
 
-  /*
-   * The search drops to its own row instead of squeezing between the logo and
-   * the cart. At 390px the inline version left about 90px of field, which is
-   * not enough to see what you typed.
-   */
-  /*
-   * Alto mínimo, no fijo.
-   *
-   * Con `height` la barra no crecía al envolver: la fila del buscador se salía
-   * por abajo y el campo quedaba flotando sobre los productos, encima de la
-   * barra de filtros. Se disimulaba mientras la barra se iba con el scroll;
-   * desde que se queda arriba, es permanente.
-   */
+/*
+ * El buscador baja a su propia fila.
+ *
+ * Debajo de ~560px lo que queda entre el logo y el carrito son unos 90px de
+ * campo: no alcanza para leer lo que uno acaba de escribir. La barra pasa a dos
+ * filas, y el `ResizeObserver` de `Navbar.js` publica la altura nueva para que
+ * los filtros del catálogo bajen con ella en vez de quedar tapados.
+ */
+@media (max-width: 560px) {
   .navbar__inner {
     flex-wrap: wrap;
-    row-gap: 10px;
+    row-gap: 8px;
     height: auto;
     min-height: calc(var(--k-nav-h) - 1px);
+    padding: 0 16px;
   }
-  .navbar__search { order: 3; flex: 1 0 100%; padding-bottom: 12px; }
-  .navbar__search form { max-width: none; }
+  .navbar__search {
+    order: 3;
+    flex: 1 0 100%;
+    max-width: none;
+    margin-left: 0;
+    padding-bottom: 10px;
+  }
 }

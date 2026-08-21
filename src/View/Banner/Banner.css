@@ -21,6 +21,31 @@
   max-height: 720px;
   overflow: hidden;
   background-color: #000;
+
+  /*
+   * El hero ya no es sangrante: respira 30px contra la barra y contra los
+   * dos bordes de la ventana.
+   *
+   * Pegado arriba, la foto arrancaba en el píxel siguiente al de la barra y
+   * las dos superficies oscuras se leían como una sola pieza; pegado a los
+   * lados, era lo único en toda la página que tocaba el borde. Separado, pasa
+   * a ser un panel más —del mismo idioma que las tarjetas y el desplegable—
+   * en vez del techo de la página.
+   *
+   * El radio va con el margen, no sin él: un rectángulo flotando con esquinas
+   * vivas se lee como un error de maquetación. Es `--k-radius`, el mismo de
+   * las tarjetas, y funciona porque `overflow: hidden` ya estaba ahí para
+   * recortar la imagen.
+   *
+   * Sin margen abajo a propósito: `.bs` abre con 40px de padding y sumarle
+   * otro margen dejaría un vacío blanco del alto de una tarjeta.
+   *
+   * `.hero__content` sigue siendo una caja de 1280px centrada, así que el
+   * titular no se mueve ni un píxel en pantalla ancha — lo que se angosta es
+   * la foto, no el texto.
+   */
+  margin: 30px 30px 0;
+  border-radius: var(--k-radius);
 }
 
 /* ─────────────────────────────
@@ -272,6 +297,7 @@
   .hero {
     height: 56vh;
     min-height: 336px;
+    margin: 20px 20px 0;
   }
 
   .hero__title {
@@ -309,6 +335,7 @@
   .hero {
     height: 50vh;
     min-height: 320px;
+    margin: 12px 12px 0;
   }
 
   .hero__desc {

@@ -3,22 +3,10 @@
 ───────────────────────────── */
 .hero {
   position: relative;
-  /*
-   * Un 20% más baja de lo que era (85vh / 520 / 900).
-   *
-   * A pantalla casi completa el hero era la página: había que scrollear para
-   * enterarse de que abajo hay un catálogo. Recortado, la primera fila de
-   * productos asoma sola en un portátil, que es lo que el hero está
-   * prometiendo.
-   *
-   * Los tres valores bajan juntos a propósito. El vh manda en una pantalla
-   * normal, pero el mínimo es el que rige en una ventana baja y el máximo en
-   * un monitor alto — dejar cualquiera de los dos donde estaba haría que el
-   * recorte desapareciera justo en esos casos.
-   */
-  height: 68vh;
-  min-height: 416px;
-  max-height: 720px;
+  /* Más compacto para que el catálogo empiece a verse en el primer pantallazo. */
+  height: 56vh;
+  min-height: 360px;
+  max-height: 600px;
   overflow: hidden;
   background-color: #000;
 
@@ -32,20 +20,14 @@
    * a ser un panel más —del mismo idioma que las tarjetas y el desplegable—
    * en vez del techo de la página.
    *
-   * El radio va con el margen, no sin él: un rectángulo flotando con esquinas
-   * vivas se lee como un error de maquetación. Es `--k-radius`, el mismo de
-   * las tarjetas, y funciona porque `overflow: hidden` ya estaba ahí para
-   * recortar la imagen.
-   *
    * Sin margen abajo a propósito: `.bs` abre con 40px de padding y sumarle
    * otro margen dejaría un vacío blanco del alto de una tarjeta.
    *
-   * `.hero__content` sigue siendo una caja de 1280px centrada, así que el
-   * titular no se mueve ni un píxel en pantalla ancha — lo que se angosta es
-   * la foto, no el texto.
+   * El contenido se alinea desde el borde izquierdo del panel para que el
+   * mensaje no se desplace hacia el centro en pantallas anchas.
    */
   margin: 30px 30px 0;
-  border-radius: var(--k-radius);
+  border-radius: 0;
 }
 
 /* ─────────────────────────────
@@ -128,10 +110,11 @@
   bottom: 12%;
   left: 0;
   right: 0;
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   text-align: left;
-  padding: 0 48px;
+  padding: 0 clamp(24px, 3vw, 40px);
   z-index: 2;
 }
 
@@ -295,8 +278,8 @@
 ───────────────────────────── */
 @media (max-width: 768px) {
   .hero {
-    height: 56vh;
-    min-height: 336px;
+    height: 48vh;
+    min-height: 304px;
     margin: 20px 20px 0;
   }
 
@@ -333,8 +316,8 @@
 
 @media (max-width: 480px) {
   .hero {
-    height: 50vh;
-    min-height: 320px;
+    height: 44vh;
+    min-height: 288px;
     margin: 12px 12px 0;
   }
 

@@ -12,7 +12,7 @@ export default function SignInForm() {
       <section className="admin-login__card">
         <NextLink href="/" className="admin-login__brand">
           <img src="/brand/mark.png" alt="" width={256} height={256} />
-          <strong>KleanChile</strong>
+          <strong>RutaCorp</strong>
         </NextLink>
 
         <div className="admin-login__intro">
@@ -24,7 +24,7 @@ export default function SignInForm() {
         <form action={formAction}>
           <label>
             Correo electrónico
-            <input required type="email" name="email" autoComplete="username" placeholder="admin@kleanchile.cl" />
+            <input required type="email" name="email" autoComplete="username" placeholder="admin@rutacorp.cl" />
           </label>
           <label>
             Contraseña

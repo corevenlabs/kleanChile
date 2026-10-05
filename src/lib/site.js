@@ -15,7 +15,7 @@
  * domain would.
  */
 
-export const SITE_NAME = "KleanChile";
+export const SITE_NAME = "RutaCorp";
 
 export const SITE_DESCRIPTION =
   "Productos de limpieza, librería y artículos de escritorio para colegios, hoteles, oficinas e industria. Despacho a todo Chile.";

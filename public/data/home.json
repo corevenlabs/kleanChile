@@ -35,11 +35,11 @@
     { "id": 5, "icon": "price", "title": "Precios mayoristas", "desc": "Descuentos especiales para empresas e instituciones." },
     { "id": 6, "icon": "catalog", "title": "Amplio catálogo", "desc": "Todo lo que necesitas en un solo lugar." }
   ] },
-  "testimonials": { "label": "testimonios", "title": "Lo que dicen nuestros clientes", "subtitle": "Más de 500 clientes confían en KleanChile para sus soluciones de limpieza", "items": [
-    { "id": 1, "nombre": "María González", "cargo": "Gerente de Operaciones", "empresa": "Limpiezas Industriales MG", "comentario": "Los productos de KleanChile han transformado nuestra limpieza. El desengrasante es el mejor que hemos probado, rendimiento excepcional.", "fecha": "15 Jun 2026" },
+  "testimonials": { "label": "testimonios", "title": "Lo que dicen nuestros clientes", "subtitle": "Más de 500 clientes confían en RutaCorp para sus soluciones de limpieza", "items": [
+    { "id": 1, "nombre": "María González", "cargo": "Gerente de Operaciones", "empresa": "Limpiezas Industriales MG", "comentario": "Los productos de RutaCorp han transformado nuestra limpieza. El desengrasante es el mejor que hemos probado, rendimiento excepcional.", "fecha": "15 Jun 2026" },
     { "id": 2, "nombre": "Carlos Rodríguez", "cargo": "Encargado de Mantención", "empresa": "Hotel Central", "comentario": "Excelente servicio y productos de primera calidad. Nuestros pisos nunca habían estado tan limpios. 100% recomendados.", "fecha": "12 Jun 2026" },
     { "id": 3, "nombre": "Ana María Pérez", "cargo": "Dueña", "empresa": "Cafetería El Buen Sabor", "comentario": "El lavalozas Excell es maravilloso. Deja los platos impecables y con un aroma fresco. Además, es biodegradable.", "fecha": "08 Jun 2026" },
-    { "id": 4, "nombre": "Roberto Méndez", "cargo": "Jefe de Bodega", "empresa": "Distribuidora Andes", "comentario": "Llevamos 2 años comprando a KleanChile. Productos consistentes, entregas puntuales y excelente atención al cliente.", "fecha": "05 Jun 2026" },
+    { "id": 4, "nombre": "Roberto Méndez", "cargo": "Jefe de Bodega", "empresa": "Distribuidora Andes", "comentario": "Llevamos 2 años comprando a RutaCorp. Productos consistentes, entregas puntuales y excelente atención al cliente.", "fecha": "05 Jun 2026" },
     { "id": 5, "nombre": "Laura Fernández", "cargo": "Administradora", "empresa": "Colegio San José", "comentario": "La limpieza de nuestro colegio mejoró notablemente. Los desinfectantes son seguros para los niños y muy efectivos.", "fecha": "01 Jun 2026" },
     { "id": 6, "nombre": "Patricio Silva", "cargo": "Jefe de Cocina", "empresa": "Restaurante La Casona", "comentario": "El desengrasante industrial es increíble. Nuestras cocinas quedan impecables y el aroma a limón es muy agradable.", "fecha": "28 May 2026" }
   ] }

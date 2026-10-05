@@ -100,7 +100,7 @@ function header(doc, mark) {
     .font("Helvetica-Bold")
     .fontSize(16)
     .fillColor(NAVY)
-    .text("KleanChile", MARGIN + (mark ? 40 : 0), top + 8, { lineBreak: false });
+    .text("RutaCorp", MARGIN + (mark ? 40 : 0), top + 8, { lineBreak: false });
 
   doc
     .font("Helvetica")
@@ -173,9 +173,9 @@ export async function renderSpecSheet({ product, specs, contactLines = [] }) {
     autoFirstPage: false,
     info: {
       Title: `Ficha técnica · ${product.name}`,
-      Author: "KleanChile",
+      Author: "RutaCorp",
       Subject: product.skuCode ? `SKU ${product.skuCode}` : "Ficha técnica",
-      Creator: "KleanChile",
+      Creator: "RutaCorp",
     },
   });
 

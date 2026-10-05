@@ -13,7 +13,7 @@ const sharp = (await import("sharp")).default;
  *
  *   node scripts/verify-media.js            # solo el pipeline, sin red
  *   node scripts/verify-media.js --r2       # además sube, lee y borra en R2
- *   node scripts/verify-media.js --r2 --cors https://kleanchile.cl
+ *   node scripts/verify-media.js --r2 --cors https://rutacorp.cl
  *
  * Sin `--r2` no toca la red: comprueba que sharp produce el escalón esperado y
  * que la URL resultante se puede volver a leer para armar el `srcset`. Ese

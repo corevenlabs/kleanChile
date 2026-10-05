@@ -28,9 +28,9 @@ function createClient() {
   });
 }
 
-const sql = globalForDb.kleanSql ?? createClient();
+const sql = globalForDb.rutacorpSql ?? createClient();
 if (process.env.NODE_ENV !== "production") {
-  globalForDb.kleanSql = sql;
+  globalForDb.rutacorpSql = sql;
 }
 
 /**

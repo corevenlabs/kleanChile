@@ -172,7 +172,7 @@ export default function ImportWizard() {
             />
             <small>
               El SKU se conserva: si ya existe, actualiza ese producto; si no existe, crea uno
-              nuevo. Si viene vacío, KleanChile genera un código interno.
+              nuevo. Si viene vacío, RutaCorp genera un código interno.
             </small>
           </label>
         </div>

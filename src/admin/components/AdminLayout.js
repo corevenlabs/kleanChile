@@ -23,7 +23,7 @@ export default function AdminLayout({ user, children }) {
         <div className="admin-topbar">
           <div>
             <span className="admin-topbar__eyebrow">Panel de gestión</span>
-            <strong>KleanChile</strong>
+            <strong>RutaCorp</strong>
           </div>
           <div className="admin-avatar" title={user.email}>
             {initials || "KC"}

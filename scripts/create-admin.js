@@ -15,7 +15,7 @@ const { hashPassword } = await import("../src/infra/auth/password.js");
  * mint an account are the ones who already have access to the deployment. This
  * is that door.
  *
- *   npm run admin:create -- --email tu@kleanchile.cl --name "Tu Nombre" --owner
+ *   npm run admin:create -- --email tu@rutacorp.cl --name "Tu Nombre" --owner
  *
  * A password is generated and printed unless `--password` is given. Generating
  * it is the default because a password typed on the command line ends up in

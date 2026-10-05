@@ -18,7 +18,7 @@ import { useState } from "react";
 /**
  * What a free-text contact line is.
  *
- * The admin types lines, not typed fields — "contacto@kleanchile.cl", "+56 9
+ * The admin types lines, not typed fields — "contacto@rutacorp.cl", "+56 9
  * 1234 5678", "Temuco, Chile" — and that is worth keeping: a shop with two
  * numbers and no email should not have to fight a form. So the kind is inferred
  * here, and a line that matches nothing still renders, just without a link.

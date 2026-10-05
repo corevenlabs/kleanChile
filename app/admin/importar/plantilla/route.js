@@ -30,7 +30,7 @@ export async function GET() {
     {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="plantilla-productos-kleanchile.csv"',
+        "Content-Disposition": 'attachment; filename="plantilla-productos-rutacorp.csv"',
         "Cache-Control": "no-store",
       },
     },

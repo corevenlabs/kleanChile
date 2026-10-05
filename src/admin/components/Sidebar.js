@@ -22,7 +22,7 @@ export default function Sidebar() {
       <Link href="/" className="admin-brand">
         <img className="admin-brand__mark" src="/brand/mark.png" alt="" width={256} height={256} />
         <span>
-          <strong>KleanChile</strong>
+          <strong>RutaCorp</strong>
           <small>Administración</small>
         </span>
       </Link>

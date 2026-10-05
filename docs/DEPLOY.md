@@ -1,4 +1,4 @@
-# Puesta en producción — KleanChile
+# Puesta en producción — RutaCorp
 
 Checklist ordenado para llevar la tienda a producción. Los pasos dependen del
 anterior; márcalos a medida que avanzas.
@@ -78,11 +78,11 @@ mensaje claro, no con un `undefined` tres capas más abajo.
 | Variable | Valor en producción |
 |---|---|
 | `DATABASE_URL` | El string pooled de Postgres. |
-| `NEXT_PUBLIC_SITE_URL` | **El dominio real**, p. ej. `https://kleanchile.cl`. Sin barra final. |
+| `NEXT_PUBLIC_SITE_URL` | **El dominio real**, p. ej. `https://rutacorp.cl`. Sin barra final. |
 | `R2_ACCOUNT_ID` | Account ID de Cloudflare. |
 | `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` | El par de llaves S3 del bucket. |
-| `R2_BUCKET` | `kleanchile` |
-| `NEXT_PUBLIC_CDN_URL` | `https://cdn.kleanchile.cl` |
+| `R2_BUCKET` | `rutacorp` |
+| `NEXT_PUBLIC_CDN_URL` | `https://cdn.rutacorp.cl` |
 | `PREVIEW_PASSWORD` | **Temporal.** Ver el paso 5b. Bórrala para abrir el sitio. |
 
 Las cinco de R2 son **todas o ninguna**: `storageConfig()` en `src/env.js`
@@ -102,7 +102,7 @@ base, no JWT firmados. Tampoco Resend ni cron.
 
 ## 3. R2 (imágenes, fichas técnicas y CORS)
 
-- [ ] Bucket creado, con dominio público `cdn.kleanchile.cl`
+- [ ] Bucket creado, con dominio público `cdn.rutacorp.cl`
       (Cloudflare → R2 → bucket → Settings → Custom Domains).
 - [ ] **CORS.** La subida del panel hace un PUT firmado desde el navegador
       directo al bucket, así que R2 tiene que permitir el dominio de producción.
@@ -111,7 +111,7 @@ base, no JWT firmados. Tampoco Resend ni cron.
       bucket → Settings → CORS Policy:
       ```json
       [{
-        "AllowedOrigins": ["https://kleanchile.cl", "https://www.kleanchile.cl"],
+        "AllowedOrigins": ["https://rutacorp.cl", "https://www.rutacorp.cl"],
         "AllowedMethods": ["PUT", "GET"],
         "AllowedHeaders": ["content-type"],
         "MaxAgeSeconds": 3600
@@ -120,7 +120,7 @@ base, no JWT firmados. Tampoco Resend ni cron.
       La misma política cubre las fichas técnicas en PDF: van por un PUT
       firmado idéntico, solo que a `docs/v1/…` y con `application/pdf`.
 - [ ] Compruébalo:
-      `npm run media:verify -- --r2 --cors https://kleanchile.cl`
+      `npm run media:verify -- --r2 --cors https://rutacorp.cl`
       Sube un objeto de prueba bajo `uploads/tmp/verify-`, lo lee, hace el
       preflight de CORS contra ese origen y lo borra. Es seguro contra el bucket
       de producción.
@@ -187,7 +187,7 @@ apretarlos:
 Para que el cliente vea el sitio y el público no, sin sacarlo de línea:
 
 - [ ] En Vercel → Settings → Environment Variables, añade **`PREVIEW_PASSWORD`**
-      (y opcionalmente `PREVIEW_USER`; por defecto es `kleanchile`). Ámbito:
+      (y opcionalmente `PREVIEW_USER`; por defecto es `rutacorp`). Ámbito:
       **Production**.
 - [ ] **Vuelve a desplegar.** Vercel solo aplica variables nuevas en un
       despliegue nuevo.
@@ -216,7 +216,7 @@ Detalles que conviene saber:
 ## 6. Datos iniciales
 
 - [ ] Crea la cuenta dueña:
-      `DATABASE_URL="<prod>" npm run admin:create -- --email tu@kleanchile.cl --name "Tu Nombre" --owner`
+      `DATABASE_URL="<prod>" npm run admin:create -- --email tu@rutacorp.cl --name "Tu Nombre" --owner`
       Imprime la contraseña **una sola vez**; guárdala en un gestor. No hay ruta
       de registro por diseño: esta es la única puerta.
 - [ ] Borra la cuenta de prueba si la creaste en desarrollo.

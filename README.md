@@ -1,4 +1,4 @@
-# KleanChile
+# RutaCorp
 
 Sitio público y panel de administración en una sola aplicación Next.js 15.
 Todo el contenido de la portada —carrusel, destacados, banners, testimonios,
@@ -13,7 +13,7 @@ npm install
 docker compose up -d         # Postgres local
 npm run db:migrate
 npm run db:seed              # carga el contenido original del sitio
-npm run admin:create -- --email tu@kleanchile.cl --name "Tu Nombre" --owner
+npm run admin:create -- --email tu@rutacorp.cl --name "Tu Nombre" --owner
 npm run dev
 ```
 

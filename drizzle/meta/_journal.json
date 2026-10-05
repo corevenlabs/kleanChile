@@ -64,6 +64,13 @@
       "when": 1787194177222,
       "tag": "0008_navbar_solo_categorias",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790812800000,
+      "tag": "0009_marca_rutacorp",
+      "breakpoints": true
     }
   ]
 }

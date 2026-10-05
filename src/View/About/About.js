@@ -78,7 +78,7 @@ export default function About() {
           <p className="about__eyebrow">Nosotros</p>
           <h1>Todo lo que tu organización necesita para funcionar mejor</h1>
           <p className="about__lede">
-            En KleanChile conectamos a empresas e instituciones con soluciones prácticas para
+            En RutaCorp conectamos a empresas e instituciones con soluciones prácticas para
             sus espacios: limpieza profesional, artículos de librería, productos de escritorio
             y maquinaria.
           </p>
@@ -148,7 +148,7 @@ export default function About() {
           <p className="about__eyebrow">A quién ayudamos</p>
           <h2 id="about-clients-title">Entendemos necesidades distintas</h2>
           <p>
-            Cada rubro tiene su propio ritmo, volumen de consumo y forma de operar. KleanChile
+            Cada rubro tiene su propio ritmo, volumen de consumo y forma de operar. RutaCorp
             atiende requerimientos de organizaciones que necesitan abastecer sus espacios de
             manera ordenada, desde compras específicas hasta cotizaciones por volumen.
           </p>
@@ -193,7 +193,7 @@ export default function About() {
             tomar una decisión.
           </p>
           <p>
-            KleanChile nace para acompañar el funcionamiento diario de empresas e instituciones
+            RutaCorp nace para acompañar el funcionamiento diario de empresas e instituciones
             con soluciones útiles, accesibles y alineadas con sus requerimientos reales.
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function About() {
           <p className="about__eyebrow">¿Tienes un requerimiento?</p>
           <h2>Conversemos sobre lo que necesitas</h2>
         </div>
-        <Link href="/contact">Contactar a KleanChile</Link>
+        <Link href="/contact">Contactar a RutaCorp</Link>
       </RevealSection>
     </div>
   );

@@ -164,7 +164,7 @@ const navDropdownSchema = z.object({
 });
 
 export const navigationSchema = z.object({
-  brand: text("KleanChile"),
+  brand: text("RutaCorp"),
   searchPlaceholder: text("Buscar productos..."),
   links: z
     .array(
@@ -178,7 +178,7 @@ export const navigationSchema = z.object({
 });
 
 export const footerSchema = z.object({
-  brand: text("KleanChile"),
+  brand: text("RutaCorp"),
   description: text(),
   sections: z
     .array(

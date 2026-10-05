@@ -47,7 +47,7 @@ export default function Home({ content, bestSellers = [] }) {
         cold and to a crawler deciding what this page is about.
       */}
       <h1 className="sr-only">
-        KleanChile — productos de limpieza, librería y artículos de escritorio para instituciones
+        RutaCorp — productos de limpieza, librería y artículos de escritorio para instituciones
       </h1>
 
       {content.hero.slides.length > 0 && <Banner data={content.hero} />}

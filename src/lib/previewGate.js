@@ -31,8 +31,8 @@
  * hash y no sobre la contraseña, y un hash no se puede recorrer a ciegas.
  */
 
-const REALM = "KleanChile - vista previa";
-const DEFAULT_USER = "kleanchile";
+const REALM = "RutaCorp - vista previa";
+const DEFAULT_USER = "rutacorp";
 
 async function sha256(value) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
@@ -52,7 +52,7 @@ export async function previewChallenge(request) {
 
   if (offered && (await sha256(offered)) === (await sha256(expected))) return null;
 
-  return new Response("KleanChile — sitio en vista previa privada.\n", {
+  return new Response("RutaCorp — sitio en vista previa privada.\n", {
     status: 401,
     headers: {
       "WWW-Authenticate": `Basic realm="${REALM}", charset="UTF-8"`,

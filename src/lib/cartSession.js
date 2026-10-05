@@ -21,7 +21,7 @@ import { cookies } from "next/headers";
  * the one navigation this whole flow depends on.
  */
 
-const COOKIE = "klean_cart";
+const COOKIE = "rutacorp_cart";
 const MAX_AGE_DAYS = 30;
 const MAX_LINES = 50;
 const MAX_QUANTITY = 99;

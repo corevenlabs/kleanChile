@@ -15,7 +15,7 @@ npm run db:generate    # write a migration from schema changes
 npm run db:studio      # browse the database
 npm run build
 
-npm run admin:create -- --email you@kleanchile.cl --name "Your Name" --owner
+npm run admin:create -- --email you@rutacorp.cl --name "Your Name" --owner
 ```
 
 There is no test runner or linter configured. `npm run build` is the only automated check.
@@ -169,7 +169,7 @@ Type has three roles: **Poppins** for display (it matches the wordmark's geometr
 
 `scripts/build-logo-assets.js` regenerates `public/brand/` from the print-resolution originals (467 KB → 14 KB). There is deliberately no light wordmark asset: the supplied dark version has its blue background baked in, so the navbar and footer pair the transparent mark with the name typeset live.
 
-The same script writes the tab icons — `app/icon.png` and `app/apple-icon.png`, which Next discovers by filename and links itself, so `metadata.icons` is deliberately empty. They stay transparent rather than sitting on a white card: the bubble carries its own white rim and so holds its shape on a light tab strip and a dark one. Root `metadata.title` is a template, so a page setting `title: "Limpieza"` gets a tab reading `Limpieza · KleanChile`.
+The same script writes the tab icons — `app/icon.png` and `app/apple-icon.png`, which Next discovers by filename and links itself, so `metadata.icons` is deliberately empty. They stay transparent rather than sitting on a white card: the bubble carries its own white rim and so holds its shape on a light tab strip and a dark one. Root `metadata.title` is a template, so a page setting `title: "Limpieza"` gets a tab reading `Limpieza · RutaCorp`.
 
 The three category pages share **one** stylesheet, `src/styles/catalog.css`. They previously had one each, all defining `.catalog`, `.chip` and `.product-card` and all loaded globally, so which one applied was decided by import order rather than by page.
 

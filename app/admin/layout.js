@@ -10,7 +10,7 @@ export const metadata = {
    * a tab reading just "Pedidos". Admin tabs are also the ones most likely to
    * sit beside half a dozen shop tabs, so they say which side they are on.
    */
-  title: { default: "Administración", template: "%s · Admin KleanChile" },
+  title: { default: "Administración", template: "%s · Admin RutaCorp" },
   // Nothing under /admin should ever be indexed, and this is inherited by
   // every page below it.
   robots: { index: false, follow: false },

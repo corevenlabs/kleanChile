@@ -58,7 +58,7 @@ const plexMono = IBM_Plex_Mono({
  * The template is what makes a tab readable when six of them are open. A page
  * that sets nothing keeps the full default line.
  */
-const title = "KleanChile — Soluciones de limpieza y oficina para instituciones";
+const title = "RutaCorp — Soluciones de limpieza y oficina para instituciones";
 
 export const metadata = {
   /*

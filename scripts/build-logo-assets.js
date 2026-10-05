@@ -38,7 +38,7 @@ const assets = [
     to: "wordmark.png",
     // Rendered at ~46px tall in the navbar and ~64px in the footer.
     height: 160,
-    note: "stacked mark + KleanChile + tagline, for light backgrounds",
+    note: "stacked mark + RutaCorp + tagline, for light backgrounds",
   },
   /*
    * There is no light wordmark asset.
@@ -139,7 +139,7 @@ const background = Buffer.from(
      </defs>
      <rect width="100%" height="100%" fill="url(#k)"/>
      <text x="440" y="322" font-family="Poppins, Trebuchet MS, sans-serif" font-size="82"
-           font-weight="800" fill="#ffffff">KleanChile</text>
+           font-weight="800" fill="#ffffff">RutaCorp</text>
      <text x="444" y="382" font-family="IBM Plex Sans, Segoe UI, sans-serif" font-size="27"
            fill="#a9e8f7">Limpieza · Librería · Escritorio</text>
      <text x="444" y="424" font-family="IBM Plex Sans, Segoe UI, sans-serif" font-size="27"

@@ -13,7 +13,7 @@ import { findSessionUser } from "../infra/auth/session.js";
  * without a token dance.
  */
 
-const COOKIE = "klean_admin";
+const COOKIE = "rutacorp_admin";
 
 export async function setSessionCookie(token, expiresAt) {
   const store = await cookies();

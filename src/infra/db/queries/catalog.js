@@ -34,6 +34,8 @@ const toView = (row) => ({
   /** Integer pesos. `formatClp` in domain/shared/money.js renders it. */
   price: row.priceClp,
   image: row.imageUrl,
+  /** Fotos adicionales para la galería de la página de producto, en orden. */
+  gallery: row.galleryUrls ?? [],
   description: row.description,
   specs: row.specs ?? {},
   /** La ficha técnica en PDF, o "" si el producto no tiene una subida. */

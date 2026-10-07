@@ -43,9 +43,11 @@ export default function ImageField({ label, value, onChange, wide = true }) {
     try {
       result = await uploadImageFile(file);
     } catch (cause) {
-      // Sin esto una excepción del Server Action dejaba el componente en
-      // «subiendo» para siempre y sin decir nada — el peor de los dos fallos.
-      result = { ok: false, message: cause instanceof Error ? cause.message : "Error inesperado." };
+      // Sin esto una excepción dejaba el componente en «subiendo» para siempre
+      // y sin decir nada. `uploadImageFile` ya traduce cada paso; esto es la
+      // red de seguridad, y tampoco muestra el texto crudo de la excepción.
+      console.error("[subida]", cause);
+      result = { ok: false, message: "No pudimos subir la imagen. Intenta de nuevo." };
     }
 
     setBusy(false);

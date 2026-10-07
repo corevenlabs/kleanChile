@@ -1,8 +1,7 @@
 import Link from "next/link";
 import AddToCartForm from "../../components/cart/AddToCartForm";
 import JsonLd from "../../components/seo/JsonLd";
-import Picture from "../../components/media/Picture";
-import ProductZoom from "../../components/media/ProductZoom";
+import ProductGallery from "../../components/media/ProductGallery";
 import { specEntries } from "../../domain/catalog/specLabels";
 import { CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { breadcrumbLd, productLd } from "../../domain/seo/structuredData";
@@ -45,6 +44,8 @@ export default function ProductDetail({ product }) {
    */
   const priceOnRequest = isPriceOnRequest(product.price);
   const enhanced = LOW_CONTRAST_SKUS.has(product.skuCode);
+  // La principal primero: es la que muestran las tarjetas y la que abre la página.
+  const images = [product.image, ...(product.gallery ?? [])].filter(Boolean);
 
   return (
     <div className="product-page">
@@ -52,7 +53,7 @@ export default function ProductDetail({ product }) {
         data={productLd({
           product,
           url,
-          image: absoluteImage(product.image),
+          image: images.map(absoluteImage),
           brand: product.specs?.marca,
         })}
       />
@@ -63,19 +64,7 @@ export default function ProductDetail({ product }) {
         <span>{product.name}</span>
       </nav>
       <div className="product-layout">
-        {/* La imagen principal de la página: `priority` para que no espere detrás de
-        la heurística de carga diferida. */}
-        <ProductZoom src={product.image} enhanced={enhanced}>
-          <div className="product-image-wrapper">
-            <Picture
-              src={product.image}
-              alt={product.name}
-              className={enhanced ? "product-image--enhanced" : undefined}
-              sizes="(max-width: 900px) 100vw, 520px"
-              priority
-            />
-          </div>
-        </ProductZoom>
+        <ProductGallery images={images} alt={product.name} enhanced={enhanced} />
         <div className="product-info">
           {product.skuCode && (
             <p className="quickview__sku">SKU {product.skuCode}</p>

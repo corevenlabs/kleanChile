@@ -3,6 +3,7 @@ import {
   storageModeAction,
   uploadImageAction,
 } from "../../actions/media";
+import { uploadFailure } from "./uploadErrors";
 
 /**
  * El lado del navegador de una subida, en un solo lugar.
@@ -17,49 +18,77 @@ import {
  * mismo: una URL.
  */
 export async function uploadImageFile(file) {
-  const { mode } = await storageModeAction();
+  /*
+   * Cada paso por separado, porque «Failed to fetch» no dice cuál falló y la
+   * respuesta cambia según el paso: un error al preparar es configuración, uno
+   * al enviar es CORS o red, uno al procesar ya dejó el original en el bucket.
+   */
+  let mode;
+  try {
+    ({ mode } = await storageModeAction());
+  } catch (cause) {
+    return uploadFailure("prepare", cause);
+  }
 
   if (mode === "local") {
     const body = new FormData();
     body.set("file", file);
-    const result = await uploadImageAction(body);
-    return result.status === "ok"
-      ? { ok: true, url: result.url }
-      : { ok: false, message: result.message };
+    try {
+      const result = await uploadImageAction(body);
+      return result.status === "ok"
+        ? { ok: true, url: result.url }
+        : { ok: false, message: result.message };
+    } catch (cause) {
+      return uploadFailure("send", cause);
+    }
   }
 
-  const ticket = await requestImageUploadAction({ contentType: file.type });
+  let ticket;
+  try {
+    ticket = await requestImageUploadAction({ contentType: file.type });
+  } catch (cause) {
+    return uploadFailure("prepare", cause);
+  }
   if (ticket.status !== "ok") return { ok: false, message: ticket.message };
 
-  const put = await fetch(ticket.uploadUrl, {
-    method: "PUT",
-    body: file,
-    headers: { "content-type": file.type },
-  });
-  if (!put.ok) {
-    /*
-     * El sospechoso número uno acá es CORS: el PUT sale del navegador directo
-     * al bucket, así que R2 tiene que permitir el origen del sitio. Es el paso
-     * que más se olvida al desplegar y da un error que no se explica solo.
-     */
-    return { ok: false, message: "No se pudo subir al bucket. Revisa la política CORS de R2." };
+  /*
+   * El PUT sale del navegador directo al bucket. Si el origen del sitio no está
+   * en la política CORS de R2 —el paso que más se olvida al cambiar de
+   * dominio— el navegador lo bloquea antes de recibir respuesta: eso es el
+   * `catch`, no el `!put.ok`.
+   */
+  let put;
+  try {
+    put = await fetch(ticket.uploadUrl, {
+      method: "PUT",
+      body: file,
+      headers: { "content-type": file.type },
+    });
+  } catch (cause) {
+    return uploadFailure("send", cause);
   }
+  if (!put.ok) return uploadFailure("rejected", `HTTP ${String(put.status)}`);
 
-  const processed = await fetch("/api/admin/media", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ tempKey: ticket.tempKey, fileName: file.name }),
-  });
+  let processed;
+  try {
+    processed = await fetch("/api/admin/media", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ tempKey: ticket.tempKey, fileName: file.name }),
+    });
+  } catch (cause) {
+    return uploadFailure("process", cause);
+  }
 
   if (!processed.ok) {
     const detail = await processed.json().catch(() => ({}));
-    return {
-      ok: false,
-      message:
-        detail.error === "unreadable"
-          ? "No se pudo leer la imagen. ¿Está corrupta?"
-          : "No se pudo procesar la imagen.",
-    };
+    if (detail.error === "unreadable") {
+      return {
+        ok: false,
+        message: "No pudimos leer esa imagen. Puede estar dañada; prueba exportarla de nuevo como JPG o PNG.",
+      };
+    }
+    return uploadFailure("process", `HTTP ${String(processed.status)}`);
   }
 
   return processed.json();

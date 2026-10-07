@@ -65,6 +65,17 @@ export const products = pgTable(
     priceClp: integer("price_clp").notNull(),
 
     imageUrl: text("image_url").notNull().default(""),
+
+    /**
+     * Photos beyond the main one, in display order.
+     *
+     * The main photo stays in `image_url` on purpose: cards, the cart, search
+     * suggestions, the importer and the structured data all read one image, and
+     * none of them had to change. This is only what the product page's gallery
+     * adds after it. Each entry is a URL, for the same reasons `image_url` is.
+     */
+    galleryUrls: text("gallery_urls").array().notNull().default(sql`'{}'::text[]`),
+
     description: text("description").notNull().default(""),
 
     /**

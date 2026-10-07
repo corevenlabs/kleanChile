@@ -81,8 +81,8 @@ mensaje claro, no con un `undefined` tres capas más abajo.
 | `NEXT_PUBLIC_SITE_URL` | **El dominio real**, p. ej. `https://rutacorp.cl`. Sin barra final. |
 | `R2_ACCOUNT_ID` | Account ID de Cloudflare. |
 | `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` | El par de llaves S3 del bucket. |
-| `R2_BUCKET` | `rutacorp` |
-| `NEXT_PUBLIC_CDN_URL` | `https://cdn.rutacorp.cl` |
+| `R2_BUCKET` | `kleanchile` — el **nombre**, no la URL. Se creó antes del cambio de marca y R2 no permite renombrar buckets. |
+| `NEXT_PUBLIC_CDN_URL` | Hoy `https://pub-667219a9fb2c46f4847f9678f41f84b7.r2.dev`; `https://cdn.rutacorp.cl` si se configura el dominio propio. |
 | `PREVIEW_PASSWORD` | **Temporal.** Ver el paso 5b. Bórrala para abrir el sitio. |
 
 Las cinco de R2 son **todas o ninguna**: `storageConfig()` en `src/env.js`
@@ -111,12 +111,22 @@ base, no JWT firmados. Tampoco Resend ni cron.
       bucket → Settings → CORS Policy:
       ```json
       [{
-        "AllowedOrigins": ["https://rutacorp.cl", "https://www.rutacorp.cl"],
+        "AllowedOrigins": [
+          "https://rutacorp.cl",
+          "https://www.rutacorp.cl",
+          "https://*.vercel.app",
+          "http://localhost:3000"
+        ],
         "AllowedMethods": ["PUT", "GET"],
         "AllowedHeaders": ["content-type"],
         "MaxAgeSeconds": 3600
       }]
       ```
+      `*.vercel.app` es para las vistas previas de Vercel y `localhost:3000`
+      para `npm run dev` con R2 real. **Cada vez que el sitio cambie de dominio
+      hay que agregarlo aquí:** el paso a rutacorp.cl dejó al panel sin poder
+      subir nada, porque la política solo tenía `*.vercel.app` y el navegador lo
+      reporta como un «Failed to fetch» sin más explicación.
       La misma política cubre las fichas técnicas en PDF: van por un PUT
       firmado idéntico, solo que a `docs/v1/…` y con `application/pdf`.
 - [ ] Compruébalo:

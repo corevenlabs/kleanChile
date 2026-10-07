@@ -30,6 +30,16 @@ const productInput = z.object({
     .transform((value) => parseClp(value))
     .refine((value) => value !== null && value >= 0, "Precio inválido"),
   image: z.string().trim().default(""),
+  /**
+   * Fotos adicionales, en orden. Las vacías se descartan: un campo agregado y
+   * nunca llenado no es una foto, y sin el filtro la galería dibujaría una
+   * miniatura en blanco.
+   */
+  gallery: z
+    .array(z.string().trim())
+    .default([])
+    .transform((urls) => urls.filter(Boolean))
+    .refine((urls) => urls.length <= 12, "Máximo 12 imágenes adicionales por producto."),
   description: z.string().trim().default(""),
   specs: z.record(z.string(), z.string()).default({}),
   /**
@@ -52,8 +62,14 @@ export async function saveProductAction(input) {
     return { status: "error", message: first?.message ?? "Datos inválidos." };
   }
 
-  const { id, price, image, specSheet, stock, ...rest } = parsed.data;
-  const row = { ...rest, priceClp: price, imageUrl: image, specSheetUrl: specSheet };
+  const { id, price, image, gallery, specSheet, stock, ...rest } = parsed.data;
+  const row = {
+    ...rest,
+    priceClp: price,
+    imageUrl: image,
+    galleryUrls: gallery,
+    specSheetUrl: specSheet,
+  };
 
   if (id) {
     // Stock is deliberately not part of an edit. It moves only through the

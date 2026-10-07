@@ -89,6 +89,32 @@ export function storageConfig() {
     );
   }
 
+  /*
+   * Checked here and not in the schema above, deliberately: `serverConfig()`
+   * also guards the database, so a typo in a storage variable there would take
+   * the whole site down instead of just failing the upload that needs it.
+   *
+   * Both catch a real mistake. The bucket's public `r2.dev` URL is what the
+   * dashboard shows most prominently, and pasted into R2_BUCKET it builds a
+   * presigned upload against a host that does not exist — which the browser
+   * reports as nothing but "Failed to fetch". And `z.url()` accepts the
+   * `https://...` left in `.env.example`, under which every image would be
+   * stored at a URL that resolves nowhere.
+   */
+  if (!/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/.test(cfg.R2_BUCKET)) {
+    throw new Error(
+      `R2_BUCKET debe ser el nombre del bucket (p. ej. "kleanchile"), no su URL. ` +
+        "La URL pública va en NEXT_PUBLIC_CDN_URL.",
+    );
+  }
+  const cdnHost = new URL(cfg.NEXT_PUBLIC_CDN_URL).hostname;
+  if (cdnHost !== "localhost" && !/^[a-z0-9-]+(.[a-z0-9-]+)+$/i.test(cdnHost)) {
+    throw new Error(
+      `NEXT_PUBLIC_CDN_URL no es una dirección real ("${cfg.NEXT_PUBLIC_CDN_URL}"). ` +
+        "¿Quedó el valor de ejemplo de .env.example?",
+    );
+  }
+
   return {
     accountId: cfg.R2_ACCOUNT_ID,
     accessKeyId: cfg.R2_ACCESS_KEY_ID,

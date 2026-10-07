@@ -41,7 +41,7 @@ const INLINE_ZOOM = 2.2;
  * `requestAnimationFrame`: un `setState` por cada `pointermove` re-renderizaría
  * el componente decenas de veces por segundo para mover un rectángulo.
  */
-export default function ProductZoom({ src, enhanced = false, children }) {
+export default function ProductZoom({ src, enhanced = false, below = null, children }) {
   const rootRef = useRef(null);
   const boxRef = useRef(null);
   const lensRef = useRef(null);
@@ -176,6 +176,7 @@ export default function ProductZoom({ src, enhanced = false, children }) {
         ref={paneRef}
         aria-hidden="true"
       />
+      {below}
       <p className="pdp-zoom__hint">Pasa el mouse sobre la imagen para ampliarla</p>
     </div>
   );

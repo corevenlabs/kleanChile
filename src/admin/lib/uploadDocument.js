@@ -4,6 +4,7 @@ import {
   storageModeAction,
   uploadDocumentAction,
 } from "../../actions/media";
+import { uploadFailure } from "./uploadErrors";
 
 /**
  * El lado del navegador de una subida de ficha técnica.
@@ -17,36 +18,57 @@ import {
  * cuelga todo lo demás.
  */
 export async function uploadDocumentFile(file) {
-  const { mode } = await storageModeAction();
+  // Paso por paso, por lo mismo que en `uploadImage.js`.
+  let mode;
+  try {
+    ({ mode } = await storageModeAction());
+  } catch (cause) {
+    return uploadFailure("prepare", cause);
+  }
 
   if (mode === "local") {
     const body = new FormData();
     body.set("file", file);
-    const result = await uploadDocumentAction(body);
-    return result.status === "ok"
-      ? { ok: true, url: result.url }
-      : { ok: false, message: result.message };
+    try {
+      const result = await uploadDocumentAction(body);
+      return result.status === "ok"
+        ? { ok: true, url: result.url }
+        : { ok: false, message: result.message };
+    } catch (cause) {
+      return uploadFailure("send", cause);
+    }
   }
 
-  const ticket = await requestDocumentUploadAction({
-    fileName: file.name,
-    contentType: file.type,
-    size: file.size,
-  });
+  let ticket;
+  try {
+    ticket = await requestDocumentUploadAction({
+      fileName: file.name,
+      contentType: file.type,
+      size: file.size,
+    });
+  } catch (cause) {
+    return uploadFailure("prepare", cause);
+  }
   if (ticket.status !== "ok") return { ok: false, message: ticket.message };
 
-  const put = await fetch(ticket.uploadUrl, {
-    method: "PUT",
-    body: file,
-    headers: { "content-type": file.type },
-  });
-  if (!put.ok) {
-    // Igual que con las imágenes: el PUT sale del navegador directo al bucket,
-    // así que CORS es el sospechoso número uno y conviene nombrarlo.
-    return { ok: false, message: "No se pudo subir al bucket. Revisa la política CORS de R2." };
+  let put;
+  try {
+    put = await fetch(ticket.uploadUrl, {
+      method: "PUT",
+      body: file,
+      headers: { "content-type": file.type },
+    });
+  } catch (cause) {
+    return uploadFailure("send", cause);
   }
+  if (!put.ok) return uploadFailure("rejected", `HTTP ${String(put.status)}`);
 
-  const confirmed = await confirmDocumentUploadAction({ key: ticket.key, fileName: file.name });
+  let confirmed;
+  try {
+    confirmed = await confirmDocumentUploadAction({ key: ticket.key, fileName: file.name });
+  } catch (cause) {
+    return uploadFailure("process", cause);
+  }
   return confirmed.status === "ok"
     ? { ok: true, url: confirmed.url, bytes: confirmed.bytes }
     : { ok: false, message: confirmed.message };

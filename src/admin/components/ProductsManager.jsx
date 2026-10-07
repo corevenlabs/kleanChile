@@ -12,6 +12,7 @@ import { CATEGORIES, CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { formatClp, parseClp } from "../../domain/shared/money";
 import { isPriceOnRequest } from "../../domain/shared/pricing";
 import DocumentField from "./DocumentField";
+import GalleryField from "./GalleryField";
 import Icon from "./Icon";
 import ImageField from "./ImageField";
 
@@ -31,6 +32,7 @@ const emptyProduct = {
   type: "",
   price: "",
   image: "",
+  gallery: [],
   description: "",
   specs: {},
   specSheet: "",
@@ -379,9 +381,22 @@ export default function ProductsManager({ products }) {
                 encontrarla y el resultado de subir aparecía más abajo todavía.
               */}
               <ImageField
-                label="Imagen"
+                label="Imagen principal"
                 value={editing.image}
                 onChange={(value) => setEditing({ ...editing, image: value })}
+              />
+              <GalleryField
+                value={editing.gallery ?? []}
+                mainImage={editing.image}
+                onChange={(next) =>
+                  setEditing((current) => ({
+                    ...current,
+                    gallery: typeof next === "function" ? next(current.gallery ?? []) : next,
+                  }))
+                }
+                onMakeMain={(image, gallery) =>
+                  setEditing((current) => ({ ...current, image, gallery }))
+                }
               />
               <label>
                 Precio (pesos)

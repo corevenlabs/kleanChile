@@ -263,6 +263,12 @@ Three properties follow, and they are worth more than the table would be:
 
 **`sharp` is reachable only from Route Handlers** — `app/api/admin/media/route.js` and the spec-sheet PDF — and is in `serverExternalPackages`. Never from a page, a component or a Server Action. `imageKeys.js` holds every naming rule with no dependencies at all, precisely so a page can name a rendition without pulling a native binary into its graph. Keep that split.
 
+**The product photo zooms like Amazon's** (`components/media/ProductZoom.jsx`): a lens follows the mouse and a pane to the right shows that area magnified, over the info column. It reads the largest rendition the URL says exists, not the one `srcset` picked for the 420px box, and only fetches it on first hover. Three choices there are deliberate: it triggers on `pointerType === "mouse"` only, because the old CSS `:hover` scale stuck on the first tap on phones; with under 320px free to the right it zooms inside its own frame instead; and the factor is derived from the photo's real width (2× to 3×), because most supplier photos are under 600px — smaller than the box — and 3× of those is just pixels. Better photos are what make it sharp, not the code.
+
+**A product has one main photo and an optional gallery.** `image_url` stays the main one — cards, the cart, search suggestions, the importer and the structured data read only that, and none of them changed. `gallery_urls` (`text[]`, `drizzle/0010`) holds the extras in order; `ProductGallery` renders main + gallery with thumbnails, and remounts `ProductZoom` per photo (`key`) because the zoom caches its big image on first hover. The importer does not take a gallery column yet.
+
+**"Failed to fetch" on upload is almost never the code.** The PUT goes from the browser straight to R2, so a missing CORS origin, or an `R2_BUCKET` holding the public URL instead of the name, kills the request before any response exists. `admin/lib/uploadErrors.js` turns each step into a message with a code (`SUBIDA-CONFIG`, `SUBIDA-RED`, `SUBIDA-RECHAZO`, `SUBIDA-PROCESO`) and logs the real error to the console. `storageConfig()` rejects a URL-shaped bucket and the `https://...` placeholder by name — there, not in the schema, because `serverConfig()` also guards the database and a storage typo must not take the site down.
+
 `PIPELINE_REVISION` is folded into every key. Bump it when widths, formats or quality change — otherwise new settings collide with objects encoded under the old ones and nothing regenerates.
 
 ### The spec sheet, in two forms

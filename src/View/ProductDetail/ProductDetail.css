@@ -145,6 +145,67 @@
   cursor: crosshair;
 }
 
+/*
+ * Miniaturas de la galería. Una fila que se desplaza de lado si no cabe, en vez
+ * de partirse en dos: dos filas de miniaturas empujan la información hacia abajo
+ * en el teléfono, donde lo primero que hay que ver es el precio.
+ */
+.pdp-thumbs {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 2px;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.pdp-thumbs li {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.pdp-thumbs__item {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+  background: var(--k-white);
+  border: 1px solid var(--k-line);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+/* `<picture>` es en línea y deja el hueco de la línea de base bajo la foto. */
+.pdp-thumbs__item picture {
+  display: contents;
+}
+
+/* Medidas fijas y no 100%: dentro de la grilla del botón el porcentaje no
+   tiene contra qué resolverse, y una foto alta tomaba su altura natural. */
+.pdp-thumbs__item img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.pdp-thumbs__item:hover {
+  border-color: var(--k-aqua);
+}
+
+.pdp-thumbs__item[aria-pressed="true"] {
+  border-color: var(--k-blue);
+  box-shadow: 0 0 0 1px var(--k-blue);
+}
+
+.pdp-thumbs__item:focus-visible {
+  outline: 2px solid var(--k-cyan);
+  outline-offset: 2px;
+}
+
 /* La pista solo tiene sentido donde hay un mouse. */
 .pdp-zoom__hint {
   display: none;

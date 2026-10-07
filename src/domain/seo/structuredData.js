@@ -63,6 +63,7 @@ export function organizationLd({ url, name, description, logo, contact }) {
  * página tampoco publica uno.
  */
 export function productLd({ product, url, image, brand }) {
+  const images = [image].flat().filter(Boolean);
   const offers = isPriceOnRequest(product.price)
     ? {}
     : {
@@ -85,7 +86,8 @@ export function productLd({ product, url, image, brand }) {
     name: product.name,
     url,
     ...(product.description ? { description: product.description } : {}),
-    ...(image ? { image: [image] } : {}),
+    // Una foto o la galería entera: Google acepta y prefiere varias.
+    ...(images.length > 0 ? { image: images } : {}),
     ...(product.skuCode ? { sku: product.skuCode } : {}),
     ...(brand ? { brand: { "@type": "Brand", name: brand } } : {}),
     ...(product.type ? { category: product.type } : {}),

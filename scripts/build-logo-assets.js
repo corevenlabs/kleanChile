@@ -34,24 +34,26 @@ await mkdir(out, { recursive: true });
 
 const assets = [
   {
-    from: "LOGO KLEAN CHILE-02.png",
+    from: "rutacorp-logo.png",
     to: "wordmark.png",
-    // Rendered at ~46px tall in the navbar and ~64px in the footer.
-    height: 160,
-    note: "stacked mark + RutaCorp + tagline, for light backgrounds",
+    height: 320,
+    note: "bubble + RutaCorp + tagline, on white",
   },
   /*
    * There is no light wordmark asset.
    *
-   * `LOGO KLEAN CHILE-03.png` is the white artwork on a baked-in blue gradient
-   * rectangle, which cannot sit inside the navy footer without showing as a
-   * box. The footer instead pairs the transparent bubble mark with the wordmark
-   * typeset live in Poppins — heavy "Klean", light "Chile", the same weight
-   * contrast the original draws — which stays crisp at any size and weighs
-   * nothing.
+   * The client's lockup arrives on an opaque white background, which cannot sit
+   * inside the navy footer without showing as a box. The footer instead pairs
+   * the transparent bubble mark with the name typeset live in Poppins — heavy
+   * "Ruta", light "Corp", the same weight contrast the lockup draws — which
+   * stays crisp at any size and weighs nothing.
+   *
+   * `rutacorp-isotipo.png` is the bubble cut out of the client's JPEG along a
+   * circle fitted to its rim: transparent outside, no drop shadow. The shadow
+   * was baked onto white and would read as a grey smudge on any other colour.
    */
   {
-    from: "LOGO KLEAN CHILE-01.png",
+    from: "rutacorp-isotipo.png",
     to: "mark.png",
     // The bubble alone: favicon, WhatsApp button, loading states.
     height: 256,
@@ -70,7 +72,7 @@ const assets = [
    * visible.
    */
   {
-    from: "LOGO KLEAN CHILE-01.png",
+    from: "rutacorp-isotipo.png",
     to: "icon.png",
     dir: appDir,
     height: 64,
@@ -78,7 +80,7 @@ const assets = [
     note: "browser tab",
   },
   {
-    from: "LOGO KLEAN CHILE-01.png",
+    from: "rutacorp-isotipo.png",
     to: "apple-icon.png",
     dir: appDir,
     // 180 is what iOS asks for; anything smaller is upscaled on the home screen.
@@ -123,37 +125,30 @@ for (const asset of assets) {
  * one flat file that never changes; generating it at request time would be
  * paying forever for a decision made once.
  *
- * 1200×630 is the size every platform crops from. The mark sits left of centre
- * so WhatsApp's own square crop, which takes the middle, still contains it.
+ * 1200×630 is the size every platform crops from.
  */
 const OG = { width: 1200, height: 630 };
 
-const background = Buffer.from(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="${String(OG.width)}" height="${String(OG.height)}">
-     <defs>
-       <linearGradient id="k" x1="0" y1="0" x2="1" y2="1">
-         <stop offset="0%" stop-color="#22c2e8"/>
-         <stop offset="52%" stop-color="#1668b8"/>
-         <stop offset="100%" stop-color="#0e2a6b"/>
-       </linearGradient>
-     </defs>
-     <rect width="100%" height="100%" fill="url(#k)"/>
-     <text x="440" y="322" font-family="Poppins, Trebuchet MS, sans-serif" font-size="82"
-           font-weight="800" fill="#ffffff">RutaCorp</text>
-     <text x="444" y="382" font-family="IBM Plex Sans, Segoe UI, sans-serif" font-size="27"
-           fill="#a9e8f7">Limpieza · Librería · Escritorio</text>
-     <text x="444" y="424" font-family="IBM Plex Sans, Segoe UI, sans-serif" font-size="27"
-           fill="#a9e8f7">Despacho a todo Chile</text>
-   </svg>`,
-);
+/*
+ * The client's lockup on its own white, centred. It is a finished piece of
+ * artwork — bubble, name and tagline — so nothing is typeset over it; the
+ * bubble sits on the vertical axis, which is what WhatsApp's square crop keeps.
+ */
+const lockup = await sharp(path.join(source, "rutacorp-logo.png"))
+  .trim({ background: "#ffffff", threshold: 12 })
+  .resize({ width: 1000, height: 540, fit: "inside" })
+  .toBuffer({ resolveWithObject: true });
 
-const badge = await sharp(path.join(source, "LOGO KLEAN CHILE-01.png"))
-  .trim()
-  .resize({ width: 260, height: 260, fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
-  .toBuffer();
-
-const og = await sharp(background)
-  .composite([{ input: badge, left: 140, top: 185 }])
+const og = await sharp({
+  create: { width: OG.width, height: OG.height, channels: 3, background: "#ffffff" },
+})
+  .composite([
+    {
+      input: lockup.data,
+      left: Math.round((OG.width - lockup.info.width) / 2),
+      top: Math.round((OG.height - lockup.info.height) / 2),
+    },
+  ])
   .png({ compressionLevel: 9 })
   .toFile(path.join(out, "og.png"));
 

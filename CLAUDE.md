@@ -167,7 +167,7 @@ Everything is derived from the logo in `public/image/`, not invented. `src/style
 
 Type has three roles: **Poppins** for display (it matches the wordmark's geometric-rounded letterforms), **IBM Plex Sans** for body, **IBM Plex Mono** for SKU codes only — those are codes customers retype into WhatsApp, so monospace is functional.
 
-`scripts/build-logo-assets.js` regenerates `public/brand/` from the print-resolution originals (467 KB → 14 KB). There is deliberately no light wordmark asset: the supplied dark version has its blue background baked in, so the navbar and footer pair the transparent mark with the name typeset live.
+`scripts/build-logo-assets.js` regenerates `public/brand/` from the client's originals in `public/image/rutacorp-*.png`. `rutacorp-isotipo.png` is the bubble cut out of a JPEG on white along a circle fitted to its rim, so it is transparent and carries no drop shadow. There is deliberately no light wordmark asset: the lockup arrives on opaque white, so the navbar and footer pair the transparent mark with the name typeset live.
 
 The same script writes the tab icons — `app/icon.png` and `app/apple-icon.png`, which Next discovers by filename and links itself, so `metadata.icons` is deliberately empty. They stay transparent rather than sitting on a white card: the bubble carries its own white rim and so holds its shape on a light tab strip and a dark one. Root `metadata.title` is a template, so a page setting `title: "Limpieza"` gets a tab reading `Limpieza · RutaCorp`.
 

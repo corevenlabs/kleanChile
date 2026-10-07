@@ -2,6 +2,7 @@ import Link from "next/link";
 import AddToCartForm from "../../components/cart/AddToCartForm";
 import JsonLd from "../../components/seo/JsonLd";
 import Picture from "../../components/media/Picture";
+import ProductZoom from "../../components/media/ProductZoom";
 import { specEntries } from "../../domain/catalog/specLabels";
 import { CATEGORY_LABELS } from "../../domain/content/vocabulary";
 import { breadcrumbLd, productLd } from "../../domain/seo/structuredData";
@@ -43,6 +44,7 @@ export default function ProductDetail({ product }) {
    * una vitrina que manda al cliente a buscar el teléfono por su cuenta.
    */
   const priceOnRequest = isPriceOnRequest(product.price);
+  const enhanced = LOW_CONTRAST_SKUS.has(product.skuCode);
 
   return (
     <div className="product-page">
@@ -63,21 +65,17 @@ export default function ProductDetail({ product }) {
       <div className="product-layout">
         {/* La imagen principal de la página: `priority` para que no espere detrás de
         la heurística de carga diferida. */}
-        <div className="product-image-box">
+        <ProductZoom src={product.image} enhanced={enhanced}>
           <div className="product-image-wrapper">
             <Picture
               src={product.image}
               alt={product.name}
-              className={
-                LOW_CONTRAST_SKUS.has(product.skuCode)
-                  ? "product-image--enhanced"
-                  : undefined
-              }
+              className={enhanced ? "product-image--enhanced" : undefined}
               sizes="(max-width: 900px) 100vw, 520px"
               priority
             />
           </div>
-        </div>
+        </ProductZoom>
         <div className="product-info">
           {product.skuCode && (
             <p className="quickview__sku">SKU {product.skuCode}</p>

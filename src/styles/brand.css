@@ -77,6 +77,82 @@
   --k-display: var(--font-poppins), "Segoe UI", system-ui, sans-serif;
   --k-body: var(--font-plex), "Segoe UI", system-ui, sans-serif;
   --k-mono: var(--font-plex-mono), ui-monospace, "Cascadia Mono", monospace;
+
+  /*
+   * The name, as the logo sets it. Sampled off the lockup: each letter runs
+   * from cyan at its bottom-left to navy at its top-right. Deliberately not
+   * `--k-gradient` — that one marks the primary action on a screen, and the
+   * name is identity, not something to click.
+   */
+  --k-wordmark: var(--font-wordmark), var(--font-poppins), "Segoe UI", system-ui, sans-serif;
+  /*
+   * 40° and not `to top right`: each letter's box is taller than the letter
+   * (it holds the space above the capitals), so a corner-to-corner gradient
+   * spent its navy in the empty air over the glyph. The stops end early for the
+   * same reason.
+   */
+  --k-wordmark-gradient: linear-gradient(
+    40deg,
+    #52e4f7 0%,
+    #2db0de 25%,
+    #1a6cb4 48%,
+    #0a2e88 70%,
+    #010f68 90%
+  );
+}
+
+/*
+ * The wordmark — see `components/brand/Wordmark.js`.
+ *
+ * Size comes from where it is used; this only sets the letters. Each letter
+ * gets its own gradient box, as in the lockup.
+ */
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--k-wordmark);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.wordmark__ch {
+  display: inline-block;
+  /* El `padding-bottom` deja la cola de la «p» dentro de la caja del degradado. */
+  padding-bottom: 0.08em;
+  background: var(--k-wordmark-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/*
+ * Las letras son decoración: el nombre real es el `.sr-only` de al lado. Sin
+ * esto, seleccionar y copiar el nombre pegaba «RutaCorpRutaCorp».
+ */
+.wordmark__lead,
+.wordmark__rest {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.wordmark__lead {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.wordmark__rest {
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+/* Alto contraste de Windows: sin degradado, el color del sistema. */
+@media (forced-colors: active) {
+  .wordmark__ch {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
 }
 
 /*

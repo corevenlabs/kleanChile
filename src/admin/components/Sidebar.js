@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOutAction } from "../../actions/auth";
 import Icon from "./Icon";
+import Wordmark from "../../components/brand/Wordmark";
+import { SITE_NAME } from "../../lib/site";
 
 const links = [
   { to: "/admin/dashboard", icon: "resumen", label: "Resumen" },
@@ -22,7 +24,9 @@ export default function Sidebar() {
       <Link href="/" className="admin-brand">
         <img className="admin-brand__mark" src="/brand/mark.png" alt="" width={256} height={256} />
         <span>
-          <strong>RutaCorp</strong>
+          <strong>
+            <Wordmark name={SITE_NAME} />
+          </strong>
           <small>Administración</small>
         </span>
       </Link>

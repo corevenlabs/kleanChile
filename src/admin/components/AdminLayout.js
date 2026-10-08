@@ -1,4 +1,6 @@
 import Sidebar from "./Sidebar";
+import Wordmark from "../../components/brand/Wordmark";
+import { SITE_NAME } from "../../lib/site";
 
 /**
  * Chrome for every admin page.
@@ -23,7 +25,9 @@ export default function AdminLayout({ user, children }) {
         <div className="admin-topbar">
           <div>
             <span className="admin-topbar__eyebrow">Panel de gestión</span>
-            <strong>RutaCorp</strong>
+            <strong>
+            <Wordmark name={SITE_NAME} />
+          </strong>
           </div>
           <div className="admin-avatar" title={user.email}>
             {initials || "KC"}

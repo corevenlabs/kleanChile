@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import NextLink from "next/link";
 import { signInAction } from "../../actions/auth";
+import Wordmark from "../../components/brand/Wordmark";
+import { SITE_NAME } from "../../lib/site";
 
 export default function SignInForm() {
   const [state, formAction, pending] = useActionState(signInAction, { status: "idle" });
@@ -12,7 +14,9 @@ export default function SignInForm() {
       <section className="admin-login__card">
         <NextLink href="/" className="admin-login__brand">
           <img src="/brand/mark.png" alt="" width={256} height={256} />
-          <strong>RutaCorp</strong>
+          <strong>
+            <Wordmark name={SITE_NAME} />
+          </strong>
         </NextLink>
 
         <div className="admin-login__intro">

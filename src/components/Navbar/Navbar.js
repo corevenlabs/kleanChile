@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { classificationHref } from "../../domain/catalog/classification";
 import SearchBox from "./SearchBox";
+import Wordmark from "../brand/Wordmark";
 import "./Navbar.css";
 
 /*
@@ -83,7 +84,9 @@ export default function Navbar({ data, cart = null }) {
     <Link href="/" className="navbar__brand" aria-label={data.brand}>
       <img src="/brand/mark.png" alt="" className="navbar__mark" width={256} height={256} />
       <span className="navbar__brand-name" aria-hidden="true">
-        <span className="navbar__brand-text">{data.brand}</span>
+        <span className="navbar__brand-text">
+          <Wordmark name={data.brand} />
+        </span>
       </span>
     </Link>
 

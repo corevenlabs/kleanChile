@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Wordmark from "../brand/Wordmark";
 
 /**
  * La firma del estudio.
@@ -42,7 +43,9 @@ export default function Footer({ data }) {
     <div className="footer__brand">
       <div className="footer__lockup">
         <img src="/brand/mark.png" alt="" width={256} height={256} />
-        <h2>{data.brand}</h2>
+        <h2>
+          <Wordmark name={data.brand} />
+        </h2>
       </div>
       <p>{data.description}</p>
     </div>

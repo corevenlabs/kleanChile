@@ -1,4 +1,4 @@
-import { IBM_Plex_Mono, IBM_Plex_Sans, Poppins } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Nunito, Poppins } from "next/font/google";
 import { SITE_DESCRIPTION, SITE_NAME, siteUrl } from "../src/lib/site.js";
 
 // Tokens first: every stylesheet below reads from them.
@@ -39,6 +39,19 @@ const plex = IBM_Plex_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-plex",
+  display: "swap",
+});
+
+/*
+ * The fourth face, for one word. Nunito is the closest open match to the
+ * client's lockup: a heavy rounded "Ruta" and a thin "Corp" from the same
+ * family, which is why only those two weights are requested. It sets the name
+ * and nothing else — see `.wordmark` in `styles/brand.css`.
+ */
+const wordmark = Nunito({
+  subsets: ["latin"],
+  weight: ["300", "900"],
+  variable: "--font-wordmark",
   display: "swap",
 });
 
@@ -97,7 +110,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={`${poppins.variable} ${plex.variable} ${plexMono.variable}`}>
+    <html lang="es" className={`${poppins.variable} ${plex.variable} ${plexMono.variable} ${wordmark.variable}`}>
       <body>{children}</body>
     </html>
   );

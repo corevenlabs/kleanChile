@@ -1,4 +1,5 @@
 import { CATEGORIES, CATEGORY_LABELS } from "../content/vocabulary.js";
+import { isAcceptableTypedSku, isReservedSkuShape } from "../catalog/skuCode.js";
 import { parseClp } from "../shared/money.js";
 import { normalizeHeader } from "./columnMapping.js";
 import { fieldLabel, REQUIRED_TO_CREATE } from "./fields.js";
@@ -98,11 +99,6 @@ const COLUMN = {
   active: "isActive",
 };
 
-/** Los SKU del cliente pueden ser numéricos y no usan necesariamente el formato interno KC. */
-function validImportedSku(value) {
-  return value.length <= 80 && !/[\u0000-\u001f\u007f]/.test(value);
-}
-
 /**
  * @param rows      [{ rowNumber, values: MappedRow }]
  * @param present   claves de campo efectivamente mapeadas
@@ -139,7 +135,7 @@ export function buildPlan({ rows, present, bySku, byName = new Map() }) {
     if (sku !== "") {
       row.skuCode = sku;
 
-      if (!validImportedSku(sku)) {
+      if (!isAcceptableTypedSku(sku)) {
         planned.push({ ...row, status: "error", message: `SKU con formato inválido: «${sku}»` });
         continue;
       }
@@ -173,6 +169,17 @@ export function buildPlan({ rows, present, bySku, byName = new Map() }) {
           ...row,
           status,
           message: status === "skipped" ? "Sin cambios" : null,
+        });
+        continue;
+      }
+
+      // Crearía un producto con un código que la secuencia puede entregar más
+      // adelante — ver `isReservedSkuShape`.
+      if (isReservedSkuShape(sku)) {
+        planned.push({
+          ...row,
+          status: "error",
+          message: `${sku} tiene el formato de los códigos que asigna el sistema y no existe en el catálogo. Deja el SKU vacío para crear uno nuevo.`,
         });
         continue;
       }

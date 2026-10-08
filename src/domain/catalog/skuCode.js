@@ -108,3 +108,32 @@ export function parseSkuCode(value) {
   const sequence = Number.parseInt(body.slice(0, -1), 10);
   return Number.isSafeInteger(sequence) && sequence > 0 ? sequence : null;
 }
+
+/**
+ * A SKU someone typed — in the product editor or in an import file.
+ *
+ * Supplier codes are kept as they come: numeric, with dashes, whatever the
+ * supplier prints. Only what would break a lookup is refused: control
+ * characters, and anything absurdly long. Upper-cased so `abc-1` and `ABC-1`
+ * cannot become two products.
+ */
+export function normalizeTypedSku(value) {
+  return String(value ?? "").trim().toUpperCase();
+}
+
+export function isAcceptableTypedSku(code) {
+  return code.length <= 80 && !/[\u0000-\u001f\u007f]/.test(code);
+}
+
+/**
+ * Whether a typed code wears the system's own shape.
+ *
+ * Those come from `sku_code_seq` in order. A `KC0000500` typed by hand is fine
+ * today and becomes a collision the day the sequence reaches 500: the next
+ * product created — by anyone, anywhere — dies on `products_sku_code_idx`. So a
+ * new product may bring any code except one the sequence could hand out.
+ * Matching an *existing* KC code (an import updating a product) is unaffected.
+ */
+export function isReservedSkuShape(code) {
+  return SHAPE.test(code);
+}

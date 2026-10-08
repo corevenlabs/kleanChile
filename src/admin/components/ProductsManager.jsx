@@ -27,6 +27,7 @@ import ImageField from "./ImageField";
 
 const emptyProduct = {
   id: null,
+  sku: "",
   category: "cleaning",
   name: "",
   type: "",
@@ -363,6 +364,44 @@ export default function ProductsManager({ products }) {
             </div>
 
             <div className="admin-form-grid">
+              {/*
+                El SKU se elige al crear y queda fijo después. Al editar se
+                muestra igual —se copia para un pedido o para buscarlo— pero en
+                solo lectura: los pedidos anteriores y los mensajes de WhatsApp
+                lo citan, y cambiarlo los dejaría apuntando a nada. El servidor
+                ignora un SKU que llegue en una edición, así que esto es la
+                explicación y no la protección.
+              */}
+              {editing.id ? (
+                <label className="wide">
+                  SKU
+                  <input
+                    readOnly
+                    value={editing.skuCode ?? ""}
+                    placeholder="Sin SKU"
+                    style={{ fontFamily: "var(--k-mono)", background: "#f4f7fb" }}
+                  />
+                  <small>El SKU no se puede cambiar: los pedidos anteriores lo usan.</small>
+                </label>
+              ) : (
+                <label className="wide">
+                  SKU (opcional)
+                  <input
+                    value={editing.sku ?? ""}
+                    placeholder="Código del proveedor, o déjalo vacío"
+                    autoComplete="off"
+                    spellCheck={false}
+                    style={{ fontFamily: "var(--k-mono)" }}
+                    onChange={(event) =>
+                      setEditing({ ...editing, sku: event.target.value })
+                    }
+                  />
+                  <small>
+                    Si lo dejas vacío, el sistema crea uno (por ejemplo, KC0000427).
+                    Después de guardar no se puede cambiar.
+                  </small>
+                </label>
+              )}
               <label className="wide">
                 Nombre
                 <input

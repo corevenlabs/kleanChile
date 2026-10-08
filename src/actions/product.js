@@ -2,6 +2,11 @@
 
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
+import {
+  isAcceptableTypedSku,
+  isReservedSkuShape,
+  normalizeTypedSku,
+} from "../domain/catalog/skuCode.js";
 import { parseClp } from "../domain/shared/money.js";
 import {
   createProduct,
@@ -18,6 +23,20 @@ import { requireUser } from "../lib/adminSession.js";
 
 const productInput = z.object({
   id: z.number().int().positive().nullish(),
+  /**
+   * Only read when creating. Blank mints a KC code from the sequence; a
+   * supplier's code is kept as typed, except in the system's own shape — see
+   * `isReservedSkuShape`.
+   */
+  sku: z
+    .string()
+    .default("")
+    .transform(normalizeTypedSku)
+    .refine(isAcceptableTypedSku, "El SKU tiene caracteres no válidos o es demasiado largo.")
+    .refine(
+      (code) => !isReservedSkuShape(code),
+      "Los códigos KC los asigna el sistema. Deja el SKU vacío para generar uno, o usa el código del proveedor.",
+    ),
   category: z.enum(["cleaning", "bookshop", "desktop"]),
   name: z.string().trim().min(1, "El nombre es obligatorio"),
   type: z.string().trim().min(1, "El tipo es obligatorio"),
@@ -62,7 +81,8 @@ export async function saveProductAction(input) {
     return { status: "error", message: first?.message ?? "Datos inválidos." };
   }
 
-  const { id, price, image, gallery, specSheet, stock, ...rest } = parsed.data;
+  // `sku` is pulled out here so it can never reach an UPDATE: see below.
+  const { id, sku, price, image, gallery, specSheet, stock, ...rest } = parsed.data;
   const row = {
     ...rest,
     priceClp: price,
@@ -75,11 +95,26 @@ export async function saveProductAction(input) {
     // Stock is deliberately not part of an edit. It moves only through the
     // ledger — the table's stock button and order confirmation — so that a
     // typo in this form can never silently rewrite a counted balance.
+    //
+    // Neither is the SKU, for a related reason: past orders and WhatsApp
+    // messages quote it, so changing it would orphan every one of them. The
+    // editor shows it read-only; this is what actually enforces that.
     await updateProduct(id, row);
   } else {
-    // A code is minted here rather than defaulted in the column, because only
-    // the sequence can guarantee two simultaneous creations get different ones.
-    const newId = await createProduct({ ...row, skuCode: await allocateSkuCode() });
+    // A blank code is minted here rather than defaulted in the column, because
+    // only the sequence can guarantee two simultaneous creations get different
+    // ones. A typed code can still collide with an existing product — the
+    // unique index is the check, so there is no window between asking and
+    // inserting.
+    let newId;
+    try {
+      newId = await createProduct({ ...row, skuCode: sku || (await allocateSkuCode()) });
+    } catch (error) {
+      if (isSkuConflict(error)) {
+        return { status: "error", message: `El SKU ${sku} ya lo usa otro producto.` };
+      }
+      throw error;
+    }
 
     if (stock > 0) {
       await setStockLevel({
@@ -115,4 +150,15 @@ export async function deleteProductAction(id) {
   await deleteProduct(parsed.data);
   revalidateTag(CATALOG_TAG);
   return { status: "ok" };
+}
+
+/**
+ * Whether an insert failed on `products_sku_code_idx`.
+ *
+ * Drizzle wraps the driver's error, so the Postgres fields may be on the error
+ * itself or on its `cause`.
+ */
+function isSkuConflict(error) {
+  const pg = error?.cause ?? error;
+  return pg?.code === "23505" && String(pg?.constraint_name ?? pg?.constraint ?? "").includes("sku_code");
 }

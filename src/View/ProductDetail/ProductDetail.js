@@ -85,7 +85,6 @@ export default function ProductDetail({ product }) {
           <AddToCartForm
             productId={product.id}
             inStock={product.inStock}
-            stockOnHand={product.stockOnHand}
           />
 
           {product.specSheet ? (

@@ -111,7 +111,7 @@ export default function Cart({ lines, dropped }) {
 
                 {line.exceedsStock && (
                   <p className="cart-line__warn">
-                    Solo quedan {line.stockOnHand}. Puedes pedirlo igual y lo confirmamos contigo.
+                    Puede que no tengamos esa cantidad. Puedes pedirlo igual y lo confirmamos contigo.
                   </p>
                 )}
               </div>

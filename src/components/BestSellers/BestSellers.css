@@ -52,7 +52,6 @@
   gap: 20px;
   overflow-x: auto;
   padding-bottom: 16px;
-  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   margin-top: 5%;
@@ -74,7 +73,6 @@
   background: #fff;
   cursor: pointer;
   transition: transform 0.2s ease;
-  scroll-snap-align: start;
 }
 
 .bs__card:hover {
@@ -206,8 +204,12 @@
   display: flex;
   gap: 20px;
   overflow-x: auto;
-  scroll-behavior: smooth; /* 👈 clave para suavidad */
-  scroll-snap-type: x mandatory;
+  /*
+   * Ni scroll-snap ni scroll-behavior: smooth. El avance automático mueve
+   * scrollLeft unos pocos píxeles por cuadro: con snap cada paso rebotaría a la
+   * tarjeta más cercana, y con smooth cada paso se animaría por su cuenta. Las
+   * flechas piden su propia suavidad en scrollBy().
+   */
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-bottom: 16px;

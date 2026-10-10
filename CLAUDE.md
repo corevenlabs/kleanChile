@@ -140,6 +140,8 @@ cart (cookie)  →  requestOrderAction  →  order (pending), stock untouched
 
 **Best sellers are derived**, not curated: ranked by units sold across *confirmed* orders, falling back to catalog position while there are no sales. Counting pending orders would let anyone push a product onto the home page by filling a cart. The `bestSellers` content block holds only the heading, link and how many to show.
 
+**The storefront never shows a unit count.** The shop does not want to publish how many it has: stock above zero reads "Disponible" and can be added, zero reads "Sin stock" and cannot. The ledger is unchanged and still decides which of the two applies; the cart's over-quantity warning says it will be confirmed rather than quoting the balance.
+
 **The cart is an httpOnly cookie** of `{productId, quantity}` — no names, no prices. Those are read from the database wherever the cart renders and when the order is placed, so the browser never states what something costs. There is no `carts` table because nothing needs one here; add one when abandoned carts must be visible in the admin.
 
 ### Price on request is price zero
@@ -321,6 +323,7 @@ On the accessibility side, four things are load-bearing and easy to undo by acci
 - **The hero carousel stops.** WCAG 2.2.2 — content that moves by itself for more than five seconds needs a control. There is a pause button, choosing a slide stops the rotation, and `prefers-reduced-motion` never starts it. The CSS block for reduced motion cannot cancel a `setInterval`, which is why the check is in the component too.
 
   The controls are **hidden, not removed**: the shop wanted the photograph clean, so `.hero__progress` is `opacity: 0` with `pointer-events: none` and comes back on `:focus-within`. That distinction is the whole point — deleting them leaves a hero that moves on its own with no way to stop it, which is the failure the rule names. `pointer-events` is load-bearing rather than cosmetic: an invisible button that still takes clicks is worse than a visible one, and one of these five stops the carousel.
+- **The brands band and the best-sellers rail keep moving under `prefers-reduced-motion`**, deliberately and against the global rule in `brand.css`. Windows turns that preference on with "Animation effects" off, and the shop saw the band frozen (in Brave) and asked for motion. The band runs slower there; both stop under the pointer (the rail also on focus and for a few seconds after a manual scroll), which is the WCAG 2.2.2 control. The rail moves the track's real `scrollLeft` from `requestAnimationFrame` over a doubled list — not a CSS transform — so its arrows and touch swipe still work; that is also why the track has no `scroll-snap` and no `scroll-behavior: smooth`, either of which fights a per-frame scroll.
 - **Only the active slide is exposed.** All slides sit in the DOM; the inactive ones get `aria-hidden` and an empty `alt`, or a screen reader reads five alt texts as one page.
 - **The skip link is the first tab stop** on every public page, and `<main id="contenido">` in `app/(public)/layout.js` is what it skips to. Without it, reaching the products means tabbing past twenty-seven menu items on every page.
 

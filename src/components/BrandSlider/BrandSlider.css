@@ -58,6 +58,22 @@
   animation-play-state: paused;
 }
 
+/*
+ * Se mueve aunque el sistema pida «reducir movimiento».
+ *
+ * La regla global de brand.css corta toda animación en ese caso, y Windows la
+ * activa con solo apagar «Efectos de animación» — por eso en algunos equipos (el
+ * cliente lo vio en Brave) la cinta aparecía quieta. La tienda la quiere en
+ * movimiento: acá va más lenta, y pasar el mouse la sigue deteniendo, que es el
+ * control que pide WCAG 2.2.2.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .brands__track {
+    animation-duration: 45s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
 @keyframes slide-brands {0% {
   transform: translateX(0);
 }100% {
@@ -79,12 +95,6 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: grayscale(1) opacity(0.4);
-  transition: filter 0.3s ease;
-}
-
-.brands__item:hover img {
-  filter: grayscale(0) opacity(1);
 }
 
 /* FALLBACK si la imagen no carga */
@@ -94,11 +104,6 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--k-muted);
-  transition: color 0.3s ease;
-}
-
-.brands__item:hover .brands__fallback {
   color: var(--k-ink);
 }
 

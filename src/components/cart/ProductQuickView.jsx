@@ -68,7 +68,6 @@ export default function ProductQuickView({ product, onClose }) {
           <AddToCartForm
             productId={product.id}
             inStock={product.inStock}
-            stockOnHand={product.stockOnHand}
           />
 
           <Link className="quickview__link" href={`/product/${String(product.id)}`}>

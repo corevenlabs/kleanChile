@@ -12,7 +12,7 @@ import { addToCartAction } from "../../actions/cart";
  * layers pending state and the confirmation on top once hydration happens, so
  * the enhanced version is strictly additive rather than a prerequisite.
  */
-export default function AddToCartForm({ productId, inStock, stockOnHand, showQuantity = true }) {
+export default function AddToCartForm({ productId, inStock, showQuantity = true }) {
   const [state, formAction, pending] = useActionState(addToCartAction, { status: "idle" });
 
   return (
@@ -37,9 +37,12 @@ export default function AddToCartForm({ productId, inStock, stockOnHand, showQua
         </button>
       </div>
 
-      {inStock && stockOnHand <= 5 && (
-        <p className="stock-note">Quedan {stockOnHand} unidades.</p>
-      )}
+      {/*
+        Solo «Disponible», sin el número: la tienda no quiere publicar cuántas
+        unidades tiene. El stock se sigue llevando en el admin y es lo que decide
+        si se puede agregar.
+      */}
+      {inStock && <p className="stock-note stock-note--in">Disponible</p>}
       {!inStock && (
         <p className="stock-note stock-note--out">
           Sin stock por ahora. Escríbenos y te avisamos cuando llegue.

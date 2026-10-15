@@ -1,5 +1,6 @@
 import BlockEditor from "../../../src/admin/components/BlockEditor";
 import { HOME_BLOCKS } from "../../../src/admin/forms";
+import { getCollectionOptions } from "../../../src/infra/db/queries/collections.js";
 import { getBlockForEdit } from "../../../src/infra/db/queries/content.js";
 import { requireUser } from "../../../src/lib/adminSession.js";
 
@@ -15,7 +16,10 @@ export const metadata = { title: "Portada" };
 export default async function Page() {
   await requireUser();
 
-  const blocks = await Promise.all(HOME_BLOCKS.map((key) => getBlockForEdit(key)));
+  const [blocks, collections] = await Promise.all([
+    Promise.all(HOME_BLOCKS.map((key) => getBlockForEdit(key))),
+    getCollectionOptions(),
+  ]);
 
   return (
     <section className="admin-page">
@@ -28,7 +32,7 @@ export default async function Page() {
       </header>
 
       {HOME_BLOCKS.map((key, index) => (
-        <BlockEditor key={key} formKey={key} initial={blocks[index]} />
+        <BlockEditor key={key} formKey={key} initial={blocks[index]} collections={collections} />
       ))}
     </section>
   );

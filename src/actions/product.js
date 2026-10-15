@@ -15,6 +15,7 @@ import {
   updateProduct,
 } from "../infra/db/mutations/product.js";
 import { setStockLevel } from "../infra/db/mutations/inventory.js";
+import { setProductCollections } from "../infra/db/mutations/collections.js";
 import { allocateSkuCode } from "../infra/db/mutations/skuCodes.js";
 import { CATALOG_TAG } from "../infra/db/queries/catalog.js";
 import { requireUser } from "../lib/adminSession.js";
@@ -68,6 +69,11 @@ const productInput = z.object({
   specSheet: z.string().trim().default(""),
   isActive: z.boolean().default(true),
   position: z.number().int().default(0),
+  /**
+   * Las colecciones en que queda el producto. Ausente = no se tocan, para que
+   * un guardado desde otro lugar no lo saque de todas sin querer.
+   */
+  collectionIds: z.array(z.number().int().positive()).max(200).nullish(),
   /** Opening stock, only meaningful when creating. */
   stock: z.coerce.number().int().min(0).max(1_000_000).default(0),
 });
@@ -82,7 +88,7 @@ export async function saveProductAction(input) {
   }
 
   // `sku` is pulled out here so it can never reach an UPDATE: see below.
-  const { id, sku, price, image, gallery, specSheet, stock, ...rest } = parsed.data;
+  const { id, sku, price, image, gallery, specSheet, stock, collectionIds, ...rest } = parsed.data;
   const row = {
     ...rest,
     priceClp: price,
@@ -100,6 +106,7 @@ export async function saveProductAction(input) {
     // messages quote it, so changing it would orphan every one of them. The
     // editor shows it read-only; this is what actually enforces that.
     await updateProduct(id, row);
+    if (collectionIds) await setProductCollections(id, [...new Set(collectionIds)]);
   } else {
     // A blank code is minted here rather than defaulted in the column, because
     // only the sequence can guarantee two simultaneous creations get different
@@ -115,6 +122,8 @@ export async function saveProductAction(input) {
       }
       throw error;
     }
+
+    if (collectionIds?.length) await setProductCollections(newId, [...new Set(collectionIds)]);
 
     if (stock > 0) {
       await setStockLevel({

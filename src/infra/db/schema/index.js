@@ -7,6 +7,7 @@
  */
 export * from "./auth.js";
 export * from "./catalog.js";
+export * from "./collections.js";
 export * from "./content.js";
 export * from "./enums.js";
 export * from "./imports.js";

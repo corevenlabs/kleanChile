@@ -156,10 +156,26 @@ export const brandsSchema = z.object({
 
 // ── Site chrome ──────────────────────────────────────────────────────────────
 
+/**
+ * Un ítem del desplegable.
+ *
+ * `path` vacío es el comportamiento de siempre: el texto se busca dentro de la
+ * categoría (ver `domain/catalog/classification.js`). Con `path`, el ítem lleva
+ * ahí — típicamente a una colección, que es como «Industriales» puede mostrar
+ * productos que no dicen «industrial» en ninguna parte.
+ *
+ * Antes un ítem era solo el texto. Esos se siguen leyendo, convertidos acá, así
+ * que ningún menú guardado necesita migración.
+ */
+const navItemSchema = z.preprocess(
+  (value) => (typeof value === "string" ? { label: value, path: "" } : value),
+  z.object({ label: text(), path: text() }),
+);
+
 const navDropdownSchema = z.object({
   title: text(),
   sections: z
-    .array(z.object({ title: text(), items: z.array(z.string()).default([]) }))
+    .array(z.object({ title: text(), items: z.array(navItemSchema).default([]) }))
     .default([]),
 });
 

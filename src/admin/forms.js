@@ -51,7 +51,12 @@ export const FORMS = {
           { name: "title", label: "Título", wide: false },
           { name: "description", label: "Descripción", type: "textarea" },
           { name: "cta", label: "Texto del botón", wide: false },
-          { name: "path", label: "Enlace del botón", wide: false, placeholder: "/cleaning" },
+          {
+            name: "path",
+            label: "El botón lleva a",
+            type: "link",
+            hint: "Para mostrar un grupo de productos, elige «Una colección». Las colecciones se arman en Colecciones.",
+          },
           IMAGE,
           ALT,
         ],
@@ -74,7 +79,7 @@ export const FORMS = {
         hint: "Entre 1 y 24.",
       },
       { name: "linkLabel", label: "Texto del enlace", wide: false },
-      { name: "linkPath", label: "Destino del enlace", wide: false, placeholder: "/cleaning" },
+      { name: "linkPath", label: "El enlace lleva a", type: "link" },
     ],
   },
 
@@ -120,7 +125,7 @@ export const FORMS = {
             label: "Descripción (solo el bloque grande la muestra)",
             type: "textarea",
           },
-          { name: "path", label: "Enlace", wide: false, placeholder: "/cleaning" },
+          { name: "path", label: "El botón lleva a", type: "link" },
           IMAGE,
           ALT,
         ],
@@ -211,65 +216,11 @@ export const FORMS = {
     ],
   },
 
-  navigation: {
-    key: "navigation",
-    title: "Menú de navegación",
-    description: "La barra superior, incluidos sus menús desplegables.",
-    fields: [
-      { name: "brand", label: "Nombre de la marca", wide: false },
-      { name: "searchPlaceholder", label: "Texto del buscador", wide: false },
-    ],
-    lists: [
-      {
-        name: "links",
-        label: "Enlaces",
-        addLabel: "Nuevo enlace",
-        itemTitle: (link, index) => link.name || `Enlace ${String(index + 1)}`,
-        blank: { name: "", path: "/", dropdown: null },
-        fields: [
-          { name: "name", label: "Texto", wide: false },
-          { name: "path", label: "Ruta", wide: false, placeholder: "/cleaning" },
-          {
-            name: "dropdown.title",
-            label: "Título del menú desplegable",
-            hint: "Déjalo vacío y sin columnas para que el enlace no despliegue nada.",
-          },
-        ],
-        lists: [
-          {
-            name: "dropdown.sections",
-            label: "Columnas del desplegable",
-            addLabel: "Nueva columna",
-            itemTitle: (section, index) => section.title || `Columna ${String(index + 1)}`,
-            blank: { title: "", items: [] },
-            fields: [
-              { name: "title", label: "Título de la columna", wide: false },
-              {
-                name: "items",
-                label: "Elementos",
-                type: "lines",
-                rows: 4,
-                hint: "Uno por línea.",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    /**
-     * A link with nothing in its dropdown stores `null`, not an empty object.
-     * `Navbar` renders the mega-menu on the truthiness of `link.dropdown`, so
-     * `{title: "", sections: []}` would open an empty white panel on hover.
-     */
-    normalize: (draft) => ({
-      ...draft,
-      links: draft.links.map((link) => {
-        const title = link.dropdown?.title?.trim() ?? "";
-        const sections = link.dropdown?.sections ?? [];
-        return { ...link, dropdown: title === "" && sections.length === 0 ? null : link.dropdown };
-      }),
-    }),
-  },
+  /*
+   * El menú no está acá: tiene su propio editor, `NavigationEditor`. Sus ítems
+   * llevan cada uno un destino, y la forma genérica de listas dentro de listas
+   * dentro de listas era justamente la parte del panel que nadie entendía.
+   */
 
   footer: {
     key: "footer",
@@ -312,7 +263,7 @@ export const FORMS = {
             blank: { label: "", path: "/" },
             fields: [
               { name: "label", label: "Texto", wide: false },
-              { name: "path", label: "Ruta", wide: false },
+              { name: "path", label: "Lleva a", type: "link" },
             ],
           },
         ],
@@ -350,5 +301,5 @@ export const HOME_BLOCKS = [
   "brands",
 ];
 
-/** The blocks that appear on every page rather than only the home page. */
-export const SITE_BLOCKS = ["navigation", "footer", "whatsapp"];
+/** Los bloques de Configuración que se editan con `BlockEditor` (el menú tiene el suyo). */
+export const SITE_BLOCKS = ["footer", "whatsapp"];

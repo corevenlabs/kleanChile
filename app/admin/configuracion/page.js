@@ -1,15 +1,22 @@
 import BlockEditor from "../../../src/admin/components/BlockEditor";
-import { SITE_BLOCKS } from "../../../src/admin/forms";
+import NavigationEditor from "../../../src/admin/components/NavigationEditor";
+import SettingsTabs from "../../../src/admin/components/SettingsTabs";
+import { getCollectionOptions } from "../../../src/infra/db/queries/collections.js";
 import { getBlockForEdit } from "../../../src/infra/db/queries/content.js";
 import { requireUser } from "../../../src/lib/adminSession.js";
 
 export const metadata = { title: "Configuración" };
 
-/** The chrome that wraps every public page: nav, footer and WhatsApp button. */
+/** Lo que envuelve cada página pública: el menú, el pie y el botón de WhatsApp. */
 export default async function Page() {
   await requireUser();
 
-  const blocks = await Promise.all(SITE_BLOCKS.map((key) => getBlockForEdit(key)));
+  const [navigation, footer, whatsapp, collections] = await Promise.all([
+    getBlockForEdit("navigation"),
+    getBlockForEdit("footer"),
+    getBlockForEdit("whatsapp"),
+    getCollectionOptions(),
+  ]);
 
   return (
     <section className="admin-page">
@@ -21,9 +28,28 @@ export default async function Page() {
         </div>
       </header>
 
-      {SITE_BLOCKS.map((key, index) => (
-        <BlockEditor key={key} formKey={key} initial={blocks[index]} />
-      ))}
+      <SettingsTabs
+        tabs={[
+          {
+            id: "menu",
+            label: "Menú",
+            description: "La barra superior y sus desplegables",
+            content: <NavigationEditor initial={navigation} collections={collections} />,
+          },
+          {
+            id: "pie",
+            label: "Pie de página",
+            description: "Contacto, mapa y enlaces",
+            content: <BlockEditor formKey="footer" initial={footer} collections={collections} />,
+          },
+          {
+            id: "whatsapp",
+            label: "WhatsApp",
+            description: "El botón flotante",
+            content: <BlockEditor formKey="whatsapp" initial={whatsapp} />,
+          },
+        ]}
+      />
     </section>
   );
 }

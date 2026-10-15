@@ -1,0 +1,270 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Configuración, colecciones y el selector de enlaces.
+
+   Aparte de admin.css porque son pantallas nuevas con piezas propias. Usa las
+   mismas variables (--admin-*) y la misma escala, así que se lee como el resto
+   del panel.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Selector «Llevar a» ─────────────────────────────────────────────────── */
+
+.link-picker { display:grid; gap:7px; align-content:start; font-size:11px; font-weight:650; color:#526076; }
+.link-picker__row { display:grid; grid-template-columns:minmax(150px, 0.8fr) 1.2fr; gap:8px; }
+.link-picker__row > :only-child { grid-column:1 / -1; }
+.link-picker__empty {
+  display:flex; align-items:center; padding:0 12px; border:1px dashed #c9d6ec; border-radius:8px;
+  font-size:12px; font-weight:600; color:var(--admin-blue); text-decoration:none; background:#f7faff;
+}
+.link-picker__empty:hover { background:#edf3ff; }
+.link-picker small { font-size:11px; font-weight:400; color:#8792a4; line-height:1.5; }
+.link-picker__path { font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:10.5px !important; color:#a0a9b8 !important; word-break:break-all; }
+
+/* ── Pestañas de Configuración ───────────────────────────────────────────── */
+
+.settings-tabs__list {
+  display:flex; gap:8px; margin-bottom:22px; padding:6px; background:#fff;
+  border:1px solid var(--admin-line); border-radius:13px; width:fit-content; max-width:100%; overflow-x:auto;
+}
+.settings-tabs__tab {
+  display:grid; gap:2px; text-align:left; border:0; background:none; padding:10px 18px;
+  border-radius:9px; cursor:pointer; font:inherit; color:#667085; white-space:nowrap;
+  transition:background .16s, color .16s;
+}
+.settings-tabs__tab strong { font-size:13.5px; font-weight:650; }
+.settings-tabs__tab small { font-size:11px; color:#98a2b3; }
+.settings-tabs__tab:hover { background:#f5f7fb; color:var(--admin-ink); }
+.settings-tabs__tab.is-active { background:#edf3ff; color:var(--admin-blue); }
+.settings-tabs__tab.is-active small { color:#6d8fd6; }
+.settings-tabs__tab:focus-visible { outline:2px solid #7ea2ea; outline-offset:2px; }
+
+/* ── Editor del menú ─────────────────────────────────────────────────────── */
+
+.nav-editor__layout { display:grid; grid-template-columns:290px minmax(0, 1fr); gap:20px; align-items:start; }
+
+.nav-editor__bar {
+  position:sticky; top:84px; background:#fff; border:1px solid var(--admin-line); border-radius:13px;
+  padding:18px; box-shadow:0 4px 18px rgba(35,55,90,.035);
+}
+.nav-editor__bar-head h2 { font-size:15px; margin:0 0 3px; }
+.nav-editor__bar-head p { font-size:11.5px; color:var(--admin-muted); margin:0 0 14px; }
+
+.nav-editor__links { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:6px; }
+.nav-editor__links li {
+  display:flex; align-items:center; gap:4px; border:1px solid #edf0f5; border-radius:10px;
+  background:#fbfcfe; transition:border-color .16s, background .16s;
+}
+.nav-editor__links li:hover { border-color:#d7e2f5; }
+.nav-editor__links li.is-selected { border-color:#7ea2ea; background:#f2f7ff; box-shadow:0 0 0 3px #edf3ff; }
+.nav-editor__link {
+  flex:1; min-width:0; display:grid; gap:2px; text-align:left; border:0; background:none;
+  padding:10px 4px 10px 12px; cursor:pointer; font:inherit; color:var(--admin-ink);
+}
+.nav-editor__link strong { font-size:13px; }
+.nav-editor__link small { font-size:11px; color:#8792a4; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.nav-editor__add { width:100%; }
+
+.nav-editor__general { display:grid; gap:12px; margin-top:18px; padding-top:16px; border-top:1px solid var(--admin-line); }
+
+.nav-editor__order { display:inline-flex; gap:3px; padding-right:6px; flex-shrink:0; }
+.nav-editor__order button {
+  width:26px; height:26px; border:0; border-radius:6px; background:#f0f3f8; color:#536176;
+  font-size:12px; cursor:pointer; display:grid; place-items:center;
+}
+.nav-editor__order button:hover:not(:disabled) { background:#e3eaf5; color:var(--admin-ink); }
+.nav-editor__order button:disabled { opacity:.35; cursor:default; }
+.nav-editor__order .nav-editor__x { color:#c94141; background:#fff0f0; font-size:15px; }
+.nav-editor__order .nav-editor__x:hover:not(:disabled) { background:#ffe2e2; color:#a52f2f; }
+
+.nav-editor__detail { display:grid; gap:18px; min-width:0; }
+.nav-editor__card {
+  background:#fff; border:1px solid var(--admin-line); border-radius:13px; padding:22px;
+  box-shadow:0 4px 18px rgba(35,55,90,.035); display:grid; gap:16px;
+}
+.nav-editor__card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+.nav-editor__card-head h2 { font-size:17px; margin:0 0 4px; }
+.nav-editor__card-head p { font-size:12px; color:var(--admin-muted); margin:0; max-width:62ch; line-height:1.55; }
+.nav-editor__danger {
+  border:0; background:#fff0f0; color:#c94141; border-radius:7px; padding:7px 11px;
+  font:inherit; font-size:11.5px; font-weight:600; cursor:pointer; flex-shrink:0;
+}
+.nav-editor__danger:hover { background:#ffe2e2; }
+.nav-editor__grid { display:grid; grid-template-columns:minmax(180px, .7fr) 1.3fr; gap:16px; align-items:start; }
+
+/* El interruptor del desplegable: una fila clicable entera, no una casilla suelta. */
+.nav-editor__switch, .collections__toggle {
+  display:flex !important; align-items:flex-start; gap:12px !important; padding:13px 14px;
+  border:1px solid #e3e9f3; border-radius:10px; background:#fbfcfe; cursor:pointer;
+}
+.nav-editor__switch input, .collections__toggle input { width:17px; height:17px; margin:1px 0 0; accent-color:var(--admin-blue); flex-shrink:0; }
+.nav-editor__switch span, .collections__toggle span { display:grid; gap:2px; }
+.nav-editor__switch strong, .collections__toggle strong { font-size:13px; color:var(--admin-ink); }
+.nav-editor__switch small, .collections__toggle small { font-size:11.5px; font-weight:400; color:#8792a4; }
+
+.nav-editor__dropdown { display:grid; grid-template-columns:minmax(0, 1fr) 300px; gap:18px; align-items:start; }
+
+.nav-editor__sections { display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:14px; }
+.nav-editor__section {
+  border:1px solid #e3e9f3; border-top:3px solid #9fbbef; border-radius:11px; background:#fbfcfe;
+  padding:12px; display:grid; gap:10px; align-content:start;
+}
+.nav-editor__section-head { display:flex; gap:6px; align-items:center; }
+.admin-page .nav-editor__section-title { font-weight:650; font-size:13.5px; background:transparent; border-color:transparent; padding:7px 8px; }
+.admin-page .nav-editor__section-title:hover { border-color:#dfe4ec; background:#fff; }
+
+.nav-editor__items { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.nav-editor__item { background:#fff; border:1px solid #e9eef6; border-radius:9px; padding:10px; display:grid; gap:9px; }
+.nav-editor__item-top { display:flex; gap:6px; align-items:center; }
+.nav-editor__item .link-picker__row { grid-template-columns:1fr; }
+.nav-editor__item .link-picker__path { display:none; }
+
+.nav-editor__add-item {
+  border:1px dashed #c9d6ec; background:none; border-radius:8px; padding:8px; color:var(--admin-blue);
+  font:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+}
+.nav-editor__add-item:hover { background:#f2f7ff; }
+.nav-editor__add-section {
+  min-height:120px; border:2px dashed #d3ddee; border-radius:11px; background:none; color:#6d8fd6;
+  font:inherit; font-size:13px; font-weight:600; cursor:pointer; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:6px;
+}
+.nav-editor__add-section:hover { background:#f7faff; border-color:#9fbbef; }
+
+/* Vista previa con los colores de la tienda, no los del panel. */
+.nav-editor__preview { position:sticky; top:84px; display:grid; gap:8px; }
+.nav-editor__preview-label { font-size:10px; letter-spacing:.13em; font-weight:800; color:var(--admin-blue); text-transform:uppercase; }
+.nav-editor__preview-panel {
+  background:#eaf6fd; border:1px solid #d6ebf8; border-radius:14px; padding:16px;
+  box-shadow:0 18px 40px -22px rgba(14,42,107,.45); font-family:var(--k-body, inherit);
+}
+.nav-editor__preview-title { margin:0 0 10px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#2db0de; }
+.nav-editor__preview-cols { display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:12px; }
+.nav-editor__preview-cols h4 { margin:0 0 6px; font-size:12px; color:#0e2a6b; }
+.nav-editor__preview-cols span { display:block; padding:4px 6px; border-radius:6px; font-size:12px; color:#33415c; }
+.nav-editor__preview-cols span.has-target { color:#1a6cb4; font-weight:600; }
+.nav-editor__preview-all { display:block; margin-top:12px; padding-top:10px; border-top:1px solid #d6ebf8; font-size:12px; font-weight:600; color:#1a6cb4; }
+.nav-editor__preview small { font-size:11px; color:#8792a4; line-height:1.5; }
+
+/* La barra de guardar queda pegada abajo: el menú es largo y el botón estaba al final de todo. */
+.nav-editor__save {
+  position:sticky; bottom:16px; z-index:5; margin-top:20px; display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:12px 14px 12px 18px; background:#fff; border:1px solid var(--admin-line); border-radius:12px;
+  box-shadow:0 12px 30px -14px rgba(35,55,90,.35); font-size:12.5px; color:#8792a4;
+}
+.nav-editor__save.is-dirty { border-color:#f1d08a; background:#fffcf3; color:#8a6412; }
+.nav-editor__save [role="alert"] { color:#c94141; }
+
+@media (max-width: 1280px) {
+  .nav-editor__dropdown { grid-template-columns:1fr; }
+  .nav-editor__preview { position:static; max-width:520px; }
+}
+@media (max-width: 960px) {
+  .nav-editor__layout { grid-template-columns:1fr; }
+  .nav-editor__bar { position:static; }
+  .nav-editor__grid { grid-template-columns:1fr; }
+}
+@media (max-width: 560px) {
+  .link-picker__row { grid-template-columns:1fr; }
+  .nav-editor__sections { grid-template-columns:1fr; }
+}
+
+/* ── Colecciones ─────────────────────────────────────────────────────────── */
+
+.collections__intro { margin:0; font-size:13px; color:var(--admin-muted); line-height:1.55; max-width:70ch; }
+.collections__intro strong { color:var(--admin-ink); }
+.admin-toolbar .collections__intro + .admin-button { margin-left:auto; }
+.collections__error { color:#c94141; font-size:12.5px; margin:0 auto 0 0; }
+
+.collections__grid { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:18px; }
+.collections__card {
+  background:#fff; border:1px solid var(--admin-line); border-radius:13px; overflow:hidden;
+  display:flex; flex-direction:column; box-shadow:0 4px 18px rgba(35,55,90,.035);
+}
+.collections__thumb { position:relative; height:150px; background:#eef2f8; }
+.collections__thumb > img { width:100%; height:100%; object-fit:cover; display:block; }
+.collections__mosaic { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; height:100%; gap:2px; background:#e6ebf3; }
+.collections__mosaic img, .collections__mosaic span { width:100%; height:100%; object-fit:contain; background:#fff; display:block; min-height:0; }
+.collections__mosaic span { background:#f3f6fa; }
+.collections__status {
+  position:absolute; top:10px; left:10px; padding:4px 9px; border-radius:20px; font-size:10.5px; font-weight:650;
+  background:#ebf8f1; color:#27875a;
+}
+.collections__status.is-hidden { background:#f3f4f6; color:#6b7280; }
+.collections__body { padding:15px 16px 6px; flex:1; }
+.collections__body h2 { font-size:15.5px; margin:0 0 4px; }
+.collections__body p { font-size:12px; color:var(--admin-muted); margin:0 0 8px; }
+.collections__url { display:inline-flex; align-items:center; gap:4px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:11px; color:var(--admin-blue); text-decoration:none; word-break:break-all; }
+.collections__url:hover { text-decoration:underline; }
+.collections__actions { display:flex; flex-wrap:wrap; align-items:center; gap:5px; padding:12px 16px 15px; }
+.collections__actions span { font-size:11.5px; color:#536176; margin-right:auto; }
+.collections__actions button { border:0; background:#f2f5f9; color:#536176; border-radius:6px; padding:6px 10px; font-size:11.5px; cursor:pointer; }
+.collections__actions button:disabled { opacity:.4; cursor:default; }
+.collections__actions .collections__edit { background:#edf3ff; color:var(--admin-blue); font-weight:650; margin-right:auto; }
+.collections__actions .danger { color:#c94141; background:#fff0f0; }
+
+/* El editor: detalles a la izquierda, la elección de productos a la derecha. */
+.admin-modal.collections__modal { width:min(1100px, 100%); display:flex; flex-direction:column; }
+.collections__editor { display:grid; grid-template-columns:340px minmax(0, 1fr); min-height:0; }
+.collections__details { display:grid; gap:16px; align-content:start; padding:22px 24px; border-right:1px solid var(--admin-line); }
+.collections__picker { display:flex; flex-direction:column; min-height:0; }
+.collections__picker-head { padding:18px 22px 12px; display:grid; gap:10px; border-bottom:1px solid var(--admin-line); }
+.collections__picker-head > strong { font-size:13.5px; display:flex; align-items:center; gap:8px; }
+.collections__badge { font-size:11px; font-weight:650; color:var(--admin-blue); background:#edf3ff; padding:3px 9px; border-radius:20px; }
+.collections__filters { display:grid; grid-template-columns:1fr 190px; gap:8px; }
+.collections__filters .admin-search { min-width:0; height:40px; }
+.collections__bulk { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+.collections__bulk button { border:0; background:#edf3ff; color:var(--admin-blue); border-radius:7px; padding:7px 11px; font:inherit; font-size:12px; font-weight:600; cursor:pointer; }
+.collections__bulk button:disabled { opacity:.45; cursor:default; }
+.admin-page .collections__check { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:500; cursor:pointer; }
+.collections__check input { accent-color:var(--admin-blue); }
+
+.collections__list { list-style:none; margin:0; padding:8px 12px 12px; overflow-y:auto; max-height:min(52vh, 520px); }
+.admin-page .collections__row {
+  display:flex; align-items:center; gap:11px; padding:8px 10px; border-radius:9px; cursor:pointer;
+  font-weight:400; border:1px solid transparent;
+}
+.collections__row:hover { background:#f7f9fc; }
+.collections__row.is-on { background:#f2f7ff; border-color:#d6e3f7; }
+.collections__row input { width:16px; height:16px; accent-color:var(--admin-blue); flex-shrink:0; }
+.collections__row img, .collections__noimg { width:38px; height:38px; border-radius:7px; object-fit:contain; background:#f3f5f8; flex-shrink:0; }
+.collections__row-text { display:grid; gap:2px; min-width:0; }
+.collections__row-text strong { font-size:12.5px; color:var(--admin-ink); font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.collections__row-text small { font-size:11px; color:#98a2b3; }
+.collections__none { padding:30px; text-align:center; color:#98a2b3; font-size:12.5px; }
+
+@media (max-width: 860px) {
+  .collections__editor { grid-template-columns:1fr; }
+  .collections__details { border-right:0; border-bottom:1px solid var(--admin-line); }
+  .collections__filters { grid-template-columns:1fr; }
+  .admin-toolbar:has(.collections__intro) { flex-wrap:wrap; }
+}
+
+/* ── Colecciones en el editor de productos ───────────────────────────────── */
+
+.product-collections { border:0; padding:0; margin:0; min-width:0; }
+.product-collections legend { font-size:11px; font-weight:650; color:#526076; padding:0; margin-bottom:8px; }
+.product-collections__list { display:flex; flex-wrap:wrap; gap:7px; }
+.admin-page .product-collections__chip {
+  display:inline-flex; align-items:center; gap:7px; padding:7px 12px; border:1px solid #dfe4ec; border-radius:20px;
+  font-size:12px; font-weight:500; color:#526076; background:#fff; cursor:pointer; transition:border-color .16s, background .16s;
+}
+.product-collections__chip:hover { border-color:#b9cbea; }
+.product-collections__chip.is-on { background:#edf3ff; border-color:#7ea2ea; color:var(--admin-blue); font-weight:600; }
+.product-collections__chip input { width:14px; height:14px; margin:0; accent-color:var(--admin-blue); }
+.product-collections__chip small { font-size:10.5px; color:#98a2b3; }
+
+/* El input de archivo oculto de ImageField lleva `.sr-only`, pero la regla de
+   admin.css para `input[type="file"]` le devolvía `width:100%` y, posicionado
+   en absoluto, empujaba la página hacia la derecha: Portada tenía scroll
+   horizontal. */
+.admin-page input.sr-only { width:1px; }
+
+@media (max-width: 560px) {
+  .settings-tabs__list { width:100%; scrollbar-width:none; }
+  .settings-tabs__list::-webkit-scrollbar { display:none; }
+  .settings-tabs__tab { flex:1; padding:10px 12px; text-align:center; }
+  .settings-tabs__tab small { display:none; }
+}
+
+.collections__body .collections__usage { font-size:11.5px; color:#a0a9b8; margin:0 0 8px; }
+.collections__body .collections__usage.is-used { color:#27875a; }
+.collections__warn { display:block; color:#c94141; font-weight:600; margin-top:3px; }

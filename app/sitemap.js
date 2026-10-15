@@ -1,7 +1,10 @@
 import {
   filterByClassification,
+  searchItems,
   slugify,
 } from "../src/domain/catalog/classification.js";
+import { collectionPath } from "../src/domain/content/links.js";
+import { getActiveCollections } from "../src/infra/db/queries/collections.js";
 import { CATEGORIES } from "../src/domain/content/vocabulary.js";
 import { getProductsByCategory } from "../src/infra/db/queries/catalog.js";
 import { getContent } from "../src/infra/db/queries/content.js";
@@ -59,7 +62,7 @@ export default async function sitemap() {
      * on thin content. They stay reachable and stay out of the sitemap.
      */
     const link = content.navigation.links.find((entry) => entry.path === `/${category}`);
-    const items = (link?.dropdown?.sections ?? []).flatMap((section) => section.items);
+    const items = searchItems(link).map((item) => item.label);
 
     for (const slug of new Set(items.map(slugify))) {
       if (filterByClassification(products, slug).length === 0) continue;
@@ -77,6 +80,17 @@ export default async function sitemap() {
         priority: 0.7,
       });
     }
+  }
+
+  // Las colecciones con algo adentro. Una vacía es una página correcta para
+  // quien llegó desde un banner, y contenido vacío para un buscador.
+  for (const collection of await getActiveCollections()) {
+    if (collection.productCount === 0) continue;
+    entries.push({
+      url: absoluteUrl(collectionPath(collection.slug)),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    });
   }
 
   return entries;

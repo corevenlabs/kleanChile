@@ -1,11 +1,14 @@
 import ProductsManager from "../../../src/admin/components/ProductsManager";
 import { getAllProducts } from "../../../src/infra/db/queries/catalog.js";
+import { getAllCollections } from "../../../src/infra/db/queries/collections.js";
 import { requireUser } from "../../../src/lib/adminSession.js";
 
 export const metadata = { title: "Productos" };
 
 export default async function Page() {
   await requireUser();
+
+  const [products, collections] = await Promise.all([getAllProducts(), getAllCollections()]);
 
   return (
     <section className="admin-page">
@@ -17,7 +20,7 @@ export default async function Page() {
         </div>
       </header>
 
-      <ProductsManager products={await getAllProducts()} />
+      <ProductsManager products={products} collections={collections} />
     </section>
   );
 }

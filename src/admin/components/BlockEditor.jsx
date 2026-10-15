@@ -14,6 +14,7 @@ import {
 } from "../lib/paths";
 import Icon from "./Icon";
 import ImageField from "./ImageField";
+import LinkPicker from "./LinkPicker";
 
 /**
  * One editor for every block of storefront content.
@@ -28,8 +29,22 @@ import ImageField from "./ImageField";
  * field by field would mean a half-applied hero if a save failed midway.
  */
 
-function Field({ field, value, onChange }) {
+function Field({ field, value, onChange, collections }) {
   const className = field.wide === false ? undefined : "wide";
+
+  if (field.type === "link") {
+    return (
+      <div className={className}>
+        <LinkPicker
+          label={field.label}
+          value={value ?? ""}
+          onChange={onChange}
+          collections={collections}
+          hint={field.hint}
+        />
+      </div>
+    );
+  }
 
   if (field.type === "image") {
     return <ImageField label={field.label} value={value} onChange={onChange} />;
@@ -106,7 +121,7 @@ function Field({ field, value, onChange }) {
  * so a dropdown inside a nav link inside the navigation block needs no special
  * case.
  */
-function ListEditor({ list, draft, path, onChange }) {
+function ListEditor({ list, draft, path, onChange, collections }) {
   const fullPath = path ? `${path}.${list.name}` : list.name;
   const items = getAt(draft, fullPath) ?? [];
 
@@ -160,6 +175,7 @@ function ListEditor({ list, draft, path, onChange }) {
                 <Field
                   key={field.name}
                   field={field}
+                  collections={collections}
                   value={getAt(draft, fieldPath)}
                   onChange={(value) => onChange(setAt(draft, fieldPath, value))}
                 />
@@ -174,6 +190,7 @@ function ListEditor({ list, draft, path, onChange }) {
               draft={draft}
               path={`${fullPath}.${String(index)}`}
               onChange={onChange}
+              collections={collections}
             />
           ))}
         </div>
@@ -188,7 +205,7 @@ function ListEditor({ list, draft, path, onChange }) {
  * server/client boundary as a prop. The page says which block; this side looks
  * up how to render it.
  */
-export default function BlockEditor({ formKey, initial }) {
+export default function BlockEditor({ formKey, initial, collections = [] }) {
   const form = FORMS[formKey];
   const [draft, setDraft] = useState(initial);
   const [feedback, setFeedback] = useState(null);
@@ -233,6 +250,7 @@ export default function BlockEditor({ formKey, initial }) {
               <Field
                 key={field.name}
                 field={field}
+                collections={collections}
                 value={getAt(draft, field.name)}
                 onChange={(value) => setDraft(setAt(draft, field.name, value))}
               />
@@ -248,6 +266,7 @@ export default function BlockEditor({ formKey, initial }) {
           draft={draft}
           path=""
           onChange={setDraft}
+          collections={collections}
         />
       ))}
 

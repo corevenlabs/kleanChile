@@ -15,7 +15,9 @@ function upgradeLegacyNavigation(value) {
   const itemsAt = (path) =>
     links
       .find((link) => link.path === path)
-      ?.dropdown?.sections?.flatMap((section) => section.items) ?? [];
+      ?.dropdown?.sections?.flatMap((section) => section.items)
+      // Un ítem es texto en los menús viejos y `{ label, path }` en los nuevos.
+      .map((item) => (typeof item === "string" ? item : item?.label)) ?? [];
 
   const isDemoMenu =
     itemsAt("/bookshop").includes("Novelas") && itemsAt("/desktop").includes("Teclados");

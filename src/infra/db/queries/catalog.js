@@ -25,7 +25,7 @@ export const CATALOG_TAG = "products";
  */
 export const SALES_TAG = "sales";
 
-const toView = (row) => ({
+export const toView = (row) => ({
   id: row.id,
   category: row.category,
   skuCode: row.skuCode,

@@ -40,6 +40,7 @@ const emptyProduct = {
   isActive: true,
   position: 0,
   stock: 0,
+  collectionIds: [],
 };
 
 /**
@@ -93,7 +94,7 @@ function StockDelta({ before, after }) {
   );
 }
 
-export default function ProductsManager({ products }) {
+export default function ProductsManager({ products, collections = [] }) {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
@@ -124,6 +125,9 @@ export default function ProductsManager({ products }) {
     setEditing({
       ...product,
       stock: product.id ? product.stockOnHand : product.stock,
+      collectionIds: product.id
+        ? collections.filter((entry) => entry.productIds.includes(product.id)).map((entry) => entry.id)
+        : [],
     });
     setStockBefore(product.id ? product.stockOnHand : null);
     setSpecsText(specsToText(product.specs));
@@ -524,6 +528,43 @@ export default function ProductsManager({ products }) {
                   <option value="0">Oculto</option>
                 </select>
               </label>
+              {/*
+                Las colecciones del producto. Lo mismo se puede hacer desde
+                Colecciones, eligiendo muchos de una vez; acá es para el caso
+                de un producto suelto mientras se lo edita.
+              */}
+              <fieldset className="wide product-collections">
+                <legend>Colecciones</legend>
+                {collections.length === 0 ? (
+                  <small className="admin-hint">
+                    No hay colecciones todavía. Se crean en <a href="/admin/colecciones">Colecciones</a>.
+                  </small>
+                ) : (
+                  <div className="product-collections__list">
+                    {collections.map((entry) => {
+                      const checked = editing.collectionIds.includes(entry.id);
+                      return (
+                        <label key={entry.id} className={`product-collections__chip ${checked ? "is-on" : ""}`}>
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() =>
+                              setEditing({
+                                ...editing,
+                                collectionIds: checked
+                                  ? editing.collectionIds.filter((value) => value !== entry.id)
+                                  : [...editing.collectionIds, entry.id],
+                              })
+                            }
+                          />
+                          {entry.name}
+                          {!entry.isActive && <small> (oculta)</small>}
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </fieldset>
               <label className="wide">
                 Descripción
                 <textarea

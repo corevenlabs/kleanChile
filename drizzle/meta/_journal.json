@@ -78,6 +78,13 @@
       "when": 1791406179659,
       "tag": "0010_product_gallery",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792030240756,
+      "tag": "0011_colecciones",
+      "breakpoints": true
     }
   ]
 }

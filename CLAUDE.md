@@ -70,7 +70,7 @@ No new admin component: `BlockEditor` renders any block from its description. Fi
 
 The mega-menu's items are free text an admin types — "Detergentes", "Aspiradoras", "Lámparas". They do **not** correspond to any column: products carry a `type` ("químico", "resma") that was never built to line up with them. Treating an item as a key would mean a migration every time someone edited the menu.
 
-So an item is a **search term scoped to its category**, resolved by `src/domain/catalog/classification.js` against name, type and description, accent- and plural-insensitive:
+So an item without a destination is a **search term scoped to its category**, resolved by `src/domain/catalog/classification.js` against name, type and description, accent- and plural-insensitive:
 
 ```
 Navbar dropdown item  →  classificationHref()  →  /cleaning/detergentes
@@ -79,6 +79,8 @@ Navbar dropdown item  →  classificationHref()  →  /cleaning/detergentes
 ```
 
 One dynamic route, not a `[classification]` folder under each of the three category pages. `/carrito/x` reaches it too, since those segments have no children of their own — hence the `CATEGORIES` check, which is the line between the two failure modes: **an unknown category is a 404, an unknown classification is a page that reports finding nothing.** A URL that was never valid and a shelf that is empty today are not the same answer, and the menu is editable, so "no results" is a normal outcome rather than a fault.
+
+**An item can also carry its own `path`.** Items are stored as `{ label, path }` since collections arrived; a bare string from an older menu is read as `{ label, path: "" }` by `navItemSchema`, so no saved menu needed migrating. An empty `path` keeps the search behaviour above; a set one (usually a collection) is where the item goes, via `navItemHref`. Only path-less items are classifications — `findClassification`, `searchItems` and the sitemap ignore the rest.
 
 `slugify` must stay the single definition of a slug — the navbar (a Client Component) builds the href with it and the route parses the href with it. Two copies drifting by one character breaks every link in the menu.
 
@@ -95,6 +97,22 @@ Eight of the seeded menu items currently match nothing — the Librería column 
 **The search field is always visible, and sits immediately left of the cart.** It used to hide behind a magnifier button, so finding anything required first discovering the icon. Three things follow: `SearchBox` lost its `autoFocus` — harmless on a box that only appeared on click, focus theft on every page load once it is always mounted; the field's `max-width` is what lets `margin-left: auto` hold it against the cart, since flex-grow would otherwise eat the free space the margin needs; and the categories now collapse into the drawer at **960px** rather than 768, because four of them plus a usable field do not fit below that and the field is the one that has to survive. Below 560px the search drops to its own row, which is what makes the bar 97px there.
 
 `/nosotros` and `/contact` are deliberately **not** in the bar — they were the two links that bought the field its width. Neither page is orphaned: `Footer.js` lists Contacto and injects Nosotros beside it, so both stay linked from every public page and stay in the sitemap. `/contact` left the `navigation` block through `drizzle/0008_navbar_solo_categorias.sql`; "Nosotros" was never in that block at all, it was injected by `Navbar.js` the way the footer still injects it.
+
+### Collections
+
+A **collection** (`collections` + `product_collections`, `drizzle/0011`) is a hand-picked group of products with its own page at `/coleccion/[slug]` — "Temporada escolar", "Rheinvéntate", "Industriales". A category says what a product *is* and there is exactly one; a collection says where the shop wants to *show* it, and a product can be in several. That is what lets an "Industriales" menu item show cleaning products that never mention the word.
+
+- **A table, not tags on the product**, because a collection has an identity of its own — a title, a text and an image for its page — and a name that can be corrected without editing every member.
+- **The slug is set at creation and never follows a rename**, like a SKU: banners and menu items point at it.
+- **Hidden is a 404**, unlike a classification that matches nothing: here the set of valid URLs is finite and the panel decides it. An empty published collection renders and is `noindex`.
+- **Reads share `CATALOG_TAG`**: a collection is a view over products, so publishing, hiding or repricing one must refresh the collections it is in. Collection actions also revalidate `CONTENT_TAG`, because the link picker lists them.
+- Members can be set from either side — `/admin/colecciones` (search, category filter, checkboxes, "elegir los que se ven") or the chips in the product editor. Products show in catalogue order; there is no per-collection ordering yet.
+
+**Every admin link field is a picker, not a path box.** `admin/components/LinkPicker.jsx` ("Llevar a": collection / category / search / site page / custom) sits over `domain/content/links.js`. What is stored is still the plain path string it always was — `readLink` recognises an existing path as the choice it corresponds to, so adopting it migrated nothing. In `forms.js` it is `type: "link"`, and `BlockEditor` needs the `collections` prop to offer them. The picker derives its type from the path whenever there is one and only holds it in local state while the path is empty; otherwise a reordered list hands a reused picker the wrong type.
+
+`/admin/colecciones` shows where each collection is linked (by searching the content blocks for its path) and repeats it in the delete confirmation, because deleting one leaves those links as 404s; the picker then shows them as "Ya no existe".
+
+**Configuración is tabbed** (`SettingsTabs`; panels are hidden, not unmounted, so an unsaved draft survives a tab switch). The menu has its own editor, `NavigationEditor`: links on the left, the chosen link's dropdown on the right with a destination per item, a live preview, and a sticky save bar. It replaced the generic three-levels-of-lists form, which is why `navigation` is no longer in `FORMS`. Admin styles for these screens live in `src/admin/styles/editor.css`.
 
 ### Search
 
@@ -355,7 +373,7 @@ Two things differ from azarwear's version and both are forced:
 - **Prices are integer Chilean pesos, not cents.** This departs from azarwear's "money is always integer cents" rule because CLP is zero-decimal — there is no centavo to represent. `src/domain/shared/money.js` formats and parses; `parseClp` exists because `Number("2.990")` returns 2.99, which would price a three-thousand-peso product at three pesos. **Zero is not a price, it is "ask us"** — see "Price on request is price zero".
 - **An image is a URL.** Not a media id, not a `MediaRef` — see "Images" below. This is the invariant the importer, the seed and every component depend on.
 - **The rate limiter is in-memory** (`src/lib/rateLimit.js`), so its limit multiplies across instances. It exists to stop unauthenticated requests from burning 32 MB of scrypt each, not to stop guessing — the per-account lockout does that.
-- **`admin.css` is untouched.** All admin UI composes from the classes already in it.
+- **Admin styles compose from `admin.css`.** New screens that need pieces of their own (Configuración, Colecciones, the link picker) put them in `src/admin/styles/editor.css`, with the same `--admin-*` variables.
 
 ## Things the migration fixed
 

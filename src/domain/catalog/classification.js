@@ -39,9 +39,27 @@ export function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-/** Where a dropdown item points: the category page, narrowed by the item. */
-export function classificationHref(basePath, item) {
-  return `${basePath}/${slugify(item)}`;
+/** Where a search-term item points: the category page, narrowed by the item. */
+export function classificationHref(basePath, label) {
+  return `${basePath}/${slugify(label)}`;
+}
+
+/**
+ * Where a dropdown item points.
+ *
+ * An item with its own `path` — a collection, a search, any page — goes
+ * there. One without is the original behaviour: its label searched within the
+ * category. Both kinds sit side by side in the same column.
+ */
+export function navItemHref(basePath, item) {
+  return item.path ? item.path : classificationHref(basePath, item.label);
+}
+
+/** The items of a nav link that are category searches, i.e. that this route answers. */
+export function searchItems(link) {
+  return (link?.dropdown?.sections ?? []).flatMap((section) =>
+    section.items.filter((item) => !item.path && item.label),
+  );
 }
 
 /**
@@ -80,8 +98,8 @@ export function findClassification(navigation, categoryPath, slug) {
 
   for (const section of link?.dropdown?.sections ?? []) {
     for (const item of section.items) {
-      if (slugify(item) === slug) {
-        return { slug, label: item, section: section.title, inMenu: true };
+      if (!item.path && slugify(item.label) === slug) {
+        return { slug, label: item.label, section: section.title, inMenu: true };
       }
     }
   }

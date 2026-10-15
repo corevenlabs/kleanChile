@@ -20,6 +20,7 @@ import "../src/components/WhyUs/WhyUs.css";
 import "../src/components/Testimonials/Testimonials.css";
 import "../src/components/cart/cart.css";
 import "../src/admin/styles/admin.css";
+import "../src/admin/styles/editor.css";
 
 /**
  * Three faces, three jobs — see the type notes in `styles/brand.css`.

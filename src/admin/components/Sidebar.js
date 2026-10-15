@@ -12,6 +12,7 @@ const links = [
   { to: "/admin/pedidos", icon: "pedidos", label: "Pedidos" },
   { to: "/admin/portada", icon: "portada", label: "Portada" },
   { to: "/admin/productos", icon: "productos", label: "Productos" },
+  { to: "/admin/colecciones", icon: "colecciones", label: "Colecciones" },
   { to: "/admin/importar", icon: "importar", label: "Importar" },
   { to: "/admin/configuracion", icon: "configuracion", label: "Configuración" },
 ];

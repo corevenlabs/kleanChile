@@ -31,6 +31,14 @@ const paths = {
       <path d="M3.5 7.5 12 12l8.5-4.5M12 12v9" />
     </>
   ),
+  colecciones: (
+    <>
+      <rect x="3" y="3" width="7.5" height="7.5" rx="1.6" />
+      <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6" />
+      <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6" />
+      <path d="M17.25 13.5v7.5M13.5 17.25H21" />
+    </>
+  ),
   importar: (
     <>
       <path d="M12 3v11" />
@@ -69,6 +77,11 @@ const paths = {
     </>
   ),
   chevron: <path d="m9 5 7 7-7 7" />,
+  arriba: <path d="m6 15 6-6 6 6" />,
+  abajo: <path d="m6 9 6 6 6-6" />,
+  izquierda: <path d="m15 6-6 6 6 6" />,
+  derecha: <path d="m9 6 6 6-6 6" />,
+  cerrar: <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />,
   buscar: (
     <>
       <circle cx="11" cy="11" r="7" />

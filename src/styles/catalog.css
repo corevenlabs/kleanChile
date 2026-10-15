@@ -492,3 +492,71 @@
     padding: 44px 18px 52px;
   }
 }
+
+/* ── Collection header ───────────────────────────────────────────────────────
+
+   A collection page is a category page with its own heading. The text and
+   image are optional; without an image it reads exactly like a category. */
+
+.catalog__lead {
+  max-width: 62ch;
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--k-ink);
+}
+
+.catalog__head--banner {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  min-height: 220px;
+  display: flex;
+  align-items: flex-end;
+  background: var(--k-navy);
+}
+
+.catalog__banner,
+.catalog__banner picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.catalog__banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The scrim is what keeps white text legible on whatever photo gets uploaded. */
+.catalog__head--banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(1, 15, 104, 0.82) 0%, rgba(1, 15, 104, 0.35) 55%, rgba(1, 15, 104, 0.05) 100%);
+}
+
+.catalog__head--banner .catalog__head-text {
+  position: relative;
+  z-index: 1;
+  padding: 28px 30px;
+}
+
+.catalog__head--banner .catalog__title,
+.catalog__head--banner .catalog__lead,
+.catalog__head--banner .catalog__crumbs,
+.catalog__head--banner .catalog__crumbs a,
+.catalog__head--banner .catalog__count {
+  color: #fff;
+}
+
+.catalog__head--banner .catalog__crumbs span[aria-hidden] {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 640px) {
+  .catalog__head--banner { min-height: 180px; }
+  .catalog__head--banner .catalog__head-text { padding: 20px; }
+}

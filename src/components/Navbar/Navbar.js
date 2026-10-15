@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { classificationHref } from "../../domain/catalog/classification";
+import { navItemHref } from "../../domain/catalog/classification";
 import SearchBox from "./SearchBox";
 import Wordmark from "../brand/Wordmark";
 import "./Navbar.css";
@@ -124,8 +124,8 @@ export default function Navbar({ data, cart = null }) {
                 <div key={section.title} className="navDrop__section">
                   <h4 className="navDrop__heading">{section.title}</h4>
                   {section.items.map((item) => {
-                    const href = classificationHref(link.path, item);
-                    return <Link key={item} href={href} className={`navDrop__item ${pathname === href ? "navDrop__item--active" : ""}`}>{item}</Link>;
+                    const href = navItemHref(link.path, item);
+                    return <Link key={href} href={href} className={`navDrop__item ${pathname === href ? "navDrop__item--active" : ""}`}>{item.label}</Link>;
                   })}
                 </div>
               ))}</div>
@@ -150,6 +150,6 @@ export default function Navbar({ data, cart = null }) {
     {/* The dropdown opens on hover, so on a phone these classifications had no
         way in at all. Repeated flat rather than behind a second tap: they are
         the shortcuts, and a shortcut you have to open a drawer for is not one. */}
-    {link.dropdown && <div className="navbar__mobile-chips">{link.dropdown.sections.flatMap((section) => section.items).map((item) => { const href = classificationHref(link.path, item); return <Link key={href} href={href} className={`navbar__mobile-chip ${pathname === href ? "navbar__mobile-chip--active" : ""}`} onClick={() => setMenuOpen(false)}>{item}</Link>; })}</div>}
+    {link.dropdown && <div className="navbar__mobile-chips">{link.dropdown.sections.flatMap((section) => section.items).map((item) => { const href = navItemHref(link.path, item); return <Link key={href} href={href} className={`navbar__mobile-chip ${pathname === href ? "navbar__mobile-chip--active" : ""}`} onClick={() => setMenuOpen(false)}>{item.label}</Link>; })}</div>}
   </div>)}</div></nav>;
 }

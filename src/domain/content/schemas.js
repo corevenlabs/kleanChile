@@ -76,7 +76,7 @@ export const heroSchema = z.object({
 export const bestSellersSchema = z.object({
   title: text("Productos más vendidos"),
   linkLabel: text("Ver más productos"),
-  linkPath: text("/cleaning"),
+  linkPath: text("/limpieza"),
   /** Capped: the rail scrolls, but a hundred cards is a slow page, not a shop. */
   limit: z.number().int().min(1).max(24).default(8),
 });

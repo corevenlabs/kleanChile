@@ -127,6 +127,24 @@ const nextConfig = {
   },
 
   /*
+   * Las categorías tenían direcciones en inglés hasta `drizzle/0012`. Siguen
+   * vivas en buscadores, en favoritos y en mensajes de WhatsApp ya enviados,
+   * así que se redirigen de forma permanente, con su clasificación incluida.
+   */
+  async redirects() {
+    return [
+      ["cleaning", "limpieza"],
+      ["bookshop", "libreria"],
+      ["desktop", "escritorio"],
+      ["hardware", "ferreteria"],
+      ["breakroom", "pausa-del-dia"],
+    ].flatMap(([from, to]) => [
+      { source: `/${from}`, destination: `/${to}`, permanent: true },
+      { source: `/${from}/:classification`, destination: `/${to}/:classification`, permanent: true },
+    ]);
+  },
+
+  /*
    * Build output location, overridable.
    *
    * `next build` and `next dev` both write to `.next`, so running a build while

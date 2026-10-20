@@ -3,7 +3,7 @@
     "brand": "RutaCorp", "description": "Soluciones profesionales de limpieza, librería y maquinaria industrial.",
     "sections": [
       {"title":"Empresa","links":[{"label":"Contacto","path":"/contact"}]},
-      {"title":"Categorías","links":[{"label":"Limpieza","path":"/cleaning"},{"label":"Librería","path":"/bookshop"},{"label":"Escritorio","path":"/desktop"}]}
+      {"title":"Categorías","links":[{"label":"Limpieza","path":"/limpieza"},{"label":"Librería","path":"/libreria"},{"label":"Escritorio","path":"/escritorio"},{"label":"Ferretería","path":"/ferreteria"},{"label":"Pausa del día","path":"/pausa-del-dia"}]}
     ],
     "contact": {"title":"Contacto","items":["contacto@rutacorp.cl","+56 9 1234 5678","Temuco, Chile"]},
     "location": {"title":"Ubicación","embedUrl":"https://www.google.com/maps?q=Avenida+Alemania+1000+Temuco&output=embed","mapUrl":"https://maps.google.com/?q=Avenida+Alemania+1000+Temuco","mapTitle":"Ubicación RutaCorp","cta":"Ver en Google Maps"},

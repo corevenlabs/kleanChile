@@ -3,15 +3,15 @@ import { categoryDescription } from "../../../src/domain/catalog/categoryCopy.js
 import { getProductsByCategory } from "../../../src/infra/db/queries/catalog.js";
 import { absoluteUrl } from "../../../src/lib/site.js";
 
-const description = categoryDescription("desktop");
+const description = categoryDescription("pausa-del-dia");
 
 export const metadata = {
-  title: "Artículos de escritorio",
+  title: "Pausa del día",
   description,
-  alternates: { canonical: absoluteUrl("/desktop") },
-  openGraph: { title: "Artículos de escritorio", description, url: absoluteUrl("/desktop") },
+  alternates: { canonical: absoluteUrl("/pausa-del-dia") },
+  openGraph: { title: "Pausa del día", description, url: absoluteUrl("/pausa-del-dia") },
 };
 
 export default async function Page() {
-  return <Category category="desktop" products={await getProductsByCategory("desktop")} />;
+  return <Category category="pausa-del-dia" products={await getProductsByCategory("pausa-del-dia")} />;
 }

@@ -29,8 +29,8 @@ const STATUS_LABEL = {
 /**
  * Cómo se muestra un valor en la columna «cambios».
  *
- * La categoría se guarda como slug en inglés — `cleaning` — igual que el resto
- * de los identificadores del sistema. Acá se traduce: quien revisa el resumen
+ * La categoría se guarda como slug — `limpieza`, `pausa-del-dia` — sin tildes
+ * porque también es la dirección de su página. Acá se traduce: quien revisa el resumen
  * escribió «Limpieza» en su planilla y eso es lo que tiene que leer de vuelta.
  */
 function showValue(field, value) {

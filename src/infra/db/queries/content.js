@@ -19,8 +19,10 @@ function upgradeLegacyNavigation(value) {
       // Un ítem es texto en los menús viejos y `{ label, path }` en los nuevos.
       .map((item) => (typeof item === "string" ? item : item?.label)) ?? [];
 
+  // Con las rutas de antes y las de ahora: 0012 pasó las categorías a español.
   const isDemoMenu =
-    itemsAt("/bookshop").includes("Novelas") && itemsAt("/desktop").includes("Teclados");
+    [...itemsAt("/bookshop"), ...itemsAt("/libreria")].includes("Novelas") &&
+    [...itemsAt("/desktop"), ...itemsAt("/escritorio")].includes("Teclados");
 
   return isDemoMenu ? navigationDefaults : value;
 }

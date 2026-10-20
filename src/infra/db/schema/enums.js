@@ -1,16 +1,18 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
 /**
- * The three storefront categories, matching the public routes `/cleaning`,
- * `/bookshop` and `/desktop`.
+ * The storefront categories, matching the public routes `/limpieza`,
+ * `/libreria`, `/escritorio`, `/ferreteria` and `/pausa-del-dia`.
  *
  * An enum rather than free text because the storefront has exactly one page per
  * category — a typo'd fourth value would create products that no page renders.
  */
 export const productCategory = pgEnum("product_category", [
-  "cleaning",
-  "bookshop",
-  "desktop",
+  "limpieza",
+  "libreria",
+  "escritorio",
+  "ferreteria",
+  "pausa-del-dia",
 ]);
 
 export const userRole = pgEnum("user_role", ["owner", "staff"]);

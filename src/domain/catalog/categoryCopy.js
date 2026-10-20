@@ -3,7 +3,7 @@ import { CATEGORY_LABELS } from "../content/vocabulary.js";
 /**
  * What a category page tells a search engine it is.
  *
- * The three pages shared the site-wide description, which reads to a crawler as
+ * The category pages shared the site-wide description, which reads to a crawler as
  * three copies of the same page. Written here rather than in each route so the
  * filtered variants ("Cloro en Limpieza") derive from the same sentence, and so
  * there is one place to change the pitch.
@@ -13,12 +13,16 @@ import { CATEGORY_LABELS } from "../content/vocabulary.js";
  * sentences would cost more attention than it saves.
  */
 const PITCH = {
-  cleaning:
+  limpieza:
     "Detergentes, desinfectantes, papel y equipos de aseo para colegios, hoteles, oficinas e industria.",
-  bookshop:
+  libreria:
     "Útiles escolares, papelería y material de oficina por volumen para instituciones.",
-  desktop:
+  escritorio:
     "Sillas, escritorios, periféricos y organización para puestos de trabajo.",
+  ferreteria:
+    "Herramientas, fijaciones, cintas y artículos de mantención para edificios, bodegas y talleres.",
+  "pausa-del-dia":
+    "Café, té, azúcar, endulzantes, vasos y artículos de cafetería para oficinas, salas de profesores y comedores.",
 };
 
 export function categoryDescription(category, classification = null) {

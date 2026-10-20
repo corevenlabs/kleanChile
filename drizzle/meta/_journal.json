@@ -85,6 +85,20 @@
       "when": 1792030240756,
       "tag": "0011_colecciones",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792523567458,
+      "tag": "0012_nuevas_categorias",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792523627458,
+      "tag": "0013_categorias_en_espanol",
+      "breakpoints": true
     }
   ]
 }

@@ -96,7 +96,7 @@ const detailsById = new Map(details.map((detail) => [detail.id, detail]));
 
 const catalogRows = Object.entries(catalogs).flatMap(([category, items]) =>
   items.map((item, index) => {
-    const detail = category === "cleaning" ? detailsById.get(item.id) : undefined;
+    const detail = category === "limpieza" ? detailsById.get(item.id) : undefined;
 
     return {
       category,
@@ -128,14 +128,14 @@ const catalogRows = Object.entries(catalogs).flatMap(([category, items]) =>
  * description where a buyer actually reads it.
  */
 const featuredRows = home.bestSellers.products.map((product, index) => ({
-  category: "cleaning",
+  category: "limpieza",
   name: product.name,
   type: "químico",
   priceClp: parseClp(product.price) ?? 0,
   imageUrl: product.image,
   description: `${product.name} — ${product.type}.`,
   specs: {},
-  position: catalogs.cleaning.length + index,
+  position: catalogs.limpieza.length + index,
 }));
 
 /*

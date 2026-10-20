@@ -63,7 +63,7 @@ export default function Cart({ lines, dropped }) {
         <h1 className="cart-page__title">Tu carrito</h1>
         <div className="cart-empty">
           <p>Todavía no has agregado productos.</p>
-          <Link href="/cleaning">Ver catálogo</Link>
+          <Link href="/limpieza">Ver catálogo</Link>
         </div>
       </div>
     );

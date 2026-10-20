@@ -6,9 +6,9 @@ import { breadcrumbLd, itemListLd } from "../../domain/seo/structuredData";
 import { absoluteUrl } from "../../lib/site";
 
 /**
- * One view for all three category pages, filtered or not.
+ * One view for every category page, filtered or not.
  *
- * `/cleaning` and `/cleaning/detergentes` are the same page asking a narrower
+ * `/limpieza` and `/limpieza/detergentes` are the same page asking a narrower
  * question, so they render the same component. `Cleaning.js`, `Bookshop.js`
  * and `Desktop.js` were three identical one-line files that each forwarded to
  * `Catalog`; a fourth for the filtered case would have been the point at which

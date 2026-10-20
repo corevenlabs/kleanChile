@@ -37,25 +37,37 @@ const SOLUTIONS = [
   {
     title: "Limpieza profesional",
     text: "Productos para el aseo, la higiene y el mantenimiento cotidiano de espacios institucionales, comerciales e industriales.",
-    href: "/cleaning",
+    href: "/limpieza",
     link: "Explorar limpieza",
   },
   {
     title: "Librería",
     text: "Artículos para apoyar las tareas educativas, administrativas y operativas de colegios, empresas y organizaciones.",
-    href: "/bookshop",
+    href: "/libreria",
     link: "Explorar librería",
   },
   {
     title: "Escritorio y oficina",
     text: "Elementos esenciales para mantener puestos de trabajo, áreas administrativas y equipos organizados y abastecidos.",
-    href: "/desktop",
+    href: "/escritorio",
     link: "Explorar escritorio",
+  },
+  {
+    title: "Ferretería",
+    text: "Herramientas, fijaciones y artículos de mantención para el cuidado diario de edificios, bodegas y talleres.",
+    href: "/ferreteria",
+    link: "Explorar ferretería",
+  },
+  {
+    title: "Pausa del día",
+    text: "Café, té, azúcar, vasos y todo lo necesario para la pausa en oficinas, salas de profesores y comedores.",
+    href: "/pausa-del-dia",
+    link: "Explorar pausa del día",
   },
   {
     title: "Maquinaria y apoyo operativo",
     text: "Alternativas pensadas para complementar labores de limpieza y responder a requerimientos de mayor escala.",
-    href: "/cleaning",
+    href: "/limpieza",
     link: "Consultar alternativas",
   },
 ];
@@ -84,7 +96,7 @@ export default function About() {
           </p>
           <div className="about__actions">
             <Link className="about__primary" href="/contact">Cotiza con nosotros</Link>
-            <Link className="about__secondary" href="/cleaning">Ver productos</Link>
+            <Link className="about__secondary" href="/limpieza">Ver productos</Link>
           </div>
         </div>
 

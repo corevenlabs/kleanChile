@@ -512,7 +512,7 @@
 
 /* Antes de esconder nada, se achica: el buscador ya no cede espacio, así que
    son las categorías y el logo los que tienen que dar el paso atrás. */
-@media (max-width: 1080px) {
+@media (max-width: 1200px) {
   .navbar__inner { gap: 10px; padding: 0 20px; }
   .navbar__link { padding: 0 7px; font-size: 0.86rem; }
   .navbar__link--active::after { left: 7px; right: 7px; }
@@ -523,12 +523,13 @@
 /*
  * Las categorías se van al cajón antes que en 768px.
  *
- * Con el campo de búsqueda siempre a la vista, cuatro categorías y el campo no
- * entran juntos por debajo de ~960px: uno de los dos queda inservible, y el que
- * tiene que sobrevivir es el buscador. El cajón repite las categorías enteras,
- * con sus clasificaciones, así que no se pierde nada.
+ * Con el campo de búsqueda siempre a la vista, las cinco categorías y el campo
+ * no entran juntos por debajo de ~1040px: uno de los dos queda inservible, y el
+ * que tiene que sobrevivir es el buscador. El cajón repite las categorías
+ * enteras, con sus clasificaciones, así que no se pierde nada. Era 960px con
+ * tres categorías; agregar otra a la barra es volver a medir este número.
  */
-@media (max-width: 960px) {
+@media (max-width: 1040px) {
   .navbar__links { display: none; }
   .navbar__hamburger { display: flex; }
   .navDrop { display: none; }

@@ -3,15 +3,15 @@ import { categoryDescription } from "../../../src/domain/catalog/categoryCopy.js
 import { getProductsByCategory } from "../../../src/infra/db/queries/catalog.js";
 import { absoluteUrl } from "../../../src/lib/site.js";
 
-const description = categoryDescription("bookshop");
+const description = categoryDescription("ferreteria");
 
 export const metadata = {
-  title: "Librería",
+  title: "Ferretería",
   description,
-  alternates: { canonical: absoluteUrl("/bookshop") },
-  openGraph: { title: "Librería", description, url: absoluteUrl("/bookshop") },
+  alternates: { canonical: absoluteUrl("/ferreteria") },
+  openGraph: { title: "Ferretería", description, url: absoluteUrl("/ferreteria") },
 };
 
 export default async function Page() {
-  return <Category category="bookshop" products={await getProductsByCategory("bookshop")} />;
+  return <Category category="ferreteria" products={await getProductsByCategory("ferreteria")} />;
 }

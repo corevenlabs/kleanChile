@@ -83,7 +83,7 @@ export function unslugify(slug) {
  *
  * `inMenu` is what says which of the two happened, and it is not decoration:
  * this route answers **any** slug, so the set of URLs that return products is
- * unbounded — `/cleaning/cloro`, `/cleaning/limpia`, `/cleaning/a-b-c` all
+ * unbounded — `/limpieza/cloro`, `/limpieza/limpia`, `/limpieza/a-b-c` all
  * match something and all would be self-canonical, indexable pages showing
  * overlapping slices of one catalogue. The menu is the finite set; everything
  * else is a page for a person, not for a crawler. See the `robots` branch in

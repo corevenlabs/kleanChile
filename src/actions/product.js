@@ -7,6 +7,7 @@ import {
   isReservedSkuShape,
   normalizeTypedSku,
 } from "../domain/catalog/skuCode.js";
+import { CATEGORIES } from "../domain/content/vocabulary.js";
 import { parseClp } from "../domain/shared/money.js";
 import {
   createProduct,
@@ -38,7 +39,7 @@ const productInput = z.object({
       (code) => !isReservedSkuShape(code),
       "Los códigos KC los asigna el sistema. Deja el SKU vacío para generar uno, o usa el código del proveedor.",
     ),
-  category: z.enum(["cleaning", "bookshop", "desktop"]),
+  category: z.enum(CATEGORIES),
   name: z.string().trim().min(1, "El nombre es obligatorio"),
   type: z.string().trim().min(1, "El tipo es obligatorio"),
   /**

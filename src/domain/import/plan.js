@@ -25,13 +25,20 @@ const CATEGORY_BY_LABEL = new Map(
 );
 // Sinónimos que la gente escribe de verdad en sus planillas.
 for (const [alias, slug] of [
-  ["aseo", "cleaning"],
-  ["quimicos", "cleaning"],
-  ["papeleria", "bookshop"],
-  ["libreria", "bookshop"],
-  ["utiles", "bookshop"],
-  ["oficina", "desktop"],
-  ["escritorio", "desktop"],
+  ["aseo", "limpieza"],
+  ["quimicos", "limpieza"],
+  ["papeleria", "libreria"],
+  ["utiles", "libreria"],
+  ["oficina", "escritorio"],
+  ["articulos de escritorio", "escritorio"],
+  ["herramientas", "ferreteria"],
+  ["pausa", "pausa-del-dia"],
+  ["cafeteria", "pausa-del-dia"],
+  ["coffee break", "pausa-del-dia"],
+  // Los slugs en inglés que usaba el sistema antes, por si vuelve una planilla exportada entonces.
+  ["cleaning", "limpieza"],
+  ["bookshop", "libreria"],
+  ["desktop", "escritorio"],
 ]) {
   if (!CATEGORY_BY_LABEL.has(alias)) CATEGORY_BY_LABEL.set(alias, slug);
 }

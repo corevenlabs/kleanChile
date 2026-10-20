@@ -28,7 +28,7 @@ import ImageField from "./ImageField";
 const emptyProduct = {
   id: null,
   sku: "",
-  category: "cleaning",
+  category: "limpieza",
   name: "",
   type: "",
   price: "",

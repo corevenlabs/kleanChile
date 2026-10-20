@@ -3,19 +3,21 @@
   "searchPlaceholder": "Buscar productos...",
   "links": [
     { "name": "Inicio", "path": "/", "dropdown": null },
-    { "name": "Limpieza", "path": "/cleaning", "dropdown": { "title": "Productos de Limpieza", "sections": [
+    { "name": "Limpieza", "path": "/limpieza", "dropdown": { "title": "Productos de Limpieza", "sections": [
       { "title": "Químicos", "items": ["Detergentes", "Desinfectantes", "Cloro"] },
       { "title": "Equipos", "items": ["Aspiradoras", "Mopas", "Fregonas"] },
       { "title": "Accesorios", "items": ["Guantes", "Paños", "Escobas"] }
     ] } },
-    { "name": "Librería", "path": "/bookshop", "dropdown": { "title": "Librería y papelería", "sections": [
+    { "name": "Librería", "path": "/libreria", "dropdown": { "title": "Librería y papelería", "sections": [
       { "title": "Papel", "items": ["Cuadernos y croqueras", "Papeles y blocks"] },
       { "title": "Escritura", "items": ["Lápices y corrección", "Marcadores y destacadores"] },
       { "title": "Manualidades", "items": ["Adhesivos y cintas", "Corte y manualidades"] }
     ] } },
-    { "name": "Artículos de escritorio", "path": "/desktop", "dropdown": { "title": "Artículos de escritorio", "sections": [
+    { "name": "Artículos de escritorio", "path": "/escritorio", "dropdown": { "title": "Artículos de escritorio", "sections": [
       { "title": "Archivo", "items": ["Archivadores y carpetas", "Fundas y plastificado"] },
       { "title": "Escritorio", "items": ["Corcheteras y perforadoras", "Corchetes y chinches"] }
-    ] } }
+    ] } },
+    { "name": "Ferretería", "path": "/ferreteria", "dropdown": null },
+    { "name": "Pausa del día", "path": "/pausa-del-dia", "dropdown": null }
   ]
 }

@@ -11,7 +11,7 @@ import { getContent } from "../../../../src/infra/db/queries/content.js";
 import { absoluteUrl } from "../../../../src/lib/site.js";
 
 /**
- * A category narrowed by a navbar dropdown item — `/cleaning/detergentes`.
+ * A category narrowed by a navbar dropdown item — `/limpieza/detergentes`.
  *
  * One dynamic route rather than a `[classification]` folder under each of the
  * three category pages: the categories are already a domain constant, and
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }) {
      * - **Nothing matches.** A real page for whoever clicked the menu, thin
      *   content for a crawler. Eight of the seeded items are in this state.
      * - **The slug is not in the menu.** This route answers anything, so
-     *   `/cleaning/cloro`, `/cleaning/limpia` and `/cleaning/a-b-c` are all
+     *   `/limpieza/cloro`, `/limpieza/limpia` and `/limpieza/a-b-c` are all
      *   200s with products on them. Left indexable, that is an unbounded set of
      *   self-canonical URLs serving overlapping slices of one catalogue —
      *   duplicate content the shop never decided to publish, and crawl budget

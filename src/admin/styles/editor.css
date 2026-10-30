@@ -268,3 +268,100 @@
 .collections__body .collections__usage { font-size:11.5px; color:#a0a9b8; margin:0 0 8px; }
 .collections__body .collections__usage.is-used { color:#27875a; }
 .collections__warn { display:block; color:#c94141; font-weight:600; margin-top:3px; }
+
+/* ── Imagen y encuadre del carrusel ──────────────────────────────────────── */
+
+.slide-media { display:grid; gap:16px; min-width:0; }
+.slide-media__sources { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+.frame-editor {
+  display:grid; gap:14px; min-width:0; padding:16px; border:1px solid var(--admin-line); border-radius:12px; background:#fafbfd;
+}
+@media (max-width: 720px) { .frame-editor { padding:12px; } }
+.frame-editor__head strong { display:block; font-size:13px; color:var(--admin-ink); }
+.frame-editor__head span { font-size:11.5px; font-weight:400; color:var(--admin-muted); }
+
+/*
+   Las tres pantallas son a la vez la vista general y el selector: se ve cómo
+   queda en todas sin cambiar de pestaña, y se toca la que se quiere ajustar.
+   El ancho de cada miniatura crece con la raíz de su proporción, para que las
+   tres pesen parecido en vez de que 3:1 sea una tira y 1:1 un sello.
+*/
+.frame-editor__views { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; }
+.frame-editor__view {
+  display:grid; gap:6px; width:var(--thumb-w); padding:5px; border:1px solid var(--admin-line); border-radius:10px;
+  background:#fff; cursor:pointer; font:inherit; text-align:left; color:#526076;
+  transition:border-color .16s, box-shadow .16s, transform .16s ease-out;
+}
+.frame-editor__view:hover { border-color:#ccdaf5; }
+.frame-editor__view:active { transform:scale(.97); }
+.frame-editor__view.is-active { border-color:#7ea2ea; box-shadow:0 0 0 3px #edf3ff; color:var(--admin-blue); }
+.frame-editor__view:focus-visible { outline:2px solid #7ea2ea; outline-offset:2px; }
+.frame-editor__view > span { display:flex; justify-content:space-between; gap:6px; font-size:11px; font-weight:650; padding:0 2px; }
+.frame-editor__view small { font-weight:500; color:#a0a9b8; }
+.frame-editor__view .hero-preview { border-radius:6px; }
+
+/* El carrusel real, dibujado a su ancho verdadero y escalado a la caja. */
+.hero-preview { position:relative; width:100%; overflow:hidden; background:#0b1a3a; }
+.hero.hero--preview {
+  position:absolute; top:0; left:0; margin:0; max-width:none; aspect-ratio:auto;
+  transform-origin:0 0; pointer-events:none;
+}
+.hero--preview .hero__slide { transition:none; }
+
+.frame-editor__stage { width:100%; }
+.frame-editor__stage--tablet { max-width:560px; }
+.frame-editor__stage--mobile { max-width:340px; }
+.frame-editor__stage .hero-preview { border-radius:8px; box-shadow:0 10px 30px -18px rgba(14,42,107,.55); }
+
+.frame-editor__grab {
+  position:absolute; inset:0; z-index:3; cursor:grab; touch-action:none; user-select:none;
+  display:flex; align-items:flex-start; justify-content:flex-end; padding:10px;
+}
+.frame-editor__grab.is-dragging { cursor:grabbing; }
+.frame-editor__grab.is-static { cursor:default; }
+.frame-editor__grab:focus-visible { outline:3px solid #7ea2ea; outline-offset:-3px; }
+.frame-editor__hint {
+  padding:5px 9px; border-radius:20px; background:rgba(8,26,66,.6); color:#fff; font-size:11px; font-weight:600;
+  backdrop-filter:blur(4px); opacity:0; transition:opacity .18s ease-out; pointer-events:none;
+}
+@media (hover:hover) and (pointer:fine) {
+  .frame-editor__grab:hover .frame-editor__hint { opacity:1; }
+}
+.frame-editor__grab:focus-visible .frame-editor__hint { opacity:1; }
+.frame-editor__grab.is-dragging .frame-editor__hint { opacity:0; }
+
+.frame-editor__controls { display:flex; flex-wrap:wrap; align-items:center; gap:12px 18px; }
+
+.frame-editor__seg { display:inline-flex; padding:3px; border:1px solid var(--admin-line); border-radius:9px; background:#fff; }
+.frame-editor__seg button {
+  border:0; background:none; padding:7px 12px; border-radius:7px; font:inherit; font-size:12px; font-weight:600;
+  color:#667085; cursor:pointer; transition:background .16s, color .16s;
+}
+.frame-editor__seg button:hover { color:var(--admin-ink); }
+.frame-editor__seg button[aria-pressed="true"] { background:#edf3ff; color:var(--admin-blue); }
+
+.frame-editor__zoom { display:flex; flex:1 1 240px; max-width:320px; min-width:0; align-items:center; gap:8px; font-size:11px; font-weight:650; color:#526076; }
+.frame-editor__zoom.is-disabled { opacity:.45; }
+.frame-editor__zoom button {
+  width:26px; height:26px; display:grid; place-items:center; border:1px solid var(--admin-line); border-radius:7px;
+  background:#fff; color:#526076; font:inherit; font-size:15px; line-height:1; cursor:pointer;
+  transition:transform .16s ease-out, background .16s;
+}
+.frame-editor__zoom button:hover:not(:disabled) { background:#f2f5f9; }
+.frame-editor__zoom button:active:not(:disabled) { transform:scale(.94); }
+.frame-editor__zoom button:disabled { cursor:default; opacity:.5; }
+.admin-form-grid .frame-editor__zoom input[type="range"] {
+  flex:1; width:auto; min-width:60px; padding:0; border:0; box-shadow:none; accent-color:var(--admin-blue); background:none;
+}
+.frame-editor__zoom output { min-width:38px; font-variant-numeric:tabular-nums; color:var(--admin-ink); }
+.frame-editor__reset { padding:7px 12px; font-size:12px; }
+.frame-editor__reset:disabled { opacity:.45; cursor:default; }
+
+.frame-editor__notes { margin:0; padding:0; list-style:none; display:grid; gap:5px; }
+.frame-editor__notes li { font-size:11.5px; font-weight:400; line-height:1.5; color:#718096; }
+.frame-editor__notes li.is-warn { color:#a4650f; }
+
+@media (max-width: 720px) {
+  .slide-media__sources { grid-template-columns:1fr; }
+}

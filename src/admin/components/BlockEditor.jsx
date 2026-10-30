@@ -13,6 +13,7 @@ import {
   updateList,
 } from "../lib/paths";
 import Icon from "./Icon";
+import HeroSlideMediaField from "./HeroSlideMediaField";
 import ImageField from "./ImageField";
 import LinkPicker from "./LinkPicker";
 
@@ -29,8 +30,14 @@ import LinkPicker from "./LinkPicker";
  * field by field would mean a half-applied hero if a save failed midway.
  */
 
-function Field({ field, value, onChange, collections }) {
+function Field({ field, value, onChange, collections, item, onItemChange }) {
   const className = field.wide === false ? undefined : "wide";
+
+  // Not one key but the whole slide: images, both framings and the text the
+  // preview draws over them.
+  if (field.type === "slideMedia") {
+    return <HeroSlideMediaField label={field.label} slide={item} onChange={onItemChange} />;
+  }
 
   if (field.type === "link") {
     return (
@@ -178,6 +185,10 @@ function ListEditor({ list, draft, path, onChange, collections }) {
                   collections={collections}
                   value={getAt(draft, fieldPath)}
                   onChange={(value) => onChange(setAt(draft, fieldPath, value))}
+                  item={item}
+                  onItemChange={(next) =>
+                    onChange(setAt(draft, `${fullPath}.${String(index)}`, next))
+                  }
                 />
               );
             })}

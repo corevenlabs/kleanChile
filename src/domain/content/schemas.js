@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DUAL_POSITIONS, WHY_US_ICONS } from "./vocabulary.js";
+import { DUAL_POSITIONS, HERO_FITS, WHY_US_ICONS } from "./vocabulary.js";
 
 /**
  * The shape of every editable block on the storefront.
@@ -42,6 +42,20 @@ const optionalId = z.union([z.string(), z.number()]).optional();
 
 // ── Hero carousel ────────────────────────────────────────────────────────────
 
+/**
+ * The framing of one hero image at one screen size — see `heroFrame.js`.
+ *
+ * `y` defaults to 30 because that was the fixed `object-position` before
+ * framing was editable, so slides saved before it render exactly as they did.
+ */
+const heroFrameSchema = z.object({
+  fit: z.enum(HERO_FITS).default("cover"),
+  x: z.number().min(0).max(100).default(50),
+  y: z.number().min(0).max(100).default(30),
+  /** Percent. Capped: past 3× a banner photo is mostly blur. */
+  zoom: z.number().min(100).max(300).default(100),
+});
+
 export const heroSchema = z.object({
   /** Milliseconds between slides. Floored so the carousel cannot busy-loop. */
   interval: z.number().int().min(1000).max(60000).default(3500),
@@ -53,6 +67,10 @@ export const heroSchema = z.object({
       description: text(),
       cta: text("Ver más"),
       image: text(),
+      /** Optional artwork for phones; empty means `image` again, reframed. */
+      imageMobile: text(),
+      frame: heroFrameSchema.prefault({}),
+      frameMobile: heroFrameSchema.prefault({}),
       alt: text(),
       path: text("/"),
     }),

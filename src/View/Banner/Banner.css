@@ -3,11 +3,24 @@
 ───────────────────────────── */
 .hero {
   position: relative;
-  /* Más compacto para que el catálogo empiece a verse en el primer pantallazo. */
-  height: 56vh;
-  min-height: 360px;
-  max-height: 600px;
+  /*
+   * Proporción fija, no un alto en `vh`.
+   *
+   * Con `height: 56vh` el marco cambiaba de forma con el alto de cada ventana,
+   * así que el mismo banner se recortaba distinto en cada monitor y la vista
+   * previa del panel no podía prometer nada. Con proporciones fijas —5:2 en
+   * computador, 16:9 en tablet, 1:1 en celular— lo que se encuadra en el
+   * editor es lo que sale. Son las mismas de `domain/content/heroFrame.js`;
+   * cambiar una sin la otra hace mentir a la vista previa.
+   *
+   * Es también lo que hacen las tiendas que se ven bien con banners hechos por
+   * un diseñador: el banner tiene una medida, y se diseña para esa medida.
+   */
+  aspect-ratio: 5 / 2;
   overflow: hidden;
+  /* Los textos se ajustan al ancho del carrusel, no al de la ventana: así la
+     vista previa del panel, que lo dibuja chico, muestra los mismos cortes. */
+  container: hero / inline-size;
   background-color: #000;
 
   /*
@@ -30,6 +43,15 @@
   border-radius: 0;
 }
 
+/* En pantallas anchas 5:2 sería un muro de 750px: desde 1600 de ancho se
+   centra y deja de crecer, como hacen las tiendas con banners de medida fija. */
+@media (min-width: 1661px) {
+  .hero {
+    max-width: 1600px;
+    margin-inline: auto;
+  }
+}
+
 /* ─────────────────────────────
    BACKGROUND
 ───────────────────────────── */
@@ -42,20 +64,65 @@
 /* ─────────────────────────────
    IMÁGENES
 ───────────────────────────── */
-.hero__img {
+/*
+ * Cada diapositiva trae su encuadre de computador (`--d-*`) y de celular
+ * (`--m-*`) como variables en línea —ver `HeroSlideMedia.js`—, y acá se elige
+ * cuál manda. Se hace en dos pasos porque una variable en `style` le gana a
+ * cualquier regla: si el componente fijara `--x` directo, la media query no
+ * podría cambiarla.
+ */
+.hero__slide {
+  --fit: var(--d-fit, cover);
+  --x: var(--d-x, 50%);
+  --y: var(--d-y, 30%);
+  --z: var(--d-z, 1);
+  --backdrop: var(--d-backdrop, none);
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%; /* mejor encuadre visual */
+  overflow: hidden;
   opacity: 0;
   transition: opacity 0.8s ease-in-out;
-  will-change: opacity;
 }
 
-.hero__img.active {
+.hero__slide.active {
   opacity: 1;
+}
+
+.hero__picture,
+.hero__backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__img,
+.hero__backdrop img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * El zoom es `scale` con origen en el mismo punto que `object-position`: ese
+ * punto queda clavado en su lugar del marco, así que acercar nunca abre un
+ * borde vacío ni corre lo que se eligió mostrar.
+ */
+.hero__img {
+  object-fit: var(--fit);
+  object-position: var(--x) var(--y);
+  transform: scale(var(--z));
+  transform-origin: var(--x) var(--y);
+}
+
+/* «Imagen completa»: la misma foto desenfocada rellena los costados, en vez
+   de franjas negras que se leen como un error de carga. */
+.hero__backdrop {
+  display: var(--backdrop);
+}
+
+.hero__backdrop img {
+  object-fit: cover;
+  filter: blur(18px) saturate(1.15) brightness(0.85);
+  transform: scale(1.15);
 }
 
 /* ─────────────────────────────
@@ -131,7 +198,7 @@
 
 .hero__title {
   font-family: var(--k-display);
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-size: clamp(2rem, 4.6cqi, 3.4rem);
   font-weight: 800;
   line-height: 1.08;
   color: #fff;
@@ -276,13 +343,51 @@
 /* ─────────────────────────────
    RESPONSIVE
 ───────────────────────────── */
+/*
+ * Dos ejes, a propósito:
+ *
+ * - **La forma y el margen del marco** dependen de la ventana (`@media`).
+ * - **Los textos y el velo** dependen del ancho del propio carrusel
+ *   (`@container hero`). La vista previa del panel dibuja el carrusel a 366px
+ *   dentro de una ventana de escritorio; con media queries mostraría la
+ *   tipografía de computador sobre un marco de celular.
+ *
+ * 728px y 456px son el ancho del carrusel en ventanas de 768 y 480.
+ */
+@media (max-width: 1024px) {
+  .hero {
+    aspect-ratio: 16 / 9;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
-    height: 48vh;
-    min-height: 304px;
     margin: 20px 20px 0;
   }
+}
 
+/* El corte de celular: mismo número que `HERO_MOBILE_QUERY`. */
+@media (max-width: 600px) {
+  .hero {
+    aspect-ratio: 1 / 1;
+  }
+
+  .hero__slide {
+    --fit: var(--m-fit, cover);
+    --x: var(--m-x, 50%);
+    --y: var(--m-y, 30%);
+    --z: var(--m-z, 1);
+    --backdrop: var(--m-backdrop, none);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    margin: 12px 12px 0;
+  }
+}
+
+@container hero (max-width: 728px) {
   .hero__title {
     max-width: 100%;
   }
@@ -312,15 +417,15 @@
       rgba(8, 26, 66, 0.05) 100%
     );
   }
+
+  /* Without the doubled class the rule above, coming later, beat the bare
+     variant and laid a full scrim over poster artwork on phones. */
+  .hero__overlay.hero__overlay--bare {
+    background: linear-gradient(to top, rgba(8, 26, 66, 0.34) 0%, rgba(8, 26, 66, 0) 34%);
+  }
 }
 
-@media (max-width: 480px) {
-  .hero {
-    height: 44vh;
-    min-height: 288px;
-    margin: 12px 12px 0;
-  }
-
+@container hero (max-width: 456px) {
   .hero__desc {
     font-size: 13px;
   }

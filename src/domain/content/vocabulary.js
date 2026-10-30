@@ -15,6 +15,13 @@ export const DUAL_POSITIONS = ["left", "top", "bottom"];
 /** The icons `WhyUs` has SVG paths for. */
 export const WHY_US_ICONS = ["star", "arrow", "shield", "clock", "price", "catalog"];
 
+/**
+ * How a hero image sits in its frame — becomes CSS `object-fit`.
+ * `cover` fills the frame and crops; `contain` shows the whole image over a
+ * blurred copy of itself, for artwork with its own text that must not be cut.
+ */
+export const HERO_FITS = ["cover", "contain"];
+
 export const CATEGORIES = ["limpieza", "libreria", "escritorio", "ferreteria", "pausa-del-dia"];
 
 /**

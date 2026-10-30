@@ -43,6 +43,9 @@ export const FORMS = {
           description: "",
           cta: "Ver más",
           image: "",
+          imageMobile: "",
+          frame: { fit: "cover", x: 50, y: 50, zoom: 100 },
+          frameMobile: { fit: "cover", x: 50, y: 50, zoom: 100 },
           alt: "",
           path: "/",
         },
@@ -57,7 +60,9 @@ export const FORMS = {
             type: "link",
             hint: "Para mostrar un grupo de productos, elige «Una colección». Las colecciones se arman en Colecciones.",
           },
-          IMAGE,
+          // Edits image, imageMobile, frame and frameMobile together: the
+          // preview needs all four and the slide's text at once.
+          { name: "media", label: "Imagen y encuadre", type: "slideMedia" },
           ALT,
         ],
       },

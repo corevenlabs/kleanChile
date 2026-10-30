@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import HeroSlideMedia from "./HeroSlideMedia";
 
 function TextEffect({ children, className, per = "word", delay = 0 }) {
   const parts = per === "char" ? children.split("") : children.split(" ");
@@ -58,24 +59,27 @@ export default function Banner({ data }) {
   return (
     <section className="hero" aria-roledescription="carrusel" aria-label="Destacados">
       <div className="hero__bg">
-        {/* Una diapositiva sin imagen no dibuja nada: `src=""` es un error de
-            consola que en desarrollo abre el overlay de Next sobre toda la
-            página. Se filtra dentro del map y no antes, porque `current` indexa
-            este mismo arreglo y reindexarlo desincronizaría el carrusel. */}
-        {slides.map((s, i) => !s.image ? null : (
-          <img
+        {/* Una diapositiva sin imagen no dibuja nada (`HeroSlideMedia` devuelve
+            null): `src=""` es un error de consola que en desarrollo abre el
+            overlay de Next sobre toda la página. Se resuelve dentro del map y no
+            filtrando antes, porque `current` indexa este mismo arreglo y
+            reindexarlo desincronizaría el carrusel. */}
+        {slides.map((s, i) => (
+          <HeroSlideMedia
             key={s.id}
-            src={s.image}
-            alt={i === current ? s.alt : ""}
+            image={s.image}
+            imageMobile={s.imageMobile}
+            frame={s.frame}
+            frameMobile={s.frameMobile}
+            alt={s.alt}
+            active={i === current}
             /* Every slide is in the DOM at once, only one is visible. Without
                this a screen reader reads all five alt texts in a row as though
                they were one page. */
-            aria-hidden={i === current ? undefined : "true"}
-            className={`hero__img ${i === current ? "active" : ""}`}
+            hidden={i !== current}
             /* The hero is the LCP element on the home page; the first slide
                must not wait behind lazy-loading heuristics. */
-            loading={i === 0 ? "eager" : "lazy"}
-            fetchPriority={i === 0 ? "high" : "low"}
+            eager={i === 0}
           />
         ))}
         {/* The scrim exists to make text readable, so with no text it steps

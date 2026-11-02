@@ -20,6 +20,16 @@
    */
   aspect-ratio: 60 / 13;
   max-height: 416px;
+  /*
+   * `width: 100%` explícito, y no es redundante. Con el ancho en `auto`, el
+   * navegador traslada el `max-height` a un `max-width` a través del
+   * `aspect-ratio` (416 × 60/13 = 1920px): en ventanas de más de 1920 —un
+   * monitor grande, o el navegador con zoom bajo 100%— el carrusel se quedaba
+   * en 1920 pegado a la izquierda, con una franja en blanco a la derecha. Con
+   * el ancho definido no hay traslado: ocupa todo el ancho y solo el alto se
+   * detiene en 416.
+   */
+  width: 100%;
   overflow: hidden;
   /*
    * `size` y no `inline-size`: los textos se miden contra el **alto** del

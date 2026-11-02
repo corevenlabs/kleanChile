@@ -4,52 +4,41 @@
 .hero {
   position: relative;
   /*
-   * Proporción fija, no un alto en `vh`.
+   * Proporción fija, no un alto en `vh`, y de borde a borde.
    *
-   * Con `height: 56vh` el marco cambiaba de forma con el alto de cada ventana,
-   * así que el mismo banner se recortaba distinto en cada monitor y la vista
-   * previa del panel no podía prometer nada. Con proporciones fijas —5:2 en
-   * computador, 16:9 en tablet, 1:1 en celular— lo que se encuadra en el
-   * editor es lo que sale. Son las mismas de `domain/content/heroFrame.js`;
-   * cambiar una sin la otra hace mentir a la vista previa.
+   * Las medidas son las de prisur.cl, que el cliente pidió como referencia
+   * porque el carrusel anterior (5:2 con márgenes) se veía demasiado alto:
    *
-   * Es también lo que hacen las tiendas que se ven bien con banners hechos por
-   * un diseñador: el banner tiene una medida, y se diseña para esa medida.
+   * - **Computador (más de 992px):** 1920 × 416, unas 4,6 veces más ancho que
+   *   alto, y nunca más de 416px de alto. En una pantalla de 2560 el marco se
+   *   ensancha y recorta un poco arriba y abajo en vez de crecer.
+   * - **Celular y tablet (992px o menos):** 8:9, casi cuadrado y un poco más
+   *   alto que ancho, con su propia imagen y su propio encuadre.
+   *
+   * Son las mismas de `domain/content/heroFrame.js`; cambiar una sin la otra
+   * hace mentir a la vista previa del panel.
    */
-  aspect-ratio: 5 / 2;
+  aspect-ratio: 60 / 13;
+  max-height: 416px;
   overflow: hidden;
-  /* Los textos se ajustan al ancho del carrusel, no al de la ventana: así la
-     vista previa del panel, que lo dibuja chico, muestra los mismos cortes. */
-  container: hero / inline-size;
-  background-color: #000;
-
   /*
-   * El hero ya no es sangrante: respira 30px contra la barra y contra los
-   * dos bordes de la ventana.
-   *
-   * Pegado arriba, la foto arrancaba en el píxel siguiente al de la barra y
-   * las dos superficies oscuras se leían como una sola pieza; pegado a los
-   * lados, era lo único en toda la página que tocaba el borde. Separado, pasa
-   * a ser un panel más —del mismo idioma que las tarjetas y el desplegable—
-   * en vez del techo de la página.
-   *
-   * Sin margen abajo a propósito: `.bs` abre con 40px de padding y sumarle
-   * otro margen dejaría un vacío blanco del alto de una tarjeta.
-   *
-   * El contenido se alinea desde el borde izquierdo del panel para que el
-   * mensaje no se desplace hacia el centro en pantallas anchas.
+   * `size` y no `inline-size`: los textos se miden contra el **alto** del
+   * carrusel (`cqh`), así que crecen y se achican con el banner como si fueran
+   * parte de la imagen. Medidos contra la ventana, el mismo título que cabía
+   * en 1440 se salía por arriba en 1000. Y como se mide el carrusel y no la
+   * ventana, la vista previa del panel —que lo dibuja chico— corta las líneas
+   * igual que la tienda.
    */
-  margin: 30px 30px 0;
+  container: hero / size;
+  background-color: #000;
+  margin: 0;
   border-radius: 0;
-}
 
-/* En pantallas anchas 5:2 sería un muro de 750px: desde 1600 de ancho se
-   centra y deja de crecer, como hacen las tiendas con banners de medida fija. */
-@media (min-width: 1661px) {
-  .hero {
-    max-width: 1600px;
-    margin-inline: auto;
-  }
+  /* Las flechas: 40px a 20px del borde, como en la referencia. El texto se
+     corre lo justo para no quedar debajo de la izquierda. */
+  --hero-arrow: 40px;
+  --hero-arrow-inset: 20px;
+  --hero-gutter: calc(var(--hero-arrow-inset) + var(--hero-arrow) + 24px);
 }
 
 /* ─────────────────────────────
@@ -144,20 +133,18 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background:
-    linear-gradient(
-      to top right,
-      rgba(8, 26, 66, 0.92) 0%,
-      rgba(8, 26, 66, 0.72) 26%,
-      rgba(8, 26, 66, 0.12) 62%,
-      rgba(8, 26, 66, 0) 100%
-    ),
-    linear-gradient(to top, rgba(8, 26, 66, 0.55) 0%, rgba(8, 26, 66, 0.1) 60%);
+  background: linear-gradient(
+    to right,
+    rgba(8, 26, 66, 0.86) 0%,
+    rgba(8, 26, 66, 0.62) 28%,
+    rgba(8, 26, 66, 0.12) 58%,
+    rgba(8, 26, 66, 0) 100%
+  );
 }
 
 /* Artwork that carries its own message gets barely any veil. */
 .hero__overlay--bare {
-  background: linear-gradient(to top, rgba(8, 26, 66, 0.34) 0%, rgba(8, 26, 66, 0) 34%);
+  background: none;
 }
 
 /* ─────────────────────────────
@@ -174,36 +161,46 @@
  */
 .hero__content {
   position: absolute;
-  bottom: 12%;
+  top: 50%;
   left: 0;
   right: 0;
+  transform: translateY(-50%);
   width: 100%;
   max-width: none;
   margin: 0;
   text-align: left;
-  padding: 0 clamp(24px, 3vw, 40px);
+  padding: 0 var(--hero-gutter);
   z-index: 2;
 }
 
+/*
+ * Todos los tamaños en `cqh`, el alto del carrusel: el texto es proporcional
+ * al banner, como si estuviera impreso en la imagen. Los `max()` son el piso de
+ * legibilidad en las pantallas más angostas del rango, y solo actúan ahí.
+ *
+ * Calibrado en 1440 × 312: título de ~39px, descripción de ~15px.
+ */
 .hero__eyebrow {
   font-family: var(--k-display);
-  font-size: 11px;
+  font-size: max(9px, 3.5cqh);
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   /* Cyan is the one brand colour bright enough to hold at this size on a photo. */
   color: var(--k-cyan);
-  margin-bottom: 12px;
+  margin-bottom: 3cqh;
 }
 
 .hero__title {
   font-family: var(--k-display);
-  font-size: clamp(2rem, 4.6cqi, 3.4rem);
+  font-size: 12.5cqh;
   font-weight: 800;
-  line-height: 1.08;
+  line-height: 1.06;
   color: #fff;
-  max-width: 15ch;
-  margin-bottom: 16px;
+  /* Dos líneas para un título normal: en un marco de 4,6:1 una tercera se
+     come el alto que necesitan la descripción y el botón. */
+  max-width: 22ch;
+  margin-bottom: 4cqh;
   letter-spacing: -0.03em;
   /* A close shadow, not a glow: it buys legibility over a bright product shot
      without the type looking like it is floating. */
@@ -211,11 +208,11 @@
 }
 
 .hero__desc {
-  font-size: 15px;
+  font-size: max(12px, 4.8cqh);
   color: rgba(255, 255, 255, 0.88);
-  max-width: 46ch;
-  margin: 0 0 28px;
-  line-height: 1.6;
+  max-width: 44ch;
+  margin: 0 0 6.5cqh;
+  line-height: 1.5;
   text-shadow: 0 1px 10px rgba(8, 26, 66, 0.5);
 }
 
@@ -228,11 +225,11 @@
  */
 .hero__cta {
   display: inline-block;
-  padding: 14px 30px;
+  padding: 3.6cqh 9cqh;
   background: var(--k-gradient);
   color: #fff;
   font-family: var(--k-display);
-  font-size: 13px;
+  font-size: max(11px, 4.2cqh);
   font-weight: 600;
   letter-spacing: 0.02em;
   text-decoration: none;
@@ -251,30 +248,29 @@
    ARROWS
 ───────────────────────────── */
 /*
- * Anterior y siguiente, juntas abajo a la derecha.
+ * Anterior y siguiente, una a cada lado y centradas en el alto, a 20px del
+ * borde: la posición de prisur.cl, que es la que pidió el cliente. El estilo
+ * es el nuestro.
  *
- * No a los costados: el texto del carrusel arranca pegado al borde izquierdo,
- * y una flecha centrada en ese lado quedaba encima del título. En la esquina
- * opuesta no compiten con nada, y de a dos se leen como un solo control.
- *
- * Velo azul translúcido y no blanco: tienen que sostenerse igual sobre una
- * foto clara y sobre una oscura, y el borde blanco es lo que las separa de la
- * foto en las dos.
+ * `.hero__arrows` no ocupa lugar ni recibe clics; solo las flechas. Velo azul
+ * translúcido con borde blanco, para sostenerse igual sobre una foto clara y
+ * una oscura.
  */
 .hero__arrows {
   position: absolute;
-  right: clamp(14px, 2.4cqi, 32px);
-  bottom: clamp(14px, 2.4cqi, 28px);
+  inset: 0;
   z-index: 3;
-  display: flex;
-  gap: 8px;
+  pointer-events: none;
 }
 
 .hero__arrow {
+  position: absolute;
+  top: 50%;
+  left: var(--hero-arrow-inset);
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: var(--hero-arrow);
+  height: var(--hero-arrow);
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 50%;
@@ -283,8 +279,15 @@
   backdrop-filter: blur(6px);
   color: #fff;
   cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-50%);
   -webkit-tap-highlight-color: transparent;
   transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.16s ease-out;
+}
+
+.hero__arrow--next {
+  left: auto;
+  right: var(--hero-arrow-inset);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -295,7 +298,7 @@
 }
 
 .hero__arrow:active {
-  transform: scale(0.94);
+  transform: translateY(-50%) scale(0.94);
 }
 
 .hero__arrow:focus-visible {
@@ -303,11 +306,9 @@
   outline-offset: 2px;
 }
 
-@container hero (max-width: 456px) {
-  .hero__arrow {
-    width: 36px;
-    height: 36px;
-  }
+.hero__arrow svg {
+  width: 45%;
+  height: 45%;
 }
 
 /* ─────────────────────────────
@@ -409,30 +410,20 @@
 /*
  * Dos ejes, a propósito:
  *
- * - **La forma y el margen del marco** dependen de la ventana (`@media`).
- * - **Los textos y el velo** dependen del ancho del propio carrusel
- *   (`@container hero`). La vista previa del panel dibuja el carrusel a 366px
- *   dentro de una ventana de escritorio; con media queries mostraría la
- *   tipografía de computador sobre un marco de celular.
+ * - **La forma del marco y qué encuadre manda** dependen de la ventana
+ *   (`@media`), porque es la ventana la que decide qué imagen baja.
+ * - **La disposición del texto** depende del propio carrusel (`@container
+ *   hero`): la vista previa del panel dibuja el de celular a 390px dentro de
+ *   una ventana de escritorio, y con media queries mostraría el texto de
+ *   computador sobre un marco de celular.
  *
- * 728px y 456px son el ancho del carrusel en ventanas de 768 y 480.
+ * 992px es el corte de la referencia y el mismo número que `HERO_MOBILE_QUERY`;
+ * la consulta del contenedor mira la forma del marco, no su ancho.
  */
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
   .hero {
-    aspect-ratio: 16 / 9;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    margin: 20px 20px 0;
-  }
-}
-
-/* El corte de celular: mismo número que `HERO_MOBILE_QUERY`. */
-@media (max-width: 600px) {
-  .hero {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 8 / 9;
+    max-height: none;
   }
 
   .hero__slide {
@@ -444,57 +435,77 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .hero {
-    margin: 12px 12px 0;
+    --hero-arrow: 30px;
   }
 }
 
-@container hero (max-width: 728px) {
+/*
+ * El marco vertical: el texto baja al pie, a todo el ancho, con los mismos
+ * tamaños proporcionales recalibrados para 390 × 438.
+ *
+ * Por la forma del marco y no por su ancho: el carrusel mide la ventana menos
+ * la barra de desplazamiento, así que un corte en 992px de ancho de carrusel
+ * caía en ventanas de hasta ~1007 todavía apaisadas, y les ponía el texto de
+ * celular. «Es vertical» no se desincroniza nunca de la media query de arriba.
+ */
+@container hero (max-aspect-ratio: 1 / 1) {
+  .hero__content {
+    top: auto;
+    /* Todo el bloque cabe en el 45% de abajo: las flechas van al centro del
+       alto y el antetítulo no puede subir hasta ellas. */
+    bottom: 6cqh;
+    transform: none;
+    padding: 0 5.5cqh;
+  }
+
+  .hero__eyebrow {
+    font-size: max(9px, 2.3cqh);
+    margin-bottom: 1.4cqh;
+  }
+
   .hero__title {
+    font-size: 5.8cqh;
     max-width: 100%;
+    margin-bottom: 2cqh;
   }
 
   .hero__desc {
-    font-size: 14px;
+    font-size: max(12px, 3cqh);
     max-width: 100%;
+    margin-bottom: 3.4cqh;
   }
 
-  .hero__content,
+  .hero__cta {
+    padding: 2.4cqh 5.6cqh;
+    font-size: max(11px, 2.8cqh);
+  }
+
   .hero__progress {
     padding: 0 22px;
   }
 
-  .hero__content {
-    bottom: 14%;
+  /* Un poco sobre el centro: en un teléfono angosto el piso de 12px de la
+     descripción hace crecer el bloque de texto lo justo para alcanzarlas. */
+  .hero__arrow {
+    top: 40%;
   }
 
-  /* The scrim turns bottom-up on a portrait screen, where there is no
-     left-hand corner to anchor to. */
+  /* The scrim turns bottom-up on a portrait frame, where the text sits. */
   .hero__overlay {
     background: linear-gradient(
       to top,
       rgba(8, 26, 66, 0.94) 0%,
-      rgba(8, 26, 66, 0.6) 42%,
-      rgba(8, 26, 66, 0.15) 75%,
-      rgba(8, 26, 66, 0.05) 100%
+      rgba(8, 26, 66, 0.6) 40%,
+      rgba(8, 26, 66, 0.12) 70%,
+      rgba(8, 26, 66, 0) 100%
     );
   }
 
   /* Without the doubled class the rule above, coming later, beat the bare
      variant and laid a full scrim over poster artwork on phones. */
   .hero__overlay.hero__overlay--bare {
-    background: linear-gradient(to top, rgba(8, 26, 66, 0.34) 0%, rgba(8, 26, 66, 0) 34%);
-  }
-}
-
-@container hero (max-width: 456px) {
-  .hero__desc {
-    font-size: 13px;
-  }
-
-  .hero__cta {
-    padding: 12px 24px;
-    font-size: 12px;
+    background: none;
   }
 }

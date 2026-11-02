@@ -304,13 +304,12 @@
 /* El carrusel real, dibujado a su ancho verdadero y escalado a la caja. */
 .hero-preview { position:relative; width:100%; overflow:hidden; background:#0b1a3a; }
 .hero.hero--preview {
-  position:absolute; top:0; left:0; margin:0; max-width:none; aspect-ratio:auto;
+  position:absolute; top:0; left:0; margin:0; max-width:none; max-height:none; aspect-ratio:auto;
   transform-origin:0 0; pointer-events:none;
 }
 .hero--preview .hero__slide { transition:none; }
 
 .frame-editor__stage { width:100%; }
-.frame-editor__stage--tablet { max-width:560px; }
 .frame-editor__stage--mobile { max-width:340px; }
 .frame-editor__stage .hero-preview { border-radius:8px; box-shadow:0 10px 30px -18px rgba(14,42,107,.55); }
 

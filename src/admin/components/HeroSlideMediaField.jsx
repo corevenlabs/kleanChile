@@ -16,8 +16,8 @@ import ImageField from "./ImageField";
  * panel no había forma de saberlo antes de publicar.
  *
  * Ahora el marco tiene proporciones fijas y cada diapositiva guarda cómo se
- * encuadra en cada una (`frame` para computador y tablet, `frameMobile` para
- * celular): llenar el marco o mostrar la imagen completa, qué punto queda a la
+ * encuadra en cada una (`frame` para computador, `frameMobile` para celular
+ * y tablet): llenar el marco o mostrar la imagen completa, qué punto queda a la
  * vista y cuánto se acerca. Nunca se estira: el zoom escala los dos ejes por
  * igual, así que «distorsionar» deja de ser posible.
  *
@@ -349,11 +349,10 @@ export default function HeroSlideMediaField({ label, slide, onChange }) {
                 banners que traen su propio texto y no se pueden recortar.
               </li>
             )}
-            {view.key === "tablet" && <li>Tablet usa el mismo encuadre que computador.</li>}
             {view.key === "mobile" && !slide.imageMobile && (
               <li>
-                En celular se usa la misma imagen, encuadrada aparte. Si el banner trae texto,
-                conviene subir una versión cuadrada en «Imagen para celular».
+                En celular y tablet se usa la misma imagen, encuadrada aparte. Si el banner trae
+                texto, conviene subir una versión vertical (8:9) en «Imagen para celular».
               </li>
             )}
             {size?.failed && <li className="is-warn">No pudimos cargar esta imagen para medirla.</li>}

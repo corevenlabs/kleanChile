@@ -6,9 +6,9 @@
  * en cada monitor y ninguna vista previa podía prometer nada. Con proporciones
  * fijas, lo que el admin ve en el editor es lo que sale en la tienda.
  *
- * Computador es 5:2 y no 3:1: con 3:1, a 1030px de ancho una diapositiva con
- * antetítulo, título de dos líneas y descripción no cabía y perdía la primera
- * línea por arriba.
+ * Las medidas son las de prisur.cl, la referencia que eligió el cliente porque
+ * el 5:2 anterior se veía demasiado alto: 1920 × 416 en computador, de borde a
+ * borde, y 8:9 en celular y tablet, con el corte en 992px.
  *
  * Los cortes tienen que coincidir con `View/Banner/Banner.css`.
  */
@@ -16,36 +16,27 @@ export const HERO_VIEWS = [
   {
     key: "desktop",
     label: "Computador",
-    ratio: 5 / 2,
-    ratioLabel: "5:2",
-    // Ancho del hero en una ventana de 1440px (menos los 30px de margen a cada
-    // lado): la vista previa se dibuja a ese tamaño y se escala.
-    width: 1380,
+    ratio: 60 / 13,
+    ratioLabel: "1920 × 416",
+    // Ancho del carrusel en una ventana de 1440px (va de borde a borde): la
+    // vista previa se dibuja a ese tamaño y se escala.
+    width: 1440,
     frame: "frame",
-    recommended: "2000 × 800 px",
-  },
-  {
-    key: "tablet",
-    label: "Tablet",
-    ratio: 16 / 9,
-    ratioLabel: "16:9",
-    width: 728,
-    frame: "frame",
-    recommended: "2000 × 800 px",
+    recommended: "1920 × 416 px (ideal 3840 × 832)",
   },
   {
     key: "mobile",
-    label: "Celular",
-    ratio: 1,
-    ratioLabel: "1:1",
-    width: 366,
+    label: "Celular y tablet",
+    ratio: 8 / 9,
+    ratioLabel: "8:9",
+    width: 390,
     frame: "frameMobile",
-    recommended: "1080 × 1080 px",
+    recommended: "1080 × 1215 px",
   },
 ];
 
-/** Por debajo de este ancho de ventana manda la imagen y el encuadre de celular. */
-export const HERO_MOBILE_QUERY = "(max-width: 600px)";
+/** Hasta este ancho de ventana manda la imagen y el encuadre de celular. */
+export const HERO_MOBILE_QUERY = "(max-width: 992px)";
 
 export const DEFAULT_FRAME = { fit: "cover", x: 50, y: 30, zoom: 100 };
 

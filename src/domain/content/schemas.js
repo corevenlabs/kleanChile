@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../lib/site.js";
 import { DUAL_POSITIONS, HERO_FITS, WHY_US_ICONS } from "./vocabulary.js";
 
 /**
@@ -259,12 +260,47 @@ export const footerSchema = z.object({
   copyright: text(),
 });
 
+/**
+ * Cómo se presenta el sitio en Google y en la vista previa de un enlace
+ * compartido (WhatsApp, redes). Lo usa la portada; las demás páginas escriben
+ * la suya. Vacío vuelve al texto de fábrica, no a una descripción en blanco:
+ * una página sin descripción deja que Google invente una con cualquier frase.
+ */
+const textOrFallback = (fallback) =>
+  z
+    .string()
+    .default(fallback)
+    .transform((value) => value.trim() || fallback);
+
+export const seoSchema = z.object({
+  title: textOrFallback(SITE_TITLE),
+  description: textOrFallback(SITE_DESCRIPTION),
+});
+
 export const whatsappSchema = z.object({
-  /** Digits only, international format — it goes straight into a wa.me URL. */
+  /*
+   * Digits only, international format — it goes straight into a wa.me URL.
+   *
+   * Normalised here rather than rejected. The field used to refuse anything
+   * but digits, and the shop typed the number the way it is written on a card
+   * — "+56 9 1234 5678" — so every save failed, with the error drawn at the top
+   * of a form whose save button is at the bottom. From the panel that looked
+   * exactly like "the number cannot be edited". A `+`, spaces, dashes and
+   * brackets carry no information wa.me needs, so they are dropped; a leading
+   * `00` is the dialled form of `+`. A Chilean mobile typed without the
+   * country code (nine digits starting with 9) gets its 56.
+   */
   phoneNumber: z
     .string()
-    .regex(/^\d*$/, "Usa solo dígitos, en formato internacional")
-    .default(""),
+    .default("")
+    .transform((value) => {
+      const digits = value.replace(/\D/g, "").replace(/^00/, "");
+      return /^9\d{8}$/.test(digits) ? `56${digits}` : digits;
+    })
+    .refine(
+      (digits) => digits === "" || (digits.length >= 8 && digits.length <= 15),
+      "El número de WhatsApp parece incompleto: escríbelo con el código de país, por ejemplo +56 9 1234 5678",
+    ),
   message: text(),
   ariaLabel: text("Chat en WhatsApp"),
   icon: text("/whatsapp-fill.svg"),
@@ -290,6 +326,7 @@ export const contentSchemas = {
   navigation: navigationSchema,
   footer: footerSchema,
   whatsapp: whatsappSchema,
+  seo: seoSchema,
 };
 
 export const CONTENT_KEYS = Object.keys(contentSchemas);

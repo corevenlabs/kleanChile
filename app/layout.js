@@ -1,5 +1,5 @@
 import { IBM_Plex_Mono, IBM_Plex_Sans, Nunito, Poppins } from "next/font/google";
-import { SITE_DESCRIPTION, SITE_NAME, siteUrl } from "../src/lib/site.js";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, siteUrl } from "../src/lib/site.js";
 
 // Tokens first: every stylesheet below reads from them.
 import "../src/styles/brand.css";
@@ -72,7 +72,7 @@ const plexMono = IBM_Plex_Mono({
  * The template is what makes a tab readable when six of them are open. A page
  * that sets nothing keeps the full default line.
  */
-const title = "RutaCorp — Soluciones de limpieza y oficina para instituciones";
+const title = SITE_TITLE;
 
 export const metadata = {
   /*

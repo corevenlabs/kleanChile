@@ -365,3 +365,14 @@
 @media (max-width: 720px) {
   .slide-media__sources { grid-template-columns:1fr; }
 }
+
+/* Un guardado fallido no puede verse del mismo verde que uno exitoso. */
+.admin-saved--error {
+  background: #fdecec;
+  color: #b42318;
+}
+
+.admin-settings__actions {
+  align-items: center;
+  flex-wrap: wrap;
+}

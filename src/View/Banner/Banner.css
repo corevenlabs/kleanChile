@@ -248,6 +248,69 @@
 }
 
 /* ─────────────────────────────
+   ARROWS
+───────────────────────────── */
+/*
+ * Anterior y siguiente, juntas abajo a la derecha.
+ *
+ * No a los costados: el texto del carrusel arranca pegado al borde izquierdo,
+ * y una flecha centrada en ese lado quedaba encima del título. En la esquina
+ * opuesta no compiten con nada, y de a dos se leen como un solo control.
+ *
+ * Velo azul translúcido y no blanco: tienen que sostenerse igual sobre una
+ * foto clara y sobre una oscura, y el borde blanco es lo que las separa de la
+ * foto en las dos.
+ */
+.hero__arrows {
+  position: absolute;
+  right: clamp(14px, 2.4cqi, 32px);
+  bottom: clamp(14px, 2.4cqi, 28px);
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+
+.hero__arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(8, 26, 66, 0.42);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.16s ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero__arrow:hover {
+    background: rgba(8, 26, 66, 0.7);
+    border-color: #fff;
+  }
+}
+
+.hero__arrow:active {
+  transform: scale(0.94);
+}
+
+.hero__arrow:focus-visible {
+  outline: 2px solid var(--k-cyan);
+  outline-offset: 2px;
+}
+
+@container hero (max-width: 456px) {
+  .hero__arrow {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ─────────────────────────────
    PROGRESS BAR
 ───────────────────────────── */
 /*

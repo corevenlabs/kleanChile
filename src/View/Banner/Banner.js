@@ -22,6 +22,9 @@ export default function Banner({ data }) {
   const { slides, interval } = data;
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(true);
+  // Cambia con cada flecha para que el temporizador vuelva a contar desde cero:
+  // sin esto, una flecha pulsada a los 3 s de 3,5 saltaba dos diapositivas.
+  const [stepCount, setStepCount] = useState(0);
 
   const goTo = useCallback((idx) => {
     setCurrent(idx);
@@ -34,6 +37,19 @@ export default function Banner({ data }) {
      */
     setPlaying(false);
   }, []);
+
+  /*
+   * Las flechas, a diferencia de elegir una diapositiva puntual, no detienen
+   * el carrusel: quien pasa a la siguiente está hojeando, no eligiendo. Solo
+   * reinician la cuenta. Detenerlo sigue siendo el botón de pausa.
+   */
+  const step = useCallback(
+    (delta) => {
+      setCurrent((prev) => (prev + delta + slides.length) % slides.length);
+      setStepCount((n) => n + 1);
+    },
+    [slides.length],
+  );
 
   useEffect(() => {
     if (!playing || slides.length < 2) return undefined;
@@ -52,7 +68,7 @@ export default function Banner({ data }) {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, interval);
     return () => clearInterval(timer);
-  }, [interval, slides.length, playing]);
+  }, [interval, slides.length, playing, stepCount]);
 
   const slide = slides[current];
 
@@ -103,6 +119,21 @@ export default function Banner({ data }) {
         {slide.description && <TextEffect key={`desc-${slide.id}`} className="hero__desc" per="word" delay={0.85}>{slide.description}</TextEffect>}
         {slide.cta && <Link href={slide.path} className="hero__cta">{slide.cta}</Link>}
       </div>
+
+      {slides.length > 1 && (
+        <div className="hero__arrows">
+          <button type="button" className="hero__arrow" onClick={() => step(-1)} aria-label="Diapositiva anterior">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button type="button" className="hero__arrow" onClick={() => step(1)} aria-label="Diapositiva siguiente">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/*
         These were five unlabelled buttons — a screen reader announced "botón,

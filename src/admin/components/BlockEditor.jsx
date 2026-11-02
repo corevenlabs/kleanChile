@@ -97,6 +97,12 @@ function Field({ field, value, onChange, collections, item, onItemChange }) {
           placeholder={field.placeholder}
           onChange={(event) => onChange(event.target.value)}
         />
+        {(field.hint || field.count) && (
+          <small>
+            {field.hint}
+            {field.count && ` ${String((value ?? "").length)} / ${String(field.count)}.`}
+          </small>
+        )}
       </label>
     );
   }
@@ -249,7 +255,7 @@ export default function BlockEditor({ formKey, initial, collections = [] }) {
             {form.description && <p>{form.description}</p>}
           </div>
           {feedback && (
-            <span className="admin-saved" role={feedback.tone === "error" ? "alert" : undefined}>
+            <span className={`admin-saved ${feedback.tone === "error" ? "admin-saved--error" : ""}`}>
               {feedback.message}
             </span>
           )}
@@ -281,7 +287,21 @@ export default function BlockEditor({ formKey, initial, collections = [] }) {
         />
       ))}
 
+      {/*
+        The result is repeated beside the button, because that is where the
+        person is looking when they press it. Shown only at the top, a failed
+        save on a long form looked like a button that did nothing — which is
+        how "I can't change the WhatsApp number" was reported.
+      */}
       <div className="admin-settings__actions">
+        {feedback && (
+          <span
+            className={`admin-saved ${feedback.tone === "error" ? "admin-saved--error" : ""}`}
+            role={feedback.tone === "error" ? "alert" : "status"}
+          >
+            {feedback.message}
+          </span>
+        )}
         <button type="button" className="admin-button" onClick={save} disabled={pending}>
           {pending ? "Guardando…" : "Guardar cambios"}
         </button>

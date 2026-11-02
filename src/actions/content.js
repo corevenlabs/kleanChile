@@ -32,7 +32,13 @@ export async function saveBlockAction(key, value) {
     const first = parsed.error.issues[0];
     return {
       status: "error",
-      message: first ? `${first.path.join(".")}: ${first.message}` : "Datos inválidos.",
+      // A `refine` message is written for the person reading it and names its
+      // own field; a built-in one ("Invalid input") needs the path to be found.
+      message: !first
+        ? "Datos inválidos."
+        : first.code === "custom"
+          ? first.message
+          : `${first.path.join(".")}: ${first.message}`,
     };
   }
 

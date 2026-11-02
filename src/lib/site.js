@@ -17,6 +17,15 @@
 
 export const SITE_NAME = "RutaCorp";
 
+/**
+ * Los valores de fábrica del título y la descripción del sitio.
+ *
+ * Desde el panel se editan en el bloque `seo` (Configuración → Buscadores);
+ * estos quedan como lo que muestra un bloque nunca guardado y como el texto de
+ * las páginas que no leen la base, como el login y el panel.
+ */
+export const SITE_TITLE = "RutaCorp — Soluciones de limpieza y oficina para instituciones";
+
 export const SITE_DESCRIPTION =
   "Productos de limpieza, librería y artículos de escritorio para colegios, hoteles, oficinas e industria. Despacho a todo Chile.";
 

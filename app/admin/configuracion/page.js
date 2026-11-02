@@ -11,10 +11,11 @@ export const metadata = { title: "Configuración" };
 export default async function Page() {
   await requireUser();
 
-  const [navigation, footer, whatsapp, collections] = await Promise.all([
+  const [navigation, footer, whatsapp, seo, collections] = await Promise.all([
     getBlockForEdit("navigation"),
     getBlockForEdit("footer"),
     getBlockForEdit("whatsapp"),
+    getBlockForEdit("seo"),
     getCollectionOptions(),
   ]);
 
@@ -24,7 +25,7 @@ export default async function Page() {
         <div>
           <p className="admin-kicker">AJUSTES DEL SITIO</p>
           <h1>Configuración</h1>
-          <p>Menú, pie de página y canales de atención. Se aplican a todas las páginas.</p>
+          <p>Menú, pie de página, canales de atención y cómo se ve el sitio en Google. Se aplican a todas las páginas.</p>
         </div>
       </header>
 
@@ -47,6 +48,12 @@ export default async function Page() {
             label: "WhatsApp",
             description: "El botón flotante",
             content: <BlockEditor formKey="whatsapp" initial={whatsapp} />,
+          },
+          {
+            id: "buscadores",
+            label: "Google",
+            description: "Título y descripción del sitio",
+            content: <BlockEditor formKey="seo" initial={seo} />,
           },
         ]}
       />

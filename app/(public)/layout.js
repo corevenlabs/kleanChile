@@ -5,7 +5,7 @@ import CartButton from "../../src/components/cart/CartButton";
 import JsonLd from "../../src/components/seo/JsonLd";
 import { organizationLd } from "../../src/domain/seo/structuredData.js";
 import { getContent } from "../../src/infra/db/queries/content.js";
-import { SITE_DESCRIPTION, SITE_NAME, absoluteUrl } from "../../src/lib/site.js";
+import { SITE_NAME, absoluteUrl } from "../../src/lib/site.js";
 
 /**
  * La tienda se renderiza por petición, y eso se declara acá.
@@ -39,7 +39,7 @@ export default async function PublicLayout({ children }) {
         data={organizationLd({
           url: absoluteUrl("/"),
           name: SITE_NAME,
-          description: SITE_DESCRIPTION,
+          description: content.seo.description,
           logo: absoluteUrl("/brand/mark.png"),
           contact: content.footer.contact.items,
         })}

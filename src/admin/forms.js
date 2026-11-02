@@ -285,13 +285,34 @@ export const FORMS = {
         name: "phoneNumber",
         label: "Número",
         wide: false,
-        placeholder: "56912345678",
-        hint: "Solo dígitos, en formato internacional y sin el signo +.",
+        placeholder: "+56 9 1234 5678",
+        hint: "Con código de país. Puedes escribirlo con +, espacios o guiones: se guarda solo con los dígitos.",
       },
       { name: "ariaLabel", label: "Etiqueta de accesibilidad", wide: false },
       { name: "message", label: "Mensaje inicial", type: "textarea" },
       { name: "icon", label: "Ícono", type: "image" },
       { name: "alt", label: "Texto alternativo del ícono" },
+    ],
+  },
+
+  seo: {
+    key: "seo",
+    title: "Google y enlaces compartidos",
+    description:
+      "El título y la descripción de la portada: lo que muestra Google bajo el nombre del sitio y la vista previa al compartir el enlace por WhatsApp o redes. Si dejas un campo vacío vuelve al texto original.",
+    fields: [
+      {
+        name: "title",
+        label: "Título del sitio",
+        hint: "Lo que se lee en la pestaña del navegador y en el resultado de Google. Ideal: menos de 60 caracteres.",
+      },
+      {
+        name: "description",
+        label: "Descripción del sitio",
+        type: "textarea",
+        hint: "Una o dos frases sobre qué vendes y a quién. Google muestra unos 155 caracteres; lo que pase de ahí se corta.",
+        count: 155,
+      },
     ],
   },
 };
@@ -307,4 +328,4 @@ export const HOME_BLOCKS = [
 ];
 
 /** Los bloques de Configuración que se editan con `BlockEditor` (el menú tiene el suyo). */
-export const SITE_BLOCKS = ["footer", "whatsapp"];
+export const SITE_BLOCKS = ["footer", "whatsapp", "seo"];
